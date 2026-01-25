@@ -1307,6 +1307,175 @@
             .container { max-width: 100%; padding: 0; }
             .card { break-inside: avoid; }
         }
+
+        /* Authentication Modal */
+        .auth-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .auth-modal-overlay.hidden {
+            display: none;
+        }
+
+        .auth-modal {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .auth-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 24px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .auth-modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .auth-modal-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-modal-icon svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .auth-modal-icon.error {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .auth-modal-icon.error svg {
+            stroke: #ef4444;
+        }
+
+        .auth-modal-icon.warning {
+            background: rgba(234, 179, 8, 0.2);
+        }
+
+        .auth-modal-icon.warning svg {
+            stroke: #eab308;
+        }
+
+        .auth-modal-icon.info {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .auth-modal-icon.info svg {
+            stroke: #3b82f6;
+        }
+
+        .auth-modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .auth-modal-message {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .auth-modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .auth-modal-actions .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .auth-modal-help {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .auth-modal-help p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .auth-modal-help a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .auth-modal-help a:hover {
+            text-decoration: underline;
+        }
+
+        .permission-list {
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .permission-list h4 {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .permission-item svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--success);
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -1349,6 +1518,26 @@
                     </svg>
                     Instant results
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div class="auth-modal-overlay hidden" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-modal-close" onclick="closeAuthModal()">&times;</button>
+            <div class="auth-modal-icon" id="authModalIcon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+            </div>
+            <h2 class="auth-modal-title" id="authModalTitle">Authentication Required</h2>
+            <p class="auth-modal-message" id="authModalMessage">Loading...</p>
+            <div class="auth-modal-actions" id="authModalActions"></div>
+            <div class="auth-modal-help">
+                <p>Need help? <a href="mailto:support@quantivecyber.com">Contact Support</a></p>
             </div>
         </div>
     </div>
@@ -1873,7 +2062,7 @@
         // Sign in with Microsoft
         async function signIn() {
             if (!msalInstance) {
-                showError("Authentication not initialized. Please refresh the page.");
+                showAuthError({ message: 'Authentication not initialized. Please refresh the page.' });
                 return null;
             }
 
@@ -1885,22 +2074,31 @@
                 console.log("Login successful:", currentAccount.username);
                 return response;
             } catch (popupError) {
-                console.log("Popup blocked or failed, trying redirect...", popupError);
+                console.log("Popup blocked or failed:", popupError);
 
-                // If popup is blocked, use redirect
+                // If popup is blocked, show helpful message
                 if (popupError.errorCode === "popup_window_error" ||
                     popupError.errorCode === "empty_window_error") {
-                    try {
-                        await msalInstance.loginRedirect(loginRequest);
-                        return null; // Will return after redirect
-                    } catch (redirectError) {
-                        console.error("Redirect login failed:", redirectError);
-                        showError("Login failed: " + redirectError.message);
-                        return null;
-                    }
+                    showAuthError(popupError);
+                    return null;
                 }
 
-                showError("Login failed: " + popupError.message);
+                // Handle user cancellation gracefully
+                if (popupError.errorCode === "user_cancelled") {
+                    showAuthError(popupError);
+                    return null;
+                }
+
+                // Handle consent required
+                if (popupError.errorCode === "consent_required" ||
+                    popupError.errorCode === "interaction_required" ||
+                    (popupError.message && popupError.message.includes('AADSTS65001'))) {
+                    showAuthError(popupError);
+                    return null;
+                }
+
+                // Show error modal for other errors
+                showAuthError(popupError);
                 return null;
             }
         }
@@ -2172,7 +2370,9 @@
                 const authResult = await signIn();
 
                 if (!authResult) {
-                    // Redirect in progress or cancelled
+                    // Auth failed, was cancelled, or modal is showing - reset UI
+                    document.getElementById('loadingOverlay').classList.add('hidden');
+                    document.getElementById('connectScreen').style.display = 'flex';
                     return;
                 }
 
@@ -2180,7 +2380,7 @@
                 await startAuthenticatedScan();
             } catch (error) {
                 console.error("Authentication failed:", error);
-                showError("Authentication failed: " + error.message);
+                showAuthError(error);
                 document.getElementById('loadingOverlay').classList.add('hidden');
                 document.getElementById('connectScreen').style.display = 'flex';
             }
@@ -2633,17 +2833,167 @@
             document.getElementById('loadingProgress').style.width = progress + '%';
         }
 
-        // Show configuration required message
-        function showConfigurationRequired() {
-            alert(
-                "MSAL Configuration Required\n\n" +
-                "To connect to Microsoft 365, you need to configure the app:\n\n" +
-                "1. Open posture-scanner.html\n" +
-                "2. Find the msalConfig section at the top of the script\n" +
-                "3. Replace YOUR_CLIENT_ID_HERE with your App Registration Client ID\n" +
-                "4. Ensure the redirect URI matches your App Registration\n\n" +
-                "Your App Registration Client ID can be found in Azure Portal > App registrations > Quantive > Overview"
+        // Authentication Modal Functions
+        function showAuthModal(type, title, message, actions = []) {
+            const modal = document.getElementById('authModal');
+            const iconEl = document.getElementById('authModalIcon');
+            const titleEl = document.getElementById('authModalTitle');
+            const messageEl = document.getElementById('authModalMessage');
+            const actionsEl = document.getElementById('authModalActions');
+
+            // Set icon based on type
+            iconEl.className = 'auth-modal-icon ' + type;
+
+            let iconSvg = '';
+            if (type === 'error') {
+                iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+            } else if (type === 'warning') {
+                iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+            } else {
+                iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+            }
+            iconEl.innerHTML = iconSvg;
+
+            titleEl.textContent = title;
+            messageEl.innerHTML = message;
+
+            // Build action buttons
+            actionsEl.innerHTML = actions.map(action => {
+                if (action.type === 'primary') {
+                    return `<button class="btn btn-primary" onclick="${action.onclick}">${action.label}</button>`;
+                } else {
+                    return `<button class="btn btn-secondary" onclick="${action.onclick}">${action.label}</button>`;
+                }
+            }).join('');
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        // Generate admin consent URL
+        function getAdminConsentUrl() {
+            const clientId = msalConfig.auth.clientId;
+            const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
+            const scopes = encodeURIComponent(loginRequest.scopes.join(' '));
+            return `https://login.microsoftonline.com/common/adminconsent?client_id=${clientId}&redirect_uri=${redirectUri}`;
+        }
+
+        // Open admin consent in new window
+        function openAdminConsent() {
+            closeAuthModal();
+            window.open(getAdminConsentUrl(), '_blank', 'width=600,height=700');
+        }
+
+        // Show admin consent required modal
+        function showAdminConsentRequired() {
+            const permissionsHtml = `
+                <div class="permission-list">
+                    <h4>Permissions Required</h4>
+                    <div class="permission-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Read directory data (users, groups, apps)
+                    </div>
+                    <div class="permission-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Read application registrations
+                    </div>
+                    <div class="permission-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Read security policies
+                    </div>
+                    <div class="permission-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Read audit logs
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">A Global Administrator or Privileged Role Administrator must grant consent for your organization.</p>
+            `;
+
+            showAuthModal(
+                'warning',
+                'Admin Consent Required',
+                `To scan your Microsoft 365 environment, an administrator must authorize this application.${permissionsHtml}`,
+                [
+                    { type: 'primary', label: 'Grant Admin Consent', onclick: 'openAdminConsent()' },
+                    { type: 'secondary', label: 'Cancel', onclick: 'closeAuthModal()' }
+                ]
             );
+        }
+
+        // Show authentication error with helpful message
+        function showAuthError(error) {
+            let title = 'Authentication Failed';
+            let message = '';
+            let actions = [{ type: 'secondary', label: 'Close', onclick: 'closeAuthModal()' }];
+
+            // Parse specific error codes
+            const errorCode = error.errorCode || '';
+            const errorMessage = error.message || error.toString();
+
+            if (errorCode === 'consent_required' || errorCode === 'interaction_required' ||
+                errorMessage.includes('AADSTS65001') || errorMessage.includes('consent')) {
+                return showAdminConsentRequired();
+            } else if (errorMessage.includes('AADSTS50011') || errorMessage.includes('redirect')) {
+                title = 'Configuration Error';
+                message = `The redirect URI is not configured correctly in Azure AD.<br><br>
+                    <strong>Expected:</strong><br>
+                    <code style="background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">${window.location.origin + window.location.pathname}</code><br><br>
+                    Please add this URI to your App Registration in Azure Portal under Authentication > Single-page application.`;
+            } else if (errorMessage.includes('AADSTS700016') || errorMessage.includes('not found')) {
+                title = 'Application Not Found';
+                message = 'The application could not be found in your directory. Please ensure the App Registration is configured for multi-tenant access or contact support.';
+            } else if (errorCode === 'user_cancelled' || errorMessage.includes('cancelled')) {
+                title = 'Sign-in Cancelled';
+                message = 'You cancelled the sign-in process. Click below to try again.';
+                actions = [
+                    { type: 'primary', label: 'Try Again', onclick: 'closeAuthModal(); startScan();' },
+                    { type: 'secondary', label: 'Cancel', onclick: 'closeAuthModal()' }
+                ];
+            } else if (errorCode === 'popup_window_error' || errorMessage.includes('popup')) {
+                title = 'Popup Blocked';
+                message = 'Your browser blocked the sign-in popup. Please allow popups for this site or click below to sign in via redirect.';
+                actions = [
+                    { type: 'primary', label: 'Sign in via Redirect', onclick: 'closeAuthModal(); signInWithRedirect();' },
+                    { type: 'secondary', label: 'Cancel', onclick: 'closeAuthModal()' }
+                ];
+            } else {
+                message = `An error occurred during authentication.<br><br><code style="background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 4px; font-size: 0.8rem; display: block; word-break: break-all;">${errorMessage}</code>`;
+                actions = [
+                    { type: 'primary', label: 'Try Again', onclick: 'closeAuthModal(); startScan();' },
+                    { type: 'secondary', label: 'Contact Support', onclick: 'window.location.href="mailto:support@quantivecyber.com?subject=Authentication Error&body=" + encodeURIComponent("Error: ' + errorMessage.replace(/"/g, '\\"') + '")' }
+                ];
+            }
+
+            showAuthModal('error', title, message, actions);
+        }
+
+        // Show configuration required (for internal use - should not appear in production)
+        function showConfigurationRequired() {
+            showAuthModal(
+                'error',
+                'Service Temporarily Unavailable',
+                'The scanning service is currently being configured. Please try again later or contact support if this persists.',
+                [
+                    { type: 'primary', label: 'Contact Support', onclick: 'window.location.href="mailto:support@quantivecyber.com"' },
+                    { type: 'secondary', label: 'Close', onclick: 'closeAuthModal()' }
+                ]
+            );
+        }
+
+        // Sign in via redirect (fallback for popup blockers)
+        async function signInWithRedirect() {
+            if (!msalInstance) {
+                showAuthError({ message: 'Authentication not initialized. Please refresh the page.' });
+                return;
+            }
+            try {
+                await msalInstance.loginRedirect(loginRequest);
+            } catch (error) {
+                showAuthError(error);
+            }
         }
 
         function loadDemoData() {
