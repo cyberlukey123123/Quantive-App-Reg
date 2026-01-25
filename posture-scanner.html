@@ -1999,8 +1999,7 @@
                 "Policy.Read.All",
                 "AuditLog.Read.All",
                 "Reports.Read.All",
-                "Sites.Read.All",
-                "InformationProtectionPolicy.Read.All"
+                "Sites.Read.All"
             ]
         };
 
@@ -2012,8 +2011,7 @@
             policies: ["Policy.Read.All"],
             audit: ["AuditLog.Read.All"],
             reports: ["Reports.Read.All"],
-            sites: ["Sites.Read.All"],
-            informationProtection: ["InformationProtectionPolicy.Read.All"]
+            sites: ["Sites.Read.All"]
         };
 
         // Initialize MSAL instance
@@ -2447,7 +2445,8 @@
                 const oauthGrants = await callGraphAPI("/oauth2PermissionGrants?$top=100", ["Directory.Read.All"]).catch(() => ({ value: [] }));
 
                 updateLoadingStatus("Reading sensitivity labels...", 50);
-                const sensitivityLabels = await callGraphAPIBeta("/security/informationProtection/sensitivityLabels", ["InformationProtectionPolicy.Read.All"]);
+                // Note: Sensitivity labels require specific licensing - skip if not available
+                const sensitivityLabels = await callGraphAPIBeta("/security/informationProtection/sensitivityLabels", ["Policy.Read.All"]).catch(() => ({ value: [] }));
 
                 updateLoadingStatus("Checking policies...", 60);
                 const conditionalAccessPolicies = await callGraphAPIBeta("/identity/conditionalAccess/policies", ["Policy.Read.All"]).catch(() => ({ value: [] }));
