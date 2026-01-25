@@ -1951,6 +1951,42 @@
 
     <script>
         // ============================================
+        // TRACKING CONFIGURATION
+        // ============================================
+        const trackingConfig = {
+            // Make.com webhook URL
+            webhookUrl: "https://hook.eu1.make.com/wdpxaxousk7xqwrh1qast536jbjhu5y4",
+            enabled: true // Set to false to disable tracking
+        };
+
+        // Track customer events (connection, scan completion, etc.)
+        async function trackEvent(eventType, data = {}) {
+            if (!trackingConfig.enabled || trackingConfig.webhookUrl === "YOUR_WEBHOOK_URL_HERE") {
+                console.log("Tracking disabled or webhook not configured. Event:", eventType, data);
+                return;
+            }
+
+            const payload = {
+                event: eventType,
+                timestamp: new Date().toISOString(),
+                source: "posture-scanner",
+                ...data
+            };
+
+            try {
+                await fetch(trackingConfig.webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    mode: "no-cors", // Required for cross-origin webhooks
+                    body: JSON.stringify(payload)
+                });
+                console.log("Event tracked:", eventType);
+            } catch (error) {
+                console.error("Tracking error:", error);
+            }
+        }
+
+        // ============================================
         // MSAL CONFIGURATION - UPDATE THESE VALUES
         // ============================================
         const msalConfig = {
@@ -2417,6 +2453,16 @@
                 const userInfo = await callGraphAPI("/me", ["User.Read"]);
 
                 const tenantName = orgInfo?.value?.[0]?.displayName || userInfo?.mail?.split('@')[1] || "Your Organisation";
+                const tenantId = orgInfo?.value?.[0]?.id || "unknown";
+                const userEmail = userInfo?.mail || userInfo?.userPrincipalName || "unknown";
+
+                // Track customer connection
+                trackEvent("customer_connected", {
+                    tenantName: tenantName,
+                    tenantId: tenantId,
+                    userEmail: userEmail,
+                    userDisplayName: userInfo?.displayName || "unknown"
+                });
 
                 // Initialize scan data structure
                 scanData = {
@@ -2473,6 +2519,15 @@
 
                 // Short delay for UX
                 await new Promise(resolve => setTimeout(resolve, 500));
+
+                // Track scan completion
+                trackEvent("scan_completed", {
+                    tenantName: scanData.tenant.name,
+                    overallScore: scanData.score.overall,
+                    aiSystemsFound: scanData.aiSystems.length,
+                    highRiskCount: scanData.riskClassification.highRisk,
+                    gapsIdentified: scanData.gaps.length
+                });
 
                 // Render dashboard
                 renderDashboard();
