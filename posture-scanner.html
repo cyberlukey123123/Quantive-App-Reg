@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- MSAL.js for Microsoft Authentication -->
-    <script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
+    <script src="https://unpkg.com/@azure/msal-browser@3.6.0/lib/msal-browser.min.js"></script>
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -2028,6 +2028,16 @@
             console.log("Initializing MSAL...");
             console.log("Client ID:", msalConfig.auth.clientId);
             console.log("Redirect URI:", msalConfig.auth.redirectUri);
+
+            // Check if MSAL library is loaded
+            if (typeof msal === 'undefined') {
+                console.error("MSAL library not loaded - check CDN or network connection");
+                msalConfigured = false;
+                msalInitError = "MSAL library failed to load. Please check your internet connection and try refreshing the page.";
+                return;
+            }
+
+            console.log("MSAL library loaded:", typeof msal);
 
             // Skip MSAL init if not configured - demo mode will still work
             if (msalConfig.auth.clientId === "YOUR_CLIENT_ID_HERE") {
