@@ -1767,7 +1767,7 @@
         const msalConfig = {
             auth: {
                 // TODO: Replace with your App Registration Client ID from Azure Portal
-                clientId: "YOUR_CLIENT_ID_HERE",
+                clientId: "132d94bd-3524-4213-8bb8-9ece8a640998",
 
                 // For multi-tenant apps, use "common" or "organizations"
                 // For single tenant, use: "https://login.microsoftonline.com/YOUR_TENANT_ID"
@@ -2025,7 +2025,16 @@
         }
 
         // Initialize on page load
-        document.addEventListener('DOMContentLoaded', initializeMsal);
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeMsal();
+
+            // Check for demo query parameter (from landing page)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('demo') === 'true') {
+                // Auto-start demo mode
+                setTimeout(() => loadDemoData(), 500);
+            }
+        });
 
         // ============================================
         // COMPANY LOGOS
