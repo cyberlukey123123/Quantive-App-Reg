@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"c:\\\\Projects\\\\Quantive-App-Reg\")",
+      "Bash(dir \"c:\\\\Projects\" /b)"
+    ]
+  }
+}
