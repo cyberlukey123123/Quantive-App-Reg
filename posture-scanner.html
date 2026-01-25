@@ -2021,13 +2021,19 @@
         let currentAccount = null;
         let accessToken = null;
         let msalConfigured = false;
+        let msalInitError = null;
 
         // Initialize MSAL on page load
         async function initializeMsal() {
+            console.log("Initializing MSAL...");
+            console.log("Client ID:", msalConfig.auth.clientId);
+            console.log("Redirect URI:", msalConfig.auth.redirectUri);
+
             // Skip MSAL init if not configured - demo mode will still work
             if (msalConfig.auth.clientId === "YOUR_CLIENT_ID_HERE") {
                 console.log("MSAL not configured - demo mode available, configure clientId for live scanning");
                 msalConfigured = false;
+                msalInitError = "Client ID not configured";
                 return;
             }
 
@@ -2035,6 +2041,8 @@
                 msalInstance = new msal.PublicClientApplication(msalConfig);
                 await msalInstance.initialize();
                 msalConfigured = true;
+                msalInitError = null;
+                console.log("MSAL initialized successfully");
 
                 // Handle redirect response (if returning from login)
                 const response = await msalInstance.handleRedirectPromise();
@@ -2056,6 +2064,7 @@
             } catch (error) {
                 console.error("MSAL initialization error:", error);
                 msalConfigured = false;
+                msalInitError = error.message || error.toString();
             }
         }
 
@@ -2970,17 +2979,42 @@
             showAuthModal('error', title, message, actions);
         }
 
-        // Show configuration required (for internal use - should not appear in production)
+        // Show configuration required with helpful setup instructions
         function showConfigurationRequired() {
-            showAuthModal(
-                'error',
-                'Service Temporarily Unavailable',
-                'The scanning service is currently being configured. Please try again later or contact support if this persists.',
-                [
-                    { type: 'primary', label: 'Contact Support', onclick: 'window.location.href="mailto:support@quantivecyber.com"' },
-                    { type: 'secondary', label: 'Close', onclick: 'closeAuthModal()' }
-                ]
-            );
+            const redirectUri = window.location.origin + window.location.pathname;
+
+            // If there's an init error, show it
+            if (msalInitError) {
+                showAuthModal(
+                    'warning',
+                    'Azure Configuration Required',
+                    `<p>To enable Microsoft 365 scanning, please configure the Azure App Registration:</p>
+                    <div class="permission-list">
+                        <h4>Required Setup</h4>
+                        <div class="permission-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            Add Redirect URI to App Registration
+                        </div>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-top: 12px;"><strong>Redirect URI to add:</strong></p>
+                    <code style="background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; display: block; word-break: break-all; margin: 8px 0;">${redirectUri}</code>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px;">Go to Azure Portal > App Registrations > Authentication > Add platform > Single-page application</p>`,
+                    [
+                        { type: 'primary', label: 'Open Azure Portal', onclick: 'window.open("https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade", "_blank")' },
+                        { type: 'secondary', label: 'Close', onclick: 'closeAuthModal()' }
+                    ]
+                );
+            } else {
+                showAuthModal(
+                    'error',
+                    'Service Temporarily Unavailable',
+                    'The scanning service is currently being configured. Please try again later or contact support if this persists.',
+                    [
+                        { type: 'primary', label: 'Contact Support', onclick: 'window.location.href="mailto:support@quantivecyber.com"' },
+                        { type: 'secondary', label: 'Close', onclick: 'closeAuthModal()' }
+                    ]
+                );
+            }
         }
 
         // Sign in via redirect (fallback for popup blockers)
