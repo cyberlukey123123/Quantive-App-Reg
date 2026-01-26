@@ -931,6 +931,34 @@
             font-weight: 600;
         }
 
+        .product-tag.product-link {
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .product-tag.product-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .product-tag.product-link::after {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3Cpolyline points='15 3 21 3 21 9'/%3E%3Cline x1='10' y1='14' x2='21' y2='3'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .product-tag.product-link:hover::after {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3Cpolyline points='15 3 21 3 21 9'/%3E%3Cline x1='10' y1='14' x2='21' y2='3'/%3E%3C/svg%3E");
+        }
+
         /* Checks List */
         .checks-list {
             display: flex;
@@ -2748,6 +2776,29 @@
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>`
         };
 
+        // Microsoft Learn documentation links
+        const msLearnLinks = {
+            "Microsoft Purview": "https://learn.microsoft.com/en-us/purview/purview",
+            "Defender for Cloud Apps": "https://learn.microsoft.com/en-us/defender-cloud-apps/what-is-defender-for-cloud-apps",
+            "Entra ID": "https://learn.microsoft.com/en-us/entra/identity/",
+            "Power Automate": "https://learn.microsoft.com/en-us/power-automate/",
+            "Audit Logs": "https://learn.microsoft.com/en-us/purview/audit-solutions-overview",
+            "Insider Risk Management": "https://learn.microsoft.com/en-us/purview/insider-risk-management",
+            "DLP": "https://learn.microsoft.com/en-us/purview/dlp-learn-about-dlp",
+            "Content Labels": "https://learn.microsoft.com/en-us/purview/sensitivity-labels",
+            "Information Protection": "https://learn.microsoft.com/en-us/purview/information-protection",
+            "SharePoint": "https://learn.microsoft.com/en-us/sharepoint/",
+            "Conditional Access": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview",
+            "Copilot": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview",
+            "Sensitivity Labels": "https://learn.microsoft.com/en-us/purview/sensitivity-labels",
+            "Chatbot Configuration": "https://learn.microsoft.com/en-us/power-virtual-agents/"
+        };
+
+        // Get Microsoft Learn link for a product, or return null if not found
+        function getMsLearnLink(product) {
+            return msLearnLinks[product] || null;
+        }
+
         // Demo Data
         const demoData = {
             tenant: {
@@ -3704,7 +3755,12 @@
                         </div>
                         <div class="gap-solution-text">${gap.solution}</div>
                         <div class="solution-products">
-                            ${gap.products.map(p => `<span class="product-tag">${p}</span>`).join('')}
+                            ${gap.products.map(p => {
+                                const link = getMsLearnLink(p);
+                                return link
+                                    ? `<a href="${link}" target="_blank" rel="noopener" class="product-tag product-link">${p}</a>`
+                                    : `<span class="product-tag">${p}</span>`;
+                            }).join('')}
                         </div>
                     </div>
                 </div>
