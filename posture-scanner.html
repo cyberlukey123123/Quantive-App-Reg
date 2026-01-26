@@ -659,7 +659,7 @@
 
         .systems-table-header {
             display: grid;
-            grid-template-columns: 1fr 140px 100px 100px;
+            grid-template-columns: 1fr 100px 100px 100px 100px;
             gap: 16px;
             padding: 10px 16px;
             background: var(--bg);
@@ -677,7 +677,7 @@
 
         .system-row {
             display: grid;
-            grid-template-columns: 1fr 140px 100px 100px;
+            grid-template-columns: 1fr 100px 100px 100px 100px;
             gap: 16px;
             padding: 14px 16px;
             align-items: center;
@@ -1542,6 +1542,218 @@
             color: var(--ink-secondary);
         }
 
+        /* Expandable Check Details */
+        .check-item.has-details {
+            cursor: pointer;
+        }
+
+        .check-item.has-details:hover {
+            background: var(--bg-secondary);
+        }
+
+        .check-expand-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--ink-muted);
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .check-item.expanded .check-expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .check-details {
+            display: none;
+            margin-top: 8px;
+            margin-left: 34px;
+            padding: 12px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .check-item.expanded + .check-details {
+            display: block;
+        }
+
+        .check-detail-item {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .check-detail-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .check-detail-item:first-child {
+            padding-top: 0;
+        }
+
+        .check-detail-name {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+
+        .check-detail-desc {
+            font-size: 0.75rem;
+            color: var(--ink-tertiary);
+            line-height: 1.4;
+        }
+
+        .system-activity {
+            font-size: 0.8125rem;
+            color: var(--ink-secondary);
+        }
+
+        /* EU AI Act Info Section */
+        .eu-ai-act-info {
+            margin-top: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-block {
+            padding: 20px;
+            background: var(--bg);
+            border-radius: 10px;
+        }
+
+        .info-block h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-block h4 svg {
+            color: var(--primary);
+        }
+
+        .info-block p {
+            font-size: 0.8125rem;
+            color: var(--ink-tertiary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .info-block p:last-child {
+            margin-bottom: 0;
+        }
+
+        .risk-level-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .risk-level-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .risk-level-item.prohibited {
+            background: var(--danger-light);
+        }
+
+        .risk-level-item.high {
+            background: var(--warning-light);
+        }
+
+        .risk-level-item.limited {
+            background: var(--primary-light);
+        }
+
+        .risk-level-item.minimal {
+            background: var(--success-light);
+        }
+
+        .risk-level-badge {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .risk-level-item.prohibited .risk-level-badge {
+            background: var(--danger);
+            color: white;
+        }
+
+        .risk-level-item.high .risk-level-badge {
+            background: var(--warning);
+            color: white;
+        }
+
+        .risk-level-item.limited .risk-level-badge {
+            background: var(--primary);
+            color: white;
+        }
+
+        .risk-level-item.minimal .risk-level-badge {
+            background: var(--success);
+            color: white;
+        }
+
+        .risk-level-text {
+            font-size: 0.75rem;
+            color: var(--ink-secondary);
+            line-height: 1.4;
+        }
+
+        .source-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .source-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+
+        .source-link:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .source-link svg {
+            width: 14px;
+            height: 14px;
+        }
+
         /* Toast animations */
         @keyframes slideUp {
             from {
@@ -1920,6 +2132,7 @@
                             <div class="systems-table-header">
                                 <span>System</span>
                                 <span>Users</span>
+                                <span>Data Activity</span>
                                 <span>Source</span>
                                 <span>Risk Level</span>
                             </div>
@@ -2016,6 +2229,124 @@
                             </thead>
                             <tbody id="dataGovernanceTable"></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EU AI Act Information -->
+            <div class="card eu-ai-act-info">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-title-icon" style="background: var(--primary-light); color: var(--primary);">
+                            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                        </div>
+                        About the EU AI Act
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-block">
+                            <h4>
+                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                What is the EU AI Act?
+                            </h4>
+                            <p>The EU Artificial Intelligence Act (Regulation 2024/1689) is the world's first comprehensive legal framework for AI. It establishes rules for the development, deployment, and use of AI systems in the European Union.</p>
+                            <p>The Act takes a risk-based approach, categorising AI systems into four risk levels with corresponding requirements. Organisations deploying or developing AI must comply based on their AI systems' classifications.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>
+                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                                    <polyline points="2 17 12 22 22 17"/>
+                                    <polyline points="2 12 12 17 22 12"/>
+                                </svg>
+                                Risk Classification
+                            </h4>
+                            <div class="risk-level-list">
+                                <div class="risk-level-item prohibited">
+                                    <span class="risk-level-badge">Prohibited</span>
+                                    <span class="risk-level-text">Banned AI practices (e.g., social scoring, subliminal manipulation, real-time biometric ID in public)</span>
+                                </div>
+                                <div class="risk-level-item high">
+                                    <span class="risk-level-badge">High-Risk</span>
+                                    <span class="risk-level-text">AI in critical areas: HR/recruitment, credit scoring, education, law enforcement. Requires conformity assessment.</span>
+                                </div>
+                                <div class="risk-level-item limited">
+                                    <span class="risk-level-badge">Limited</span>
+                                    <span class="risk-level-text">AI with transparency obligations (chatbots, emotion recognition). Must disclose AI interaction to users.</span>
+                                </div>
+                                <div class="risk-level-item minimal">
+                                    <span class="risk-level-badge">Minimal</span>
+                                    <span class="risk-level-text">Low-risk AI (spam filters, AI-enabled games). No mandatory requirements, voluntary codes of conduct.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-block">
+                            <h4>
+                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                Key Compliance Dates
+                            </h4>
+                            <p><strong>February 2025:</strong> Prohibited AI practices ban in force</p>
+                            <p><strong>August 2025:</strong> GPAI model rules and governance obligations apply</p>
+                            <p><strong>August 2026:</strong> Full compliance required for most provisions including high-risk AI</p>
+                            <p><strong>August 2027:</strong> Extended deadline for high-risk AI in regulated products</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>
+                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                </svg>
+                                Official Sources
+                            </h4>
+                            <p>For detailed compliance requirements and official guidance, refer to these authoritative sources:</p>
+                            <div class="source-links">
+                                <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj" target="_blank" rel="noopener" class="source-link">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                        <polyline points="15 3 21 3 21 9"/>
+                                        <line x1="10" y1="14" x2="21" y2="3"/>
+                                    </svg>
+                                    EU AI Act Full Text
+                                </a>
+                                <a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener" class="source-link">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                        <polyline points="15 3 21 3 21 9"/>
+                                        <line x1="10" y1="14" x2="21" y2="3"/>
+                                    </svg>
+                                    EC AI Strategy
+                                </a>
+                                <a href="https://artificialintelligenceact.eu/" target="_blank" rel="noopener" class="source-link">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                        <polyline points="15 3 21 3 21 9"/>
+                                        <line x1="10" y1="14" x2="21" y2="3"/>
+                                    </svg>
+                                    AI Act Explorer
+                                </a>
+                                <a href="https://www.europarl.europa.eu/topics/en/article/20230601STO93804/eu-ai-act-first-regulation-on-artificial-intelligence" target="_blank" rel="noopener" class="source-link">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                        <polyline points="15 3 21 3 21 9"/>
+                                        <line x1="10" y1="14" x2="21" y2="3"/>
+                                    </svg>
+                                    EU Parliament Guide
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2444,18 +2775,18 @@
                 { name: "Governance", score: 35, color: "var(--danger)" }
             ],
             aiSystems: [
-                { name: "Microsoft Copilot for M365", type: "Productivity AI", users: 45, risk: "limited", logo: "microsoft", shadow: false, source: "Licensed" },
-                { name: "Azure OpenAI Service", type: "Generative AI", users: 12, risk: "limited", logo: "azure", shadow: false, source: "Azure" },
-                { name: "HireVue", type: "HR/Recruitment AI", users: 5, risk: "high", logo: "hirevue", shadow: false, source: "Integrated" },
-                { name: "Workday AI", type: "HR Performance AI", users: 200, risk: "high", logo: "workday", shadow: false, source: "Integrated" },
-                { name: "Salesforce Einstein", type: "Sales AI", users: 35, risk: "limited", logo: "salesforce", shadow: false, source: "Integrated" },
-                { name: "ChatGPT (OpenAI)", type: "Generative AI", users: 28, risk: "unknown", logo: "openai", shadow: true, source: "Shadow AI" },
-                { name: "Grammarly", type: "Writing AI", users: 67, risk: "minimal", logo: "grammarly", shadow: true, source: "Shadow AI" },
-                { name: "Otter.ai", type: "Transcription AI", users: 15, risk: "limited", logo: "otter", shadow: true, source: "Shadow AI" },
-                { name: "Credit Risk Model", type: "Risk Assessment AI", users: 8, risk: "high", logo: "default", shadow: false, source: "Internal" },
-                { name: "Defender for Endpoint", type: "Security AI", users: 500, risk: "minimal", logo: "microsoft", shadow: false, source: "Microsoft" },
-                { name: "Power Automate AI Builder", type: "Automation AI", users: 22, risk: "minimal", logo: "microsoft", shadow: false, source: "Licensed" },
-                { name: "Teams Intelligent Recap", type: "Productivity AI", users: 150, risk: "minimal", logo: "microsoft", shadow: false, source: "Microsoft" }
+                { name: "Microsoft Copilot for M365", type: "Productivity AI", users: 45, dataActivity: "2.4 GB", risk: "limited", logo: "microsoft", shadow: false, source: "Licensed" },
+                { name: "Azure OpenAI Service", type: "Generative AI", users: 12, dataActivity: "890 MB", risk: "limited", logo: "azure", shadow: false, source: "Azure" },
+                { name: "HireVue", type: "HR/Recruitment AI", users: 5, dataActivity: "156 MB", risk: "high", logo: "hirevue", shadow: false, source: "Integrated" },
+                { name: "Workday AI", type: "HR Performance AI", users: 200, dataActivity: "1.8 GB", risk: "high", logo: "workday", shadow: false, source: "Integrated" },
+                { name: "Salesforce Einstein", type: "Sales AI", users: 35, dataActivity: "945 MB", risk: "limited", logo: "salesforce", shadow: false, source: "Integrated" },
+                { name: "ChatGPT (OpenAI)", type: "Generative AI", users: 28, dataActivity: "Unknown", risk: "unknown", logo: "openai", shadow: true, source: "Shadow AI" },
+                { name: "Grammarly", type: "Writing AI", users: 67, dataActivity: "Unknown", risk: "minimal", logo: "grammarly", shadow: true, source: "Shadow AI" },
+                { name: "Otter.ai", type: "Transcription AI", users: 15, dataActivity: "Unknown", risk: "limited", logo: "otter", shadow: true, source: "Shadow AI" },
+                { name: "Credit Risk Model", type: "Risk Assessment AI", users: 8, dataActivity: "340 MB", risk: "high", logo: "default", shadow: false, source: "Internal" },
+                { name: "Defender for Endpoint", type: "Security AI", users: 500, dataActivity: "4.2 GB", risk: "minimal", logo: "microsoft", shadow: false, source: "Microsoft" },
+                { name: "Power Automate AI Builder", type: "Automation AI", users: 22, dataActivity: "128 MB", risk: "minimal", logo: "microsoft", shadow: false, source: "Licensed" },
+                { name: "Teams Intelligent Recap", type: "Productivity AI", users: 150, dataActivity: "1.1 GB", risk: "minimal", logo: "microsoft", shadow: false, source: "Microsoft" }
             ],
             gaps: [
                 {
@@ -2488,10 +2819,26 @@
                 }
             ],
             checks: [
-                { name: "Sensitivity labels configured", status: "pass", value: "4 labels" },
-                { name: "DLP policies active", status: "pass", value: "6 policies" },
+                { name: "Sensitivity labels configured", status: "pass", value: "4 labels", details: [
+                    { name: "Highly Confidential", description: "Encryption + restricted access for sensitive data" },
+                    { name: "Confidential", description: "Internal use only, watermarking enabled" },
+                    { name: "Internal", description: "General internal business content" },
+                    { name: "Public", description: "Content approved for external sharing" }
+                ]},
+                { name: "DLP policies active", status: "pass", value: "6 policies", details: [
+                    { name: "Block External PII Sharing", description: "Prevents sharing of personal data outside org" },
+                    { name: "Financial Data Protection", description: "Controls for credit card and banking info" },
+                    { name: "Healthcare Compliance (HIPAA)", description: "PHI data handling requirements" },
+                    { name: "EU Data Residency", description: "Ensures EU data stays in EU region" },
+                    { name: "AI Training Data Controls", description: "Prevents sensitive data use in AI training" },
+                    { name: "External Sharing Audit", description: "Logs all external file shares for review" }
+                ]},
                 { name: "Copilot access controlled", status: "pass", value: "45 users" },
-                { name: "Conditional Access for AI apps", status: "pass", value: "3 policies" },
+                { name: "Conditional Access for AI apps", status: "pass", value: "3 policies", details: [
+                    { name: "Require MFA for Copilot", description: "Multi-factor authentication required for all Copilot access" },
+                    { name: "Block Copilot from unmanaged devices", description: "Only corporate-managed devices can access Copilot" },
+                    { name: "Restrict AI apps to compliant devices", description: "Device compliance required for AI application access" }
+                ]},
                 { name: "Audit logging enabled", status: "pass", value: "Active" },
                 { name: "AI system inventory exists", status: "pass", value: "12 systems" },
                 { name: "AI governance policy", status: "fail", value: "Not found" },
@@ -2794,10 +3141,16 @@
         // Process sensitivity labels
         function processSensitivityLabels(labels) {
             const hasLabels = labels && labels.length > 0;
+            const labelDetails = hasLabels ? labels.map(l => ({
+                name: l.name || l.displayName || 'Unnamed Label',
+                description: l.description || l.tooltip || 'No description available'
+            })) : [];
+
             scanData.checks.push({
                 name: "Sensitivity labels configured",
                 status: hasLabels ? "pass" : "fail",
-                value: hasLabels ? `${labels.length} labels` : "Not configured"
+                value: hasLabels ? `${labels.length} labels` : "Not configured",
+                details: labelDetails
             });
         }
 
@@ -2806,10 +3159,17 @@
             const hasPolicies = policies && policies.length > 0;
             const enabledPolicies = policies.filter(p => p.state === 'enabled');
 
+            // Build details for all enabled policies
+            const policyDetails = enabledPolicies.map(p => ({
+                name: p.displayName || 'Unnamed Policy',
+                description: buildCADescription(p)
+            }));
+
             scanData.checks.push({
                 name: "Conditional Access policies",
                 status: enabledPolicies.length > 0 ? "pass" : "warn",
-                value: `${enabledPolicies.length} enabled`
+                value: `${enabledPolicies.length} enabled`,
+                details: policyDetails
             });
 
             // Check for AI-specific policies
@@ -2817,11 +3177,27 @@
                 p.displayName?.toLowerCase().includes('ai') ||
                 p.displayName?.toLowerCase().includes('copilot')
             );
+            const aiPolicyDetails = aiPolicies.map(p => ({
+                name: p.displayName || 'Unnamed Policy',
+                description: buildCADescription(p)
+            }));
             scanData.checks.push({
                 name: "AI-specific Conditional Access",
                 status: aiPolicies.length > 0 ? "pass" : "warn",
-                value: aiPolicies.length > 0 ? `${aiPolicies.length} policies` : "Not found"
+                value: aiPolicies.length > 0 ? `${aiPolicies.length} policies` : "Not found",
+                details: aiPolicyDetails.length > 0 ? aiPolicyDetails : undefined
             });
+        }
+
+        // Build a human-readable description for a Conditional Access policy
+        function buildCADescription(policy) {
+            const parts = [];
+            if (policy.conditions?.users?.includeUsers?.includes('All')) parts.push('All users');
+            if (policy.grantControls?.builtInControls?.includes('mfa')) parts.push('Requires MFA');
+            if (policy.grantControls?.builtInControls?.includes('compliantDevice')) parts.push('Requires compliant device');
+            if (policy.grantControls?.builtInControls?.includes('domainJoinedDevice')) parts.push('Requires domain-joined device');
+            if (policy.conditions?.platforms?.includePlatforms?.length) parts.push(`Platforms: ${policy.conditions.platforms.includePlatforms.join(', ')}`);
+            return parts.length > 0 ? parts.join(' • ') : 'Policy details available in Azure portal';
         }
 
         // Process subscriptions for Copilot licenses
@@ -3337,17 +3713,31 @@
 
             // Checks
             const checksList = document.getElementById('checksList');
-            checksList.innerHTML = scanData.checks.map(check => `
-                <div class="check-item">
-                    <div class="check-icon ${check.status}">
-                        ${check.status === 'pass' ? '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' :
-                          check.status === 'fail' ? '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' :
-                          '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'}
+            checksList.innerHTML = scanData.checks.map((check, index) => {
+                const hasDetails = check.details && check.details.length > 0;
+                return `
+                    <div class="check-item ${hasDetails ? 'has-details' : ''}" ${hasDetails ? `onclick="toggleCheckDetails(${index})" id="check-${index}"` : ''}>
+                        <div class="check-icon ${check.status}">
+                            ${check.status === 'pass' ? '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' :
+                              check.status === 'fail' ? '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' :
+                              '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'}
+                        </div>
+                        <span class="check-text">${check.name}</span>
+                        <span class="check-value">${check.value}</span>
+                        ${hasDetails ? '<svg class="check-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>' : ''}
                     </div>
-                    <span class="check-text">${check.name}</span>
-                    <span class="check-value">${check.value}</span>
-                </div>
-            `).join('');
+                    ${hasDetails ? `
+                        <div class="check-details" id="check-details-${index}">
+                            ${check.details.map(d => `
+                                <div class="check-detail-item">
+                                    <div class="check-detail-name">${d.name}</div>
+                                    <div class="check-detail-desc">${d.description}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                `;
+            }).join('');
 
             // Data Governance
             const dgTable = document.getElementById('dataGovernanceTable');
@@ -3398,6 +3788,7 @@
                         </div>
                     </div>
                     <div class="system-users">${sys.users} users</div>
+                    <div class="system-activity">${sys.dataActivity || 'N/A'}</div>
                     <div class="system-source">${sys.source}</div>
                     <span class="risk-badge ${sys.risk}">${sys.risk}</span>
                 </div>
@@ -3410,6 +3801,19 @@
             document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
             renderAISystems(filter);
+        }
+
+        function toggleCheckDetails(index) {
+            const checkItem = document.getElementById(`check-${index}`);
+            const details = document.getElementById(`check-details-${index}`);
+
+            if (checkItem.classList.contains('expanded')) {
+                checkItem.classList.remove('expanded');
+                details.style.display = 'none';
+            } else {
+                checkItem.classList.add('expanded');
+                details.style.display = 'block';
+            }
         }
 
         function updateAlertBanner() {
@@ -3503,6 +3907,7 @@
                     n: a.name,
                     t: a.type,
                     u: a.users,
+                    da: a.dataActivity,
                     r: a.risk,
                     l: a.logo,
                     sh: a.shadow,
@@ -3515,7 +3920,12 @@
                     so: g.solution,
                     pr: g.products
                 })),
-                ch: data.checks.map(c => ({ n: c.name, s: c.status, v: c.value })),
+                ch: data.checks.map(c => ({
+                    n: c.name,
+                    s: c.status,
+                    v: c.value,
+                    de: c.details ? c.details.map(d => ({ n: d.name, d: d.description })) : undefined
+                })),
                 dg: data.dataGovernance
             };
 
@@ -3548,6 +3958,7 @@
                         name: a.n,
                         type: a.t,
                         users: a.u,
+                        dataActivity: a.da,
                         risk: a.r,
                         logo: a.l,
                         shadow: a.sh,
@@ -3560,7 +3971,12 @@
                         solution: g.so,
                         products: g.pr
                     })),
-                    checks: data.ch.map(c => ({ name: c.n, status: c.s, value: c.v })),
+                    checks: data.ch.map(c => ({
+                        name: c.n,
+                        status: c.s,
+                        value: c.v,
+                        details: c.de ? c.de.map(d => ({ name: d.n, description: d.d })) : undefined
+                    })),
                     dataGovernance: data.dg,
                     timeline: demoData.timeline // Use static timeline
                 };
