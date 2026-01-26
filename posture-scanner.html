@@ -940,6 +940,276 @@
             color: var(--purple);
         }
 
+        /* Score Breakdown Styles */
+        .score-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .score-summary {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 10px;
+        }
+
+        .score-summary-ring {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+        }
+
+        .score-summary-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .score-summary-details {
+            flex: 1;
+        }
+
+        .score-summary-points {
+            font-size: 0.875rem;
+            color: var(--ink-secondary);
+            margin-bottom: 4px;
+        }
+
+        .score-summary-status {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .score-summary-desc {
+            font-size: 0.75rem;
+            color: var(--ink-tertiary);
+            line-height: 1.4;
+        }
+
+        .score-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .score-category {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .score-category-name {
+            width: 120px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--ink-secondary);
+            flex-shrink: 0;
+        }
+
+        .score-category-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-category-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .score-category-value {
+            width: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--ink);
+            text-align: right;
+        }
+
+        /* Improve Score Section */
+        .improve-score-section {
+            margin-top: 8px;
+        }
+
+        .improve-score-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .improve-score-title {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .improve-score-potential {
+            font-size: 0.75rem;
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .score-control-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .score-control-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .score-control-item:hover {
+            border-color: var(--primary-light);
+            background: var(--bg);
+        }
+
+        .score-control-item.implemented {
+            opacity: 0.7;
+        }
+
+        .score-control-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .score-control-icon.pass {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .score-control-icon.fail {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .score-control-icon.warn {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .score-control-icon svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .score-control-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .score-control-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .score-control-name {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .score-control-article {
+            font-size: 0.625rem;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .score-control-desc {
+            font-size: 0.75rem;
+            color: var(--ink-tertiary);
+            margin-bottom: 6px;
+        }
+
+        .score-control-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.6875rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .score-control-action:hover {
+            text-decoration: underline;
+        }
+
+        .score-control-points {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+            flex-shrink: 0;
+        }
+
+        .score-control-impact {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .score-control-impact.earned {
+            color: var(--ink-tertiary);
+        }
+
+        .score-control-label {
+            font-size: 0.625rem;
+            color: var(--ink-tertiary);
+            text-transform: uppercase;
+        }
+
+        .show-more-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--ink-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .show-more-btn:hover {
+            background: var(--bg);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
         /* Tabs */
         .tabs {
             display: flex;
@@ -1628,6 +1898,40 @@
 
             .risk-badge {
                 align-self: flex-start;
+            }
+
+            /* Score breakdown mobile */
+            .score-summary {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+
+            .score-summary-details {
+                text-align: center;
+            }
+
+            .score-category-name {
+                width: 90px;
+                font-size: 0.6875rem;
+            }
+
+            .score-control-item {
+                flex-wrap: wrap;
+            }
+
+            .score-control-points {
+                width: 100%;
+                flex-direction: row;
+                justify-content: flex-end;
+                gap: 6px;
+                margin-top: 8px;
+                padding-top: 8px;
+                border-top: 1px dashed var(--border-light);
+            }
+
+            .score-control-impact {
+                font-size: 0.8125rem;
             }
 
             /* Tabs scrollable */
@@ -2550,8 +2854,8 @@
 
             <!-- Main Grid -->
             <div class="dashboard-grid">
-                <!-- Score Card -->
-                <div class="card">
+                <!-- Score Card with Detailed Breakdown -->
+                <div class="card" style="grid-column: span 2;">
                     <div class="card-header">
                         <div class="card-title">
                             <div class="card-title-icon" style="background: var(--primary-light); color: var(--primary);">
@@ -2561,33 +2865,37 @@
                                     <line x1="6" y1="20" x2="6" y2="14"/>
                                 </svg>
                             </div>
-                            Overall Posture Score
+                            Compliance Posture Score
                         </div>
+                        <span class="card-badge" style="background: var(--bg); color: var(--ink-secondary);" id="scorePointsBadge">0 / 100 pts</span>
                     </div>
                     <div class="card-body">
-                        <div class="score-display">
-                            <div class="score-ring" id="scoreRing">
-                                <svg width="120" height="120" viewBox="0 0 120 120">
-                                    <circle class="score-ring-bg" cx="60" cy="60" r="52"/>
-                                    <circle class="score-ring-progress" cx="60" cy="60" r="52"
-                                        stroke="var(--warning)"
-                                        stroke-dasharray="326.73"
-                                        stroke-dashoffset="137.23"
-                                        id="scoreProgress"/>
-                                </svg>
-                                <div class="score-ring-text">
-                                    <div class="score-value" id="overallScore">58</div>
-                                    <div class="score-max">of 100</div>
+                        <div class="score-breakdown">
+                            <!-- Score Summary -->
+                            <div class="score-summary">
+                                <div class="score-ring" id="scoreRing">
+                                    <svg width="100" height="100" viewBox="0 0 100 100">
+                                        <circle class="score-ring-bg" cx="50" cy="50" r="42" stroke-width="8"/>
+                                        <circle class="score-ring-progress" cx="50" cy="50" r="42" stroke-width="8"
+                                            stroke="var(--warning)"
+                                            stroke-dasharray="263.89"
+                                            stroke-dashoffset="110.84"
+                                            id="scoreProgress"/>
+                                    </svg>
+                                    <div class="score-ring-text">
+                                        <div class="score-value" id="overallScore" style="font-size: 1.5rem;">58</div>
+                                        <div class="score-max" style="font-size: 0.625rem;">/ 100</div>
+                                    </div>
+                                </div>
+                                <div class="score-summary-details">
+                                    <div class="score-summary-points" id="scorePointsText">Earning 58 of 100 possible points</div>
+                                    <div class="score-summary-status" id="scoreStatus" style="color: var(--warning);">Partially Ready</div>
+                                    <div class="score-summary-desc" id="scoreDescription">You have foundational controls but notable gaps remain. Focus on priority areas to achieve compliance before August 2026.</div>
                                 </div>
                             </div>
-                            <div class="score-details">
-                                <div class="score-status" id="scoreStatus" style="color: var(--warning);">Partially Ready</div>
-                                <div class="score-description" id="scoreDescription">You have foundational controls but notable gaps remain. Focus on priority areas to achieve compliance.</div>
-                                <div class="score-meta">
-                                    <span><strong>Deadline:</strong> Aug 2026</span>
-                                    <span><strong>Checks:</strong> 24 passed</span>
-                                </div>
-                            </div>
+
+                            <!-- Category Progress Bars -->
+                            <div class="score-categories" id="categoryList"></div>
                         </div>
                     </div>
                 </div>
@@ -2610,24 +2918,57 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Category Breakdown -->
+            <!-- Improve Your Score Section -->
+            <div class="section-full" style="margin-top: 20px;">
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <div class="card-title-icon" style="background: var(--purple-light); color: var(--purple);">
+                            <div class="card-title-icon" style="background: var(--success-light); color: var(--success);">
                                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                    <line x1="16" y1="13" x2="8" y2="13"/>
-                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                    <polyline points="17 6 23 6 23 12"/>
                                 </svg>
                             </div>
-                            Category Breakdown
+                            Improve Your Score
                         </div>
+                        <span class="card-badge" style="background: var(--success-light); color: var(--success);" id="potentialPointsBadge">+0 pts available</span>
                     </div>
                     <div class="card-body">
-                        <div class="category-list" id="categoryList"></div>
+                        <div class="improve-score-section">
+                            <div class="score-control-list" id="pendingControlsList">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implemented Controls (Collapsible) -->
+            <div class="section-full" style="margin-top: 20px;">
+                <div class="card">
+                    <div class="card-header" style="cursor: pointer;" onclick="toggleImplementedControls()">
+                        <div class="card-title">
+                            <div class="card-title-icon" style="background: var(--primary-light); color: var(--primary);">
+                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </div>
+                            Implemented Controls
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="card-badge" style="background: var(--success-light); color: var(--success);" id="implementedPointsBadge">0 pts earned</span>
+                            <svg id="implementedChevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-body" id="implementedControlsBody" style="display: none;">
+                        <div class="score-control-list" id="implementedControlsList">
+                            <!-- Dynamically populated -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -4655,71 +4996,322 @@
             ];
         }
 
-        // Calculate overall scores
+        // Calculate overall scores with detailed breakdown
         function calculateScores() {
-            let totalScore = 0;
-            let maxScore = 0;
+            // Define all scoring controls with clear point values
+            const scoreControls = [
+                // AI Inventory & Classification (25 points)
+                {
+                    id: 'ai-inventory',
+                    name: 'AI Systems Inventory',
+                    category: 'AI Inventory',
+                    points: 10,
+                    article: 'Art. 9',
+                    check: () => scanData.aiSystems.length > 0,
+                    status: () => scanData.aiSystems.length > 0 ? 'pass' : 'fail',
+                    current: () => scanData.aiSystems.length > 0 ? 10 : 0,
+                    description: 'Complete inventory of AI systems in use',
+                    action: 'Scan identifies AI applications in your environment'
+                },
+                {
+                    id: 'risk-classification',
+                    name: 'Risk Classification Complete',
+                    category: 'AI Inventory',
+                    points: 10,
+                    article: 'Art. 6',
+                    check: () => scanData.aiSystems.length > 0,
+                    status: () => scanData.aiSystems.length > 0 ? 'pass' : 'fail',
+                    current: () => scanData.aiSystems.length > 0 ? 10 : 0,
+                    description: 'AI systems classified by EU AI Act risk level',
+                    action: 'All discovered systems are automatically classified'
+                },
+                {
+                    id: 'no-prohibited',
+                    name: 'No Prohibited AI Systems',
+                    category: 'AI Inventory',
+                    points: 5,
+                    article: 'Art. 5',
+                    check: () => scanData.riskClassification.prohibited === 0,
+                    status: () => scanData.riskClassification.prohibited === 0 ? 'pass' : 'fail',
+                    current: () => scanData.riskClassification.prohibited === 0 ? 5 : 0,
+                    description: 'No banned AI systems detected',
+                    action: 'Remove any prohibited AI systems immediately'
+                },
 
-            // Category scores based on checks
-            const categories = {
-                "AI Inventory": { score: 0, max: 20 },
-                "Data Governance": { score: 0, max: 20 },
-                "Access Controls": { score: 0, max: 20 },
-                "Human Oversight": { score: 0, max: 15 },
-                "Transparency": { score: 0, max: 15 },
-                "Governance": { score: 0, max: 10 }
+                // Data Governance (20 points)
+                {
+                    id: 'sensitivity-labels',
+                    name: 'Sensitivity Labels Configured',
+                    category: 'Data Governance',
+                    points: 10,
+                    article: 'Art. 10',
+                    check: () => {
+                        const check = scanData.checks.find(c => c.name.includes("Sensitivity labels"));
+                        return check?.status === 'pass';
+                    },
+                    status: () => {
+                        const check = scanData.checks.find(c => c.name.includes("Sensitivity labels"));
+                        return check?.status || 'fail';
+                    },
+                    current: () => {
+                        const check = scanData.checks.find(c => c.name.includes("Sensitivity labels"));
+                        return check?.status === 'pass' ? 10 : check?.status === 'warn' ? 5 : 0;
+                    },
+                    description: 'Data classification labels to protect AI training data',
+                    action: 'Configure sensitivity labels in Microsoft Purview',
+                    actionUrl: 'https://purview.microsoft.com/informationprotection'
+                },
+                {
+                    id: 'dlp-policies',
+                    name: 'DLP Policies Active',
+                    category: 'Data Governance',
+                    points: 10,
+                    article: 'Art. 10',
+                    check: () => {
+                        const check = scanData.checks.find(c => c.name.includes("DLP policies"));
+                        return check?.status === 'pass';
+                    },
+                    status: () => {
+                        const check = scanData.checks.find(c => c.name.includes("DLP policies"));
+                        return check?.status || 'fail';
+                    },
+                    current: () => {
+                        const check = scanData.checks.find(c => c.name.includes("DLP policies"));
+                        return check?.status === 'pass' ? 10 : check?.status === 'warn' ? 5 : 0;
+                    },
+                    description: 'Prevent sensitive data exposure to AI systems',
+                    action: 'Configure DLP policies in Microsoft Purview',
+                    actionUrl: 'https://purview.microsoft.com/datalossprevention'
+                },
+
+                // Access Controls (20 points)
+                {
+                    id: 'conditional-access',
+                    name: 'Conditional Access Policies',
+                    category: 'Access Controls',
+                    points: 10,
+                    article: 'Art. 9',
+                    check: () => {
+                        const check = scanData.checks.find(c => c.name.includes("Conditional Access"));
+                        return check?.status === 'pass';
+                    },
+                    status: () => {
+                        const check = scanData.checks.find(c => c.name.includes("Conditional Access"));
+                        return check?.status || 'fail';
+                    },
+                    current: () => {
+                        const check = scanData.checks.find(c => c.name.includes("Conditional Access"));
+                        return check?.status === 'pass' ? 10 : check?.status === 'warn' ? 5 : 0;
+                    },
+                    description: 'Control access to AI applications',
+                    action: 'Configure Conditional Access in Entra ID',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies'
+                },
+                {
+                    id: 'ai-specific-ca',
+                    name: 'AI-Specific Access Controls',
+                    category: 'Access Controls',
+                    points: 5,
+                    article: 'Art. 9',
+                    check: () => {
+                        const check = scanData.checks.find(c => c.name.includes("AI-specific"));
+                        return check?.status === 'pass';
+                    },
+                    status: () => {
+                        const check = scanData.checks.find(c => c.name.includes("AI-specific"));
+                        return check?.status || 'fail';
+                    },
+                    current: () => {
+                        const check = scanData.checks.find(c => c.name.includes("AI-specific"));
+                        return check?.status === 'pass' ? 5 : 0;
+                    },
+                    description: 'Policies specifically targeting AI applications',
+                    action: 'Create CA policies for Copilot and AI apps',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies'
+                },
+                {
+                    id: 'oauth-review',
+                    name: 'OAuth App Consent Review',
+                    category: 'Access Controls',
+                    points: 5,
+                    article: 'Art. 9',
+                    check: () => {
+                        const grants = scanData.checks.find(c => c.name.includes("OAuth"));
+                        return grants?.status === 'pass';
+                    },
+                    status: () => {
+                        const grants = scanData.checks.find(c => c.name.includes("OAuth"));
+                        return grants?.status || 'warn';
+                    },
+                    current: () => {
+                        const grants = scanData.checks.find(c => c.name.includes("OAuth"));
+                        return grants?.status === 'pass' ? 5 : grants?.status === 'warn' ? 2 : 0;
+                    },
+                    description: 'Review and govern third-party AI app permissions',
+                    action: 'Review app consents in Entra ID',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_IAM/ConsentPoliciesMenuBlade/~/UserSettings'
+                },
+
+                // Human Oversight (15 points)
+                {
+                    id: 'human-oversight',
+                    name: 'Human Oversight Documented',
+                    category: 'Human Oversight',
+                    points: 8,
+                    article: 'Art. 14',
+                    check: () => false, // Manual verification needed
+                    status: () => 'warn',
+                    current: () => 0,
+                    description: 'Document human review processes for AI decisions',
+                    action: 'Create human oversight policy and procedures',
+                    manual: true
+                },
+                {
+                    id: 'high-risk-oversight',
+                    name: 'High-Risk AI Oversight Process',
+                    category: 'Human Oversight',
+                    points: 7,
+                    article: 'Art. 14',
+                    check: () => scanData.riskClassification.highRisk === 0,
+                    status: () => scanData.riskClassification.highRisk === 0 ? 'pass' : 'warn',
+                    current: () => scanData.riskClassification.highRisk === 0 ? 7 : 0,
+                    description: 'Human review for high-risk AI system outputs',
+                    action: 'Implement oversight for HR AI, recruitment tools',
+                    manual: true
+                },
+
+                // Transparency (10 points)
+                {
+                    id: 'ai-notices',
+                    name: 'AI Transparency Notices',
+                    category: 'Transparency',
+                    points: 5,
+                    article: 'Art. 52',
+                    check: () => false,
+                    status: () => 'warn',
+                    current: () => 0,
+                    description: 'Inform users when interacting with AI',
+                    action: 'Add AI disclosure notices to Copilot, chatbots',
+                    manual: true
+                },
+                {
+                    id: 'ai-documentation',
+                    name: 'AI System Documentation',
+                    category: 'Transparency',
+                    points: 5,
+                    article: 'Art. 11',
+                    check: () => false,
+                    status: () => 'warn',
+                    current: () => 0,
+                    description: 'Document AI capabilities and limitations',
+                    action: 'Create AI system cards for each high-risk system',
+                    manual: true
+                },
+
+                // Governance & Training (10 points)
+                {
+                    id: 'ai-policy',
+                    name: 'AI Acceptable Use Policy',
+                    category: 'Governance',
+                    points: 5,
+                    article: 'Art. 4',
+                    check: () => false,
+                    status: () => 'warn',
+                    current: () => 0,
+                    description: 'Formal policy governing AI use in organisation',
+                    action: 'Create and publish AI acceptable use policy',
+                    manual: true
+                },
+                {
+                    id: 'ai-training',
+                    name: 'AI Literacy Training',
+                    category: 'Governance',
+                    points: 5,
+                    article: 'Art. 4',
+                    check: () => false,
+                    status: () => 'warn',
+                    current: () => 0,
+                    description: 'Staff training on AI risks and responsibilities',
+                    action: 'Deploy AI awareness training programme',
+                    manual: true
+                }
+            ];
+
+            // Calculate scores for each control
+            const implementedControls = [];
+            const pendingControls = [];
+            let totalEarned = 0;
+            let totalPossible = 0;
+
+            scoreControls.forEach(control => {
+                const earned = control.current();
+                const status = control.status();
+                totalPossible += control.points;
+                totalEarned += earned;
+
+                const controlData = {
+                    ...control,
+                    earned,
+                    available: control.points - earned,
+                    status
+                };
+
+                if (earned === control.points) {
+                    implementedControls.push(controlData);
+                } else {
+                    pendingControls.push(controlData);
+                }
+            });
+
+            // Sort pending by available points (highest impact first)
+            pendingControls.sort((a, b) => b.available - a.available);
+
+            // Calculate category scores
+            const categoryScores = {};
+            scoreControls.forEach(control => {
+                if (!categoryScores[control.category]) {
+                    categoryScores[control.category] = { earned: 0, max: 0, controls: [] };
+                }
+                categoryScores[control.category].earned += control.current();
+                categoryScores[control.category].max += control.points;
+                categoryScores[control.category].controls.push({
+                    name: control.name,
+                    earned: control.current(),
+                    max: control.points,
+                    status: control.status()
+                });
+            });
+
+            // Store detailed score breakdown
+            scanData.scoreBreakdown = {
+                totalEarned,
+                totalPossible,
+                implementedControls,
+                pendingControls,
+                categoryScores,
+                allControls: scoreControls
             };
 
-            // AI Inventory score
-            if (scanData.aiSystems.length > 0) categories["AI Inventory"].score += 15;
-            if (scanData.riskClassification.prohibited === 0) categories["AI Inventory"].score += 5;
-
-            // Data Governance score
-            const labelCheck = scanData.checks.find(c => c.name.includes("Sensitivity labels"));
-            if (labelCheck?.status === "pass") categories["Data Governance"].score += 15;
-            else if (labelCheck?.status === "warn") categories["Data Governance"].score += 7;
-
-            // Access Controls score
-            const caCheck = scanData.checks.find(c => c.name.includes("Conditional Access policies"));
-            if (caCheck?.status === "pass") categories["Access Controls"].score += 15;
-            else if (caCheck?.status === "warn") categories["Access Controls"].score += 7;
-
-            const aiCaCheck = scanData.checks.find(c => c.name.includes("AI-specific"));
-            if (aiCaCheck?.status === "pass") categories["Access Controls"].score += 5;
-
-            // Human Oversight - generally low without manual verification
-            categories["Human Oversight"].score = 5;
-
-            // Transparency - generally low without manual verification
-            categories["Transparency"].score = 5;
-
-            // Governance - check for policies
-            categories["Governance"].score = 3;
-
-            // Add missing checks
-            scanData.checks.push(
-                { name: "AI governance policy", status: "warn", value: "Manual verification needed" },
-                { name: "Human oversight documented", status: "warn", value: "Manual verification needed" },
-                { name: "AI literacy training", status: "warn", value: "Manual verification needed" },
-                { name: "AI transparency notices", status: "warn", value: "Manual verification needed" }
-            );
-
-            // Calculate totals
-            scanData.categories = Object.entries(categories).map(([name, data]) => {
-                totalScore += data.score;
-                maxScore += data.max;
+            // Calculate categories for the category bars
+            scanData.categories = Object.entries(categoryScores).map(([name, data]) => {
+                const percent = Math.round((data.earned / data.max) * 100);
                 return {
                     name,
-                    score: Math.round((data.score / data.max) * 100),
-                    color: data.score / data.max >= 0.7 ? "var(--success)" :
-                           data.score / data.max >= 0.4 ? "var(--warning)" : "var(--danger)"
+                    score: percent,
+                    earned: data.earned,
+                    max: data.max,
+                    controls: data.controls,
+                    color: percent >= 70 ? "var(--success)" :
+                           percent >= 40 ? "var(--warning)" : "var(--danger)"
                 };
             });
 
             // Overall score
-            const overallPercent = Math.round((totalScore / maxScore) * 100);
+            const overallPercent = Math.round((totalEarned / totalPossible) * 100);
             scanData.score = {
                 overall: overallPercent,
+                earned: totalEarned,
+                possible: totalPossible,
                 status: overallPercent >= 80 ? "Well Prepared" :
                         overallPercent >= 60 ? "Partially Ready" :
                         overallPercent >= 40 ? "Needs Attention" : "Critical Gaps",
@@ -5042,9 +5634,9 @@
             document.getElementById('tenantName').textContent = tenantDisplay;
             document.getElementById('scanTime').textContent = `Last scan: ${scanData.tenant.scanTime}`;
 
-            // Score
+            // Score - Updated for new layout
             const score = scanData.score.overall;
-            const circumference = 2 * Math.PI * 52;
+            const circumference = 2 * Math.PI * 42; // Updated radius for smaller ring
             const offset = circumference - (score / 100) * circumference;
 
             document.getElementById('overallScore').textContent = score;
@@ -5052,6 +5644,13 @@
             document.getElementById('scoreStatus').style.color = scanData.score.statusColor;
             document.getElementById('scoreDescription').textContent = scanData.score.description;
             document.getElementById('scoreProgress').setAttribute('stroke-dashoffset', offset);
+            document.getElementById('scoreProgress').setAttribute('stroke', scanData.score.statusColor);
+
+            // Score points breakdown
+            const earned = scanData.score.earned || score;
+            const possible = scanData.score.possible || 100;
+            document.getElementById('scorePointsBadge').textContent = `${earned} / ${possible} pts`;
+            document.getElementById('scorePointsText').textContent = `Earning ${earned} of ${possible} possible points`;
 
             // Stats
             document.getElementById('statAiSystems').textContent = scanData.aiSystems.length;
@@ -5061,19 +5660,20 @@
             // Risk Classification - Dynamic rendering with system names
             renderRiskClassification();
 
-            // Categories
+            // Categories - New progress bar style
             const categoryList = document.getElementById('categoryList');
             categoryList.innerHTML = scanData.categories.map(cat => `
-                <div class="category-item">
-                    <div class="category-header">
-                        <span class="category-name">${cat.name}</span>
-                        <span class="category-score">${cat.score}%</span>
+                <div class="score-category">
+                    <span class="score-category-name">${cat.name}</span>
+                    <div class="score-category-bar">
+                        <div class="score-category-fill" style="width: ${cat.score}%; background: ${cat.color};"></div>
                     </div>
-                    <div class="category-bar">
-                        <div class="category-fill" style="width: ${cat.score}%; background: ${cat.color};"></div>
-                    </div>
+                    <span class="score-category-value">${cat.earned || Math.round(cat.score * (cat.max || 20) / 100)}/${cat.max || 20}</span>
                 </div>
             `).join('');
+
+            // Render Score Controls (Improve Your Score + Implemented)
+            renderScoreControls();
 
             // AI Systems
             renderAISystems('all');
@@ -5332,6 +5932,80 @@
             document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
             renderAISystems(filter);
+        }
+
+        function renderScoreControls() {
+            const breakdown = scanData.scoreBreakdown;
+            if (!breakdown) return;
+
+            // Calculate potential points available
+            const potentialPoints = breakdown.pendingControls.reduce((sum, c) => sum + c.available, 0);
+            const earnedPoints = breakdown.implementedControls.reduce((sum, c) => sum + c.earned, 0);
+
+            // Update badges
+            document.getElementById('potentialPointsBadge').textContent = `+${potentialPoints} pts available`;
+            document.getElementById('implementedPointsBadge').textContent = `${earnedPoints} pts earned`;
+
+            // Render pending controls (improve your score)
+            const pendingList = document.getElementById('pendingControlsList');
+            pendingList.innerHTML = breakdown.pendingControls.map(control => `
+                <div class="score-control-item">
+                    <div class="score-control-icon ${control.status}">
+                        ${control.status === 'warn'
+                            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+                            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}
+                    </div>
+                    <div class="score-control-content">
+                        <div class="score-control-header">
+                            <span class="score-control-name">${control.name}</span>
+                            <span class="score-control-article">${control.article}</span>
+                            ${control.manual ? '<span class="score-control-article" style="background: var(--warning-light); color: var(--warning);">Manual</span>' : ''}
+                        </div>
+                        <div class="score-control-desc">${control.description}</div>
+                        ${control.actionUrl
+                            ? `<a href="${control.actionUrl}" target="_blank" class="score-control-action">${control.action} <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
+                            : `<span class="score-control-action" style="cursor: default;">${control.action}</span>`}
+                    </div>
+                    <div class="score-control-points">
+                        <span class="score-control-impact">+${control.available}</span>
+                        <span class="score-control-label">points</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render implemented controls
+            const implementedList = document.getElementById('implementedControlsList');
+            implementedList.innerHTML = breakdown.implementedControls.map(control => `
+                <div class="score-control-item implemented">
+                    <div class="score-control-icon pass">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <div class="score-control-content">
+                        <div class="score-control-header">
+                            <span class="score-control-name">${control.name}</span>
+                            <span class="score-control-article">${control.article}</span>
+                        </div>
+                        <div class="score-control-desc">${control.description}</div>
+                    </div>
+                    <div class="score-control-points">
+                        <span class="score-control-impact earned">${control.earned}</span>
+                        <span class="score-control-label">earned</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleImplementedControls() {
+            const body = document.getElementById('implementedControlsBody');
+            const chevron = document.getElementById('implementedChevron');
+
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                body.style.display = 'none';
+                chevron.style.transform = 'rotate(0deg)';
+            }
         }
 
         function toggleCheckDetails(index) {
