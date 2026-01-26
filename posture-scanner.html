@@ -2902,17 +2902,24 @@
         // These correspond to the API permissions in your App Registration
         const loginRequest = {
             scopes: [
+                // Core permissions
                 "User.Read",
                 "Directory.Read.All",
                 "Application.Read.All",
                 "Policy.Read.All",
-                "AuditLog.Read.All",
-                "Reports.Read.All",
-                "Sites.Read.All",
-                // Security & Compliance permissions
+                // Audit & Reports
+                "AuditLog.Read.All",                    // AI app sign-ins, directory changes
+                "Reports.Read.All",                     // Copilot usage, app usage reports
+                // Security & Compliance
                 "SecurityEvents.Read.All",              // Security alerts
-                "InformationProtectionPolicy.Read.All", // DLP & Sensitivity policies
-                "CloudApp-Discovery.Read.All"           // MDCA discovered apps inventory
+                "SecurityActions.Read.All",             // Security recommendations
+                "ThreatIndicators.Read.All",            // Threat intelligence
+                // Information Protection
+                "InformationProtectionPolicy.Read",     // Sensitivity labels & policies (user scope)
+                // Cloud App Security
+                "CloudApp-Discovery.Read.All",          // MDCA discovered apps
+                // SharePoint
+                "Sites.Read.All"                        // External sharing settings
             ]
         };
 
@@ -3510,18 +3517,53 @@
                         .catch(() => ({ value: [] }))
                 ]);
 
-                updateLoadingStatus("Reading Cloud App Discovery...", 70);
+                updateLoadingStatus("Reading Cloud App Discovery...", 55);
                 // Defender for Cloud Apps - Discovered Apps Inventory
                 const discoveredApps = await callGraphAPIBeta("/security/dataDiscovery/cloudAppDiscovery/uploadedStreams", ["CloudApp-Discovery.Read.All"])
                     .catch(() => ({ value: [] }));
 
-                updateLoadingStatus("Reading directory settings...", 80);
+                updateLoadingStatus("Reading audit logs...", 60);
+                // Audit logs - Sign-ins to AI applications (last 7 days)
+                const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+                const [signInLogs, directoryAudits] = await Promise.all([
+                    callGraphAPIBeta(`/auditLogs/signIns?$top=200&$filter=createdDateTime ge ${sevenDaysAgo}`, ["AuditLog.Read.All"])
+                        .catch(() => ({ value: [] })),
+                    callGraphAPIBeta(`/auditLogs/directoryAudits?$top=100&$filter=activityDateTime ge ${sevenDaysAgo}`, ["AuditLog.Read.All"])
+                        .catch(() => ({ value: [] }))
+                ]);
+
+                updateLoadingStatus("Reading usage reports...", 68);
+                // Usage reports - Copilot and application usage
+                const [copilotUsage, appCredentialSignIns] = await Promise.all([
+                    // Copilot usage report (if available)
+                    callGraphAPIBeta("/reports/getMicrosoft365CopilotUsageUserDetail(period='D7')", ["Reports.Read.All"])
+                        .catch(() => ({ value: [] })),
+                    // App credential sign-in activity
+                    callGraphAPIBeta("/reports/getCredentialUserRegistrationDetails", ["Reports.Read.All"])
+                        .catch(() => ({ value: [] }))
+                ]);
+
+                updateLoadingStatus("Reading security recommendations...", 75);
+                // Security recommendations and threat indicators
+                const [securityRecommendations, threatIndicators] = await Promise.all([
+                    callGraphAPIBeta("/security/secureScoreControlProfiles", ["SecurityActions.Read.All"])
+                        .catch(() => ({ value: [] })),
+                    callGraphAPIBeta("/security/tiIndicators?$top=50", ["ThreatIndicators.Read.All"])
+                        .catch(() => ({ value: [] }))
+                ]);
+
+                updateLoadingStatus("Reading SharePoint settings...", 82);
+                // SharePoint external sharing settings
+                const sharepointSettings = await callGraphAPIBeta("/admin/sharepoint/settings", ["Sites.Read.All"])
+                    .catch(() => null);
+
+                updateLoadingStatus("Reading directory settings...", 88);
                 const directorySettings = await callGraphAPIBeta("/settings", ["Directory.Read.All"]).catch(() => ({ value: [] }));
 
-                updateLoadingStatus("Checking subscriptions...", 85);
+                updateLoadingStatus("Checking subscriptions...", 92);
                 const subscriptions = await callGraphAPI("/subscribedSkus", ["Directory.Read.All"]).catch(() => ({ value: [] }));
 
-                updateLoadingStatus("Analyzing AI systems...", 95);
+                updateLoadingStatus("Analyzing AI systems...", 96);
 
                 // Store raw data for detailed reporting
                 const collectedData = {
@@ -3535,6 +3577,12 @@
                     securityAlerts: securityAlerts?.value || [],
                     secureScore: secureScore?.value?.[0] || null,
                     discoveredApps: discoveredApps?.value || [],
+                    signInLogs: signInLogs?.value || [],
+                    directoryAudits: directoryAudits?.value || [],
+                    copilotUsage: copilotUsage?.value || [],
+                    securityRecommendations: securityRecommendations?.value || [],
+                    threatIndicators: threatIndicators?.value || [],
+                    sharepointSettings: sharepointSettings,
                     directorySettings: directorySettings?.value || [],
                     subscriptions: subscriptions?.value || []
                 };
@@ -3546,6 +3594,8 @@
                 processConditionalAccess(collectedData.conditionalAccessPolicies);
                 processSecurityAlerts(collectedData.securityAlerts);
                 processDiscoveredApps(collectedData.discoveredApps);
+                processSignInLogs(collectedData.signInLogs);
+                processCopilotUsage(collectedData.copilotUsage);
                 processSubscriptions(collectedData.subscriptions);
                 processDataGovernance(collectedData);
 
@@ -4052,6 +4102,110 @@
             scanData._discoveredApps = streams;
         }
 
+        // Process Sign-In Logs - Identify AI app usage patterns
+        function processSignInLogs(signIns) {
+            if (!signIns || signIns.length === 0) return;
+
+            // AI-related app names to look for in sign-ins
+            const aiAppIndicators = ['copilot', 'openai', 'chatgpt', 'gpt', 'ai', 'claude', 'gemini',
+                'grammarly', 'notion', 'otter', 'midjourney', 'dall-e', 'jasper', 'anthropic'];
+
+            // Count sign-ins to AI apps
+            const aiSignIns = signIns.filter(s => {
+                const appName = (s.appDisplayName || s.resourceDisplayName || '').toLowerCase();
+                return aiAppIndicators.some(indicator => appName.includes(indicator));
+            });
+
+            // Get unique users accessing AI apps
+            const aiUsers = new Set(aiSignIns.map(s => s.userPrincipalName || s.userId).filter(Boolean));
+
+            // Get unique AI apps accessed
+            const aiApps = new Set(aiSignIns.map(s => s.appDisplayName || s.resourceDisplayName).filter(Boolean));
+
+            // Add check for AI app access monitoring
+            scanData.checks.push({
+                name: "AI app access monitoring",
+                status: aiSignIns.length > 0 ? "pass" : "warn",
+                value: aiSignIns.length > 0 ? `${aiUsers.size} users, ${aiApps.size} apps` : "No AI sign-ins detected",
+                details: aiApps.size > 0 ? Array.from(aiApps).slice(0, 10).map(app => ({
+                    name: app,
+                    description: `${aiSignIns.filter(s => s.appDisplayName === app || s.resourceDisplayName === app).length} sign-ins in last 7 days`
+                })) : undefined
+            });
+
+            // Add any newly discovered AI apps to the systems list
+            aiApps.forEach(appName => {
+                const lowerName = appName.toLowerCase();
+                if (!scanData.aiSystems.find(s => s.name.toLowerCase() === lowerName)) {
+                    const signInCount = aiSignIns.filter(s =>
+                        s.appDisplayName === appName || s.resourceDisplayName === appName
+                    ).length;
+                    const uniqueUsers = new Set(aiSignIns
+                        .filter(s => s.appDisplayName === appName || s.resourceDisplayName === appName)
+                        .map(s => s.userPrincipalName)
+                    ).size;
+
+                    scanData.aiSystems.push({
+                        name: appName,
+                        type: 'Detected via Sign-ins',
+                        users: uniqueUsers,
+                        dataActivity: `${signInCount} sign-ins`,
+                        risk: 'unknown',
+                        logo: 'default',
+                        shadow: true,
+                        source: 'Audit Logs'
+                    });
+                    scanData.riskClassification.limited++;
+                }
+            });
+
+            // Store for reference
+            scanData._signInLogs = signIns;
+        }
+
+        // Process Copilot Usage Reports
+        function processCopilotUsage(copilotData) {
+            if (!copilotData || copilotData.length === 0) {
+                // No Copilot usage data - might not have Copilot licenses
+                scanData.checks.push({
+                    name: "Copilot usage tracking",
+                    status: "warn",
+                    value: "No data available",
+                    details: [{ name: "Microsoft 365 Copilot", description: "Enable Copilot licenses to track usage" }]
+                });
+                return;
+            }
+
+            // Count active Copilot users
+            const activeUsers = copilotData.filter(u => u.lastActivityDate || u.isActive);
+            const totalUsers = copilotData.length;
+
+            // Calculate adoption metrics
+            const adoptionRate = totalUsers > 0 ? Math.round((activeUsers.length / totalUsers) * 100) : 0;
+
+            scanData.checks.push({
+                name: "Copilot usage tracking",
+                status: activeUsers.length > 0 ? "pass" : "warn",
+                value: `${activeUsers.length}/${totalUsers} active users (${adoptionRate}%)`,
+                details: activeUsers.slice(0, 10).map(u => ({
+                    name: u.userPrincipalName || u.displayName || 'User',
+                    description: `Last active: ${u.lastActivityDate || 'Unknown'}`
+                }))
+            });
+
+            // Update Copilot entry in AI systems if it exists
+            const copilotSystem = scanData.aiSystems.find(s =>
+                s.name.toLowerCase().includes('copilot') && s.name.toLowerCase().includes('microsoft')
+            );
+            if (copilotSystem) {
+                copilotSystem.users = activeUsers.length;
+                copilotSystem.dataActivity = `${activeUsers.length} active users`;
+            }
+
+            // Store for reference
+            scanData._copilotUsage = copilotData;
+        }
+
         // Process Conditional Access policies
         function processConditionalAccess(policies) {
             const hasPolicies = policies && policies.length > 0;
@@ -4123,6 +4277,8 @@
             const securityAlerts = collectedData.securityAlerts || [];
             const discoveredApps = collectedData.discoveredApps || [];
             const secureScore = collectedData.secureScore;
+            const sharepointSettings = collectedData.sharepointSettings;
+            const securityRecommendations = collectedData.securityRecommendations || [];
 
             const hasLabels = sensitivityLabels.length > 0;
             const hasDLP = dlpPolicies.length > 0;
@@ -4138,6 +4294,23 @@
             const discoveredAppCount = discoveredApps.reduce((count, stream) => {
                 return count + (stream.discoveredCloudApps?.length || stream.apps?.length || 0);
             }, 0);
+
+            // Analyze SharePoint external sharing settings
+            const sharingCapability = sharepointSettings?.sharingCapability || sharepointSettings?.externalSharingCapability;
+            let sharingStatus = 'orange';
+            let sharingCoverage = 'Unable to determine';
+            if (sharepointSettings) {
+                if (sharingCapability === 'Disabled' || sharingCapability === 'ExternalUserAndGuestSharing') {
+                    sharingStatus = sharingCapability === 'Disabled' ? 'green' : 'orange';
+                    sharingCoverage = sharingCapability === 'Disabled' ? 'External sharing disabled' : 'External sharing enabled';
+                } else if (sharingCapability === 'ExternalUserSharingOnly') {
+                    sharingStatus = 'orange';
+                    sharingCoverage = 'Authenticated external users only';
+                } else if (sharingCapability === 'ExistingExternalUserSharingOnly') {
+                    sharingStatus = 'green';
+                    sharingCoverage = 'Existing external users only';
+                }
+            }
 
             // Check secure score for various controls
             const secureScoreControls = secureScore?.controlScores || [];
@@ -4180,8 +4353,8 @@
                 },
                 {
                     control: "SharePoint Permissions",
-                    status: "orange",
-                    coverage: "Manual review recommended",
+                    status: sharepointSettings ? "orange" : "orange",
+                    coverage: sharepointSettings ? "Review access controls" : "Manual review recommended",
                     article: "Art. 10(3) - Access Controls",
                     articleDesc: "Data governance measures must include access management and traceability",
                     action: "Review Permissions",
@@ -4189,8 +4362,8 @@
                 },
                 {
                     control: "External Sharing",
-                    status: "orange",
-                    coverage: "Check SharePoint admin",
+                    status: sharingStatus,
+                    coverage: sharingCoverage,
                     article: "Art. 10(5) - Data Minimization",
                     articleDesc: "Only necessary data should be accessible; external sharing increases risk exposure",
                     action: "Sharing Settings",
