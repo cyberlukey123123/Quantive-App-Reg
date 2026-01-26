@@ -3492,24 +3492,115 @@
                 const oauthGrants = await callGraphAPI("/oauth2PermissionGrants?$top=200", ["Directory.Read.All"]).catch(() => ({ value: [] }));
 
                 updateLoadingStatus("Reading sensitivity labels...", 35);
-                // Sensitivity labels - use SensitivityLabel.Read permission
-                const [sensitivityLabels, labelPolicies] = await Promise.all([
-                    // Try user-scoped endpoint first, then tenant-scoped
-                    callGraphAPIBeta("/me/informationProtection/sensitivityLabels", ["SensitivityLabel.Read"])
-                        .catch(() => callGraphAPIBeta("/informationProtection/sensitivityLabels", ["SensitivityLabel.Read"]))
-                        .catch(() => callGraphAPIBeta("/security/informationProtection/sensitivityLabels", ["InformationProtectionPolicy.Read"]))
-                        .catch(() => ({ value: [] })),
-                    // Label policies
-                    callGraphAPIBeta("/me/informationProtection/labelPolicySettings", ["SensitivityLabel.Read"])
-                        .catch(() => callGraphAPIBeta("/informationProtection/labelPolicySettings", ["InformationProtectionPolicy.Read"]))
-                        .catch(() => ({ value: [] }))
-                ]);
+                // Sensitivity labels - try multiple endpoints to get ALL labels
+                let sensitivityLabels = { value: [] };
+                let labelPolicies = { value: [] };
+                let allLabelsFound = [];
+
+                // Try different endpoints - some return more complete lists
+                // Note: Graph API with delegated permissions only returns labels published to the user
+                // Some labels in Purview may not be visible if not published via label policies
+                const labelEndpoints = [
+                    { url: "/informationProtection/policy/labels", scope: ["InformationProtectionPolicy.Read"], name: "MIP Policy Labels" },
+                    { url: "/me/informationProtection/sensitivityLabels", scope: ["SensitivityLabel.Read"], name: "User Labels" },
+                    { url: "/security/informationProtection/sensitivityLabels", scope: ["InformationProtectionPolicy.Read"], name: "Security Labels" },
+                    { url: "/informationProtection/sensitivityLabels", scope: ["InformationProtectionPolicy.Read"], name: "IP Labels" },
+                    { url: "/me/informationProtection/policy/labels", scope: ["InformationProtectionPolicy.Read"], name: "User Policy Labels" },
+                    { url: "/security/labels_v2/sensitivityLabels", scope: ["InformationProtectionPolicy.Read"], name: "Security v2 Labels" }
+                ];
+
+                console.log("🏷️ Fetching sensitivity labels from multiple endpoints...");
+
+                for (const endpoint of labelEndpoints) {
+                    try {
+                        const result = await callGraphAPIBeta(endpoint.url, endpoint.scope);
+                        const count = result?.value?.length || 0;
+                        console.log(`  ✓ ${endpoint.name} (${endpoint.url}): ${count} labels`);
+
+                        if (result?.value) {
+                            // Collect all unique labels by ID
+                            result.value.forEach(label => {
+                                if (!allLabelsFound.find(l => l.id === label.id)) {
+                                    allLabelsFound.push(label);
+                                }
+                                // Also check for sublabels
+                                if (label.sublabels) {
+                                    label.sublabels.forEach(sub => {
+                                        if (!allLabelsFound.find(l => l.id === sub.id)) {
+                                            allLabelsFound.push({ ...sub, parentLabel: label.name });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
+                        if (count > (sensitivityLabels.value?.length || 0)) {
+                            sensitivityLabels = result;
+                        }
+                    } catch (e) {
+                        console.log(`  ✗ ${endpoint.name} (${endpoint.url}): ${e.message}`);
+                    }
+                }
+
+                // Use the combined unique labels if we found more
+                if (allLabelsFound.length > (sensitivityLabels.value?.length || 0)) {
+                    sensitivityLabels = { value: allLabelsFound };
+                }
+
+                // Log detailed label info
+                const labelCount = sensitivityLabels.value?.length || 0;
+                console.log(`📊 Total unique labels found: ${labelCount}`);
+                if (labelCount > 0) {
+                    const labelNames = sensitivityLabels.value.map(l => l.name || l.displayName || 'Unnamed').join(', ');
+                    console.log(`   Label names: ${labelNames}`);
+                }
+
+                // Note about Graph API limitation
+                console.log('ℹ️ Note: Graph API only returns labels published to the signed-in user.');
+                console.log('   Some tenant labels may not appear if not published via label policies.');
+
+                // Get label policies
+                try {
+                    labelPolicies = await callGraphAPIBeta("/informationProtection/policy/labels", ["InformationProtectionPolicy.Read"]);
+                    console.log(`📋 Label policies: ${labelPolicies?.value?.length || 0}`);
+                } catch (e) {
+                    console.log(`📋 Label policies: error - ${e.message}`);
+                }
 
                 updateLoadingStatus("Reading DLP policies...", 45);
-                // DLP Policies - try different endpoints
-                const dlpPolicies = await callGraphAPIBeta("/security/informationProtection/policy/dlpPolicies", ["InformationProtectionPolicy.Read"])
-                    .catch(() => callGraphAPIBeta("/informationProtection/policy/dlpPolicies", ["InformationProtectionPolicy.Read"]))
-                    .catch(() => ({ value: [] }));
+                // DLP Policies - try multiple endpoints
+                // Note: Microsoft Purview DLP policies are NOT fully exposed via Graph API
+                // They require Security & Compliance PowerShell or Office 365 Management API
+                let dlpPolicies = { value: [] };
+                let dlpDetectedViaAudit = false;
+
+                console.log("🛡️ Fetching DLP policies from multiple endpoints...");
+
+                const dlpEndpoints = [
+                    { url: "/informationProtection/dataLossPreventionPolicies", scope: ["InformationProtectionPolicy.Read"], name: "IP DLP" },
+                    { url: "/security/dataLossPreventionPolicies", scope: ["InformationProtectionPolicy.Read"], name: "Security DLP" },
+                    { url: "/security/informationProtection/policy/dlpPolicies", scope: ["InformationProtectionPolicy.Read"], name: "Security IP DLP" },
+                    { url: "/policies/informationProtectionPolicy", scope: ["InformationProtectionPolicy.Read"], name: "Policies IP" }
+                ];
+
+                for (const endpoint of dlpEndpoints) {
+                    try {
+                        const result = await callGraphAPIBeta(endpoint.url, endpoint.scope);
+                        const count = result?.value?.length || 0;
+                        console.log(`  ✓ ${endpoint.name} (${endpoint.url}): ${count} policies`);
+
+                        if (count > (dlpPolicies.value?.length || 0)) {
+                            dlpPolicies = result;
+                        }
+                    } catch (e) {
+                        console.log(`  ✗ ${endpoint.name} (${endpoint.url}): ${e.message}`);
+                    }
+                }
+
+                console.log(`📊 Total DLP policies found via Graph: ${dlpPolicies.value?.length || 0}`);
+
+                // Also try to detect DLP activity from directory audits (indicates DLP is configured even if we can't access policies)
+                // This helps when Graph API doesn't return Purview DLP policies directly
 
                 updateLoadingStatus("Checking Conditional Access...", 55);
                 const conditionalAccessPolicies = await callGraphAPIBeta("/identity/conditionalAccess/policies", ["Policy.Read.All"]).catch(() => ({ value: [] }));
@@ -3572,6 +3663,18 @@
 
                 updateLoadingStatus("Analyzing AI systems...", 96);
 
+                // Check audit logs for DLP activity (indicates DLP is configured even if Graph can't access policies directly)
+                const dlpAuditEvents = (directoryAudits?.value || []).filter(audit => {
+                    const activity = (audit.activityDisplayName || audit.activity || '').toLowerCase();
+                    const category = (audit.category || '').toLowerCase();
+                    return activity.includes('dlp') || activity.includes('data loss') ||
+                           category.includes('dlp') || category.includes('policy');
+                });
+                const dlpActivityDetected = dlpAuditEvents.length > 0;
+                if (dlpActivityDetected) {
+                    console.log(`🛡️ DLP activity detected in audit logs: ${dlpAuditEvents.length} events`);
+                }
+
                 // Store raw data for detailed reporting
                 const collectedData = {
                     apps: apps.value || [],
@@ -3580,6 +3683,7 @@
                     sensitivityLabels: sensitivityLabels?.value || [],
                     labelPolicies: labelPolicies?.value || [],
                     dlpPolicies: dlpPolicies?.value || [],
+                    dlpActivityDetected: dlpActivityDetected,
                     conditionalAccessPolicies: conditionalAccessPolicies?.value || [],
                     securityAlerts: securityAlerts?.value || [],
                     secureScore: secureScore?.value?.[0] || null,
@@ -3597,7 +3701,7 @@
                 // Process collected data
                 processApplicationData(collectedData.apps, collectedData.servicePrincipals, collectedData.oauthGrants);
                 processSensitivityLabels(collectedData.sensitivityLabels);
-                processDLPPolicies(collectedData.dlpPolicies);
+                processDLPPolicies(collectedData.dlpPolicies, collectedData.dlpActivityDetected);
                 processConditionalAccess(collectedData.conditionalAccessPolicies);
                 processSecurityAlerts(collectedData.securityAlerts);
                 processDiscoveredApps(collectedData.discoveredApps);
@@ -3938,16 +4042,39 @@
         // Process sensitivity labels
         function processSensitivityLabels(labels) {
             const hasLabels = labels && labels.length > 0;
-            const labelDetails = hasLabels ? labels.map(l => ({
-                name: l.name || l.displayName || 'Unnamed Label',
-                description: l.description || l.tooltip || l.color ? `Priority: ${l.priority || 'N/A'}, Color: ${l.color || 'N/A'}` : 'No description available'
-            })) : [];
+
+            // Extract meaningful label details
+            const labelDetails = hasLabels ? labels.map(l => {
+                const name = l.name || l.displayName || 'Unnamed Label';
+                const parent = l.parentLabel ? ` (child of ${l.parentLabel})` : '';
+                const priority = l.priority !== undefined ? `Priority: ${l.priority}` : '';
+                const color = l.color ? `Color: ${l.color}` : '';
+                const description = l.description || l.tooltip || '';
+
+                let detailParts = [priority, color].filter(p => p).join(', ');
+                if (description) {
+                    detailParts = description;
+                }
+
+                return {
+                    name: name + parent,
+                    description: detailParts || 'No additional details'
+                };
+            }) : [];
+
+            // Log label names for debugging
+            if (hasLabels) {
+                console.log('📋 Sensitivity labels found:', labels.map(l => l.name || l.displayName).join(', '));
+            }
 
             scanData.checks.push({
                 name: "Sensitivity labels configured",
                 status: hasLabels ? "pass" : "fail",
-                value: hasLabels ? `${labels.length} labels` : "Not configured",
-                details: labelDetails
+                value: hasLabels ? `${labels.length} labels` : "Not detected via API",
+                details: labelDetails.length > 0 ? labelDetails : [{
+                    name: "Note",
+                    description: "Sensitivity labels may exist in Purview but may not be published to this user. Verify in Purview portal."
+                }]
             });
 
             // Store for data governance section
@@ -3955,7 +4082,7 @@
         }
 
         // Process DLP Policies
-        function processDLPPolicies(policies) {
+        function processDLPPolicies(policies, dlpActivityDetected = false) {
             const hasPolicies = policies && policies.length > 0;
             const enabledPolicies = hasPolicies ? policies.filter(p => p.state === 'Enabled' || p.mode === 'Enable' || p.isEnabled) : [];
 
@@ -3964,11 +4091,27 @@
                 description: `Status: ${p.state || p.mode || 'Unknown'}, Locations: ${p.locations?.length || 'All'}`
             })) : [];
 
+            // Note: Purview DLP policies may exist but not be accessible via Graph API
+            // The API returns application-level DLP, not full compliance center policies
+            let statusValue = "Not detected via API";
+            let statusResult = "fail";
+
+            if (hasPolicies) {
+                statusValue = `${enabledPolicies.length} active / ${policies.length} total`;
+                statusResult = enabledPolicies.length > 0 ? "pass" : "warn";
+            } else if (dlpActivityDetected) {
+                statusValue = "DLP activity detected - policies may exist in Purview";
+                statusResult = "warn";
+            }
+
             scanData.checks.push({
                 name: "DLP policies active",
-                status: enabledPolicies.length > 0 ? "pass" : hasPolicies ? "warn" : "fail",
-                value: hasPolicies ? `${enabledPolicies.length} active / ${policies.length} total` : "Not configured",
-                details: policyDetails
+                status: statusResult,
+                value: statusValue,
+                details: policyDetails.length > 0 ? policyDetails : [{
+                    name: "Note",
+                    description: "Microsoft Purview DLP policies require Purview portal verification. Graph API has limited DLP access."
+                }]
             });
 
             // Store for data governance section
@@ -4281,6 +4424,7 @@
             // Extract data from collected object
             const sensitivityLabels = collectedData.sensitivityLabels || [];
             const dlpPolicies = collectedData.dlpPolicies || [];
+            const dlpActivityDetected = collectedData.dlpActivityDetected || false;
             const securityAlerts = collectedData.securityAlerts || [];
             const discoveredApps = collectedData.discoveredApps || [];
             const secureScore = collectedData.secureScore;
@@ -4290,6 +4434,10 @@
             const hasLabels = sensitivityLabels.length > 0;
             const hasDLP = dlpPolicies.length > 0;
             const activeDLP = dlpPolicies.filter(p => p.state === 'Enabled' || p.mode === 'Enable' || p.isEnabled);
+
+            // Note: Microsoft Purview DLP policies are not fully exposed via Graph API
+            // They require Security & Compliance PowerShell or Office 365 Management API
+            // We detect activity to indicate DLP may be configured even if we can't list policies
 
             // Check for MDCA/Cloud App Security from alerts or discovered apps
             const hasMDCA = discoveredApps.length > 0 || securityAlerts.some(a => {
@@ -4340,8 +4488,12 @@
                 },
                 {
                     control: "DLP Policies",
-                    status: hasDLP ? (activeDLP.length > 0 ? "green" : "orange") : "red",
-                    coverage: hasDLP ? `${activeDLP.length} active / ${dlpPolicies.length} total` : "Not configured",
+                    status: hasDLP ? (activeDLP.length > 0 ? "green" : "orange") : (dlpActivityDetected ? "orange" : "red"),
+                    coverage: hasDLP
+                        ? `${activeDLP.length} active / ${dlpPolicies.length} total`
+                        : (dlpActivityDetected
+                            ? "DLP activity detected - verify in Purview portal"
+                            : "Not detected via API - check Purview portal"),
                     article: "Art. 10 & 15 - Data Protection",
                     articleDesc: "Ensures AI systems process data in compliance with quality and accuracy requirements",
                     action: "Configure DLP",
