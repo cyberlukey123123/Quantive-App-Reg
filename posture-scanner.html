@@ -3846,22 +3846,14 @@
             ];
 
             const list = document.getElementById('riskClassificationList');
-            list.innerHTML = riskLevels.map(level => {
-                const systems = scanData.aiSystems.filter(level.filter);
-                const systemTags = systems.length > 0
-                    ? `<div class="risk-row-systems">${systems.map(s => `<span class="risk-system-tag">${s.name}</span>`).join('')}</div>`
-                    : `<div class="risk-row-none">No systems in this category</div>`;
-
-                return `
-                    <div class="risk-row ${level.key}">
-                        <div class="risk-row-badge">${level.count} ${level.label}</div>
-                        <div class="risk-row-content">
-                            <div class="risk-row-desc">${level.desc}</div>
-                            ${systemTags}
-                        </div>
+            list.innerHTML = riskLevels.map(level => `
+                <div class="risk-row ${level.key}">
+                    <div class="risk-row-badge">${level.count} ${level.label}</div>
+                    <div class="risk-row-content">
+                        <div class="risk-row-desc">${level.desc}</div>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `).join('');
         }
 
         function renderAISystems(filter) {
