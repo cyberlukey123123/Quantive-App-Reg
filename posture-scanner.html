@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- MSAL.js for Microsoft Authentication -->
     <script src="https://unpkg.com/@azure/msal-browser@3.6.0/lib/msal-browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -3217,8 +3218,8 @@
             riskClassification: {
                 prohibited: 0,
                 highRisk: 3,
-                limited: 5,
-                minimal: 4
+                limited: 12,
+                minimal: 3
             },
             categories: [
                 { name: "AI Inventory", score: 75, color: "var(--primary)" },
@@ -3229,18 +3230,28 @@
                 { name: "Governance", score: 35, color: "var(--danger)" }
             ],
             aiSystems: [
+                // Microsoft AI - Licensed/Built-in
                 { name: "Microsoft Copilot for M365", type: "Productivity AI", users: 45, dataActivity: "2.4 GB", risk: "limited", logo: "microsoft", shadow: false, source: "Licensed" },
                 { name: "Azure OpenAI Service", type: "Generative AI", users: 12, dataActivity: "890 MB", risk: "limited", logo: "azure", shadow: false, source: "Azure" },
-                { name: "HireVue", type: "HR/Recruitment AI", users: 5, dataActivity: "156 MB", risk: "high", logo: "hirevue", shadow: false, source: "Integrated" },
-                { name: "Workday AI", type: "HR Performance AI", users: 200, dataActivity: "1.8 GB", risk: "high", logo: "workday", shadow: false, source: "Integrated" },
-                { name: "Salesforce Einstein", type: "Sales AI", users: 35, dataActivity: "945 MB", risk: "limited", logo: "salesforce", shadow: false, source: "Integrated" },
-                { name: "ChatGPT (OpenAI)", type: "Generative AI", users: 28, dataActivity: "Unknown", risk: "unknown", logo: "openai", shadow: true, source: "Shadow AI" },
-                { name: "Grammarly", type: "Writing AI", users: 67, dataActivity: "Unknown", risk: "minimal", logo: "grammarly", shadow: true, source: "Shadow AI" },
-                { name: "Otter.ai", type: "Transcription AI", users: 15, dataActivity: "Unknown", risk: "limited", logo: "otter", shadow: true, source: "Shadow AI" },
-                { name: "Credit Risk Model", type: "Risk Assessment AI", users: 8, dataActivity: "340 MB", risk: "high", logo: "default", shadow: false, source: "Internal" },
-                { name: "Defender for Endpoint", type: "Security AI", users: 500, dataActivity: "4.2 GB", risk: "minimal", logo: "microsoft", shadow: false, source: "Microsoft" },
+                { name: "Defender for Endpoint AI", type: "Security AI", users: 500, dataActivity: "4.2 GB", risk: "minimal", logo: "microsoft", shadow: false, source: "Microsoft" },
                 { name: "Power Automate AI Builder", type: "Automation AI", users: 22, dataActivity: "128 MB", risk: "minimal", logo: "microsoft", shadow: false, source: "Licensed" },
-                { name: "Teams Intelligent Recap", type: "Productivity AI", users: 150, dataActivity: "1.1 GB", risk: "minimal", logo: "microsoft", shadow: false, source: "Microsoft" }
+                { name: "Teams Intelligent Recap", type: "Meeting AI", users: 150, dataActivity: "1.1 GB", risk: "limited", logo: "microsoft", shadow: false, source: "Microsoft" },
+                { name: "Viva Insights", type: "Analytics AI", users: 180, dataActivity: "560 MB", risk: "limited", logo: "microsoft", shadow: false, source: "Microsoft" },
+                // HIGH-RISK - HR/Recruitment AI
+                { name: "HireVue", type: "Recruitment AI", users: 5, dataActivity: "156 MB", risk: "high", logo: "hirevue", shadow: false, source: "Integrated" },
+                { name: "Workday AI", type: "HR Performance AI", users: 200, dataActivity: "1.8 GB", risk: "high", logo: "workday", shadow: false, source: "Integrated" },
+                { name: "Eightfold Talent Intelligence", type: "Talent AI", users: 12, dataActivity: "280 MB", risk: "high", logo: "eightfold", shadow: false, source: "Integrated" },
+                // Business Applications
+                { name: "Salesforce Einstein", type: "Sales AI", users: 35, dataActivity: "945 MB", risk: "limited", logo: "salesforce", shadow: false, source: "Integrated" },
+                { name: "Gong Revenue Intelligence", type: "Sales AI", users: 28, dataActivity: "1.2 GB", risk: "limited", logo: "gong", shadow: false, source: "Integrated" },
+                // Shadow AI - Detected but not officially sanctioned
+                { name: "ChatGPT (OpenAI)", type: "Generative AI", users: 42, dataActivity: "Unknown", risk: "unknown", logo: "openai", shadow: true, source: "Shadow AI" },
+                { name: "Claude (Anthropic)", type: "Generative AI", users: 8, dataActivity: "Unknown", risk: "unknown", logo: "anthropic", shadow: true, source: "Shadow AI" },
+                { name: "Perplexity", type: "Search AI", users: 15, dataActivity: "Unknown", risk: "unknown", logo: "perplexity", shadow: true, source: "Shadow AI" },
+                { name: "Grammarly", type: "Writing AI", users: 89, dataActivity: "Unknown", risk: "minimal", logo: "grammarly", shadow: true, source: "Shadow AI" },
+                { name: "Otter.ai", type: "Transcription AI", users: 23, dataActivity: "Unknown", risk: "limited", logo: "otter", shadow: true, source: "Shadow AI" },
+                { name: "Notion AI", type: "Productivity AI", users: 34, dataActivity: "Unknown", risk: "limited", logo: "notion", shadow: true, source: "Shadow AI" },
+                { name: "Midjourney", type: "Image Generation", users: 6, dataActivity: "Unknown", risk: "limited", logo: "midjourney", shadow: true, source: "Shadow AI" }
             ],
             gaps: [
                 {
@@ -3523,19 +3534,184 @@
 
         // Process application and service principal data to identify AI systems
         function processApplicationData(apps, servicePrincipals, oauthGrants) {
-            const aiKeywords = ['copilot', 'openai', 'gpt', 'ai', 'cognitive', 'ml', 'machine learning',
-                               'chatgpt', 'grammarly', 'otter', 'synthesia', 'jasper', 'midjourney'];
-            const hrKeywords = ['workday', 'hirevue', 'greenhouse', 'lever', 'bamboo', 'adp', 'recruiting'];
+            // Comprehensive AI detection keywords
+            const aiKeywords = [
+                // General AI terms
+                'copilot', 'openai', 'gpt', 'ai', 'cognitive', 'ml', 'machine learning', 'neural', 'llm',
+                'chatgpt', 'grammarly', 'otter', 'synthesia', 'jasper', 'midjourney', 'dall-e', 'dalle',
+                // Specific AI products
+                'anthropic', 'claude', 'gemini', 'bard', 'perplexity', 'notion ai', 'gamma', 'beautiful.ai',
+                'copy.ai', 'writesonic', 'rytr', 'wordtune', 'quillbot', 'deepl', 'lumen5', 'pictory',
+                'runway', 'descript', 'murf', 'elevenlabs', 'speechify', 'fireflies', 'fathom', 'read.ai',
+                'krisp', 'sembly', 'supernormal', 'tldv', 'avoma', 'gong', 'chorus', 'clari',
+                'drift', 'intercom', 'ada', 'forethought', 'cognigy', 'kore.ai', 'yellow.ai',
+                'automation', 'automate', 'intelligent', 'smart', 'predict', 'recommendation'
+            ];
+
+            // HR/Recruitment AI - classified as high-risk under EU AI Act
+            const hrKeywords = [
+                'workday', 'hirevue', 'greenhouse', 'lever', 'bamboo', 'adp', 'recruiting', 'talent',
+                'icims', 'jobvite', 'smartrecruiters', 'breezy', 'recruitee', 'ashby', 'gem',
+                'eightfold', 'phenom', 'beamery', 'seekout', 'hireez', 'paradox', 'mya', 'olivia',
+                'pymetrics', 'harver', 'criteria', 'vervoe', 'codility', 'hackerrank', 'codesignal',
+                'textio', 'datapeople', 'applied', 'blendoor', 'humanly', 'retrain'
+            ];
+
+            // Comprehensive known AI applications with risk classification
             const knownAIApps = {
+                // Microsoft AI
                 'microsoft copilot': { risk: 'limited', logo: 'microsoft', type: 'Productivity AI' },
                 'copilot': { risk: 'limited', logo: 'microsoft', type: 'Productivity AI' },
-                'azure openai': { risk: 'limited', logo: 'azure', type: 'Generative AI' },
+                'azure openai': { risk: 'limited', logo: 'microsoft', type: 'Generative AI' },
+                'azure cognitive': { risk: 'limited', logo: 'microsoft', type: 'Cognitive Services' },
+                'azure machine learning': { risk: 'limited', logo: 'microsoft', type: 'ML Platform' },
+                'power automate': { risk: 'minimal', logo: 'microsoft', type: 'Automation AI' },
+                'power virtual agents': { risk: 'limited', logo: 'microsoft', type: 'Chatbot AI' },
+                'dynamics 365 ai': { risk: 'limited', logo: 'microsoft', type: 'Business AI' },
+                'viva insights': { risk: 'limited', logo: 'microsoft', type: 'Analytics AI' },
+
+                // OpenAI / ChatGPT
                 'openai': { risk: 'unknown', logo: 'openai', type: 'Generative AI' },
                 'chatgpt': { risk: 'unknown', logo: 'openai', type: 'Generative AI' },
-                'salesforce': { risk: 'limited', logo: 'salesforce', type: 'Sales AI' },
+                'gpt-4': { risk: 'unknown', logo: 'openai', type: 'Generative AI' },
+                'dall-e': { risk: 'limited', logo: 'openai', type: 'Image Generation' },
+                'whisper': { risk: 'limited', logo: 'openai', type: 'Speech AI' },
+
+                // Google AI
+                'google bard': { risk: 'unknown', logo: 'google', type: 'Generative AI' },
+                'gemini': { risk: 'unknown', logo: 'google', type: 'Generative AI' },
+                'google ai': { risk: 'limited', logo: 'google', type: 'AI Platform' },
+                'vertex ai': { risk: 'limited', logo: 'google', type: 'ML Platform' },
+                'dialogflow': { risk: 'limited', logo: 'google', type: 'Chatbot AI' },
+                'google cloud ai': { risk: 'limited', logo: 'google', type: 'Cloud AI' },
+
+                // Anthropic
+                'anthropic': { risk: 'unknown', logo: 'anthropic', type: 'Generative AI' },
+                'claude': { risk: 'unknown', logo: 'anthropic', type: 'Generative AI' },
+
+                // Other LLM Providers
+                'perplexity': { risk: 'unknown', logo: 'perplexity', type: 'Search AI' },
+                'cohere': { risk: 'limited', logo: 'cohere', type: 'Enterprise AI' },
+                'ai21': { risk: 'limited', logo: 'ai21', type: 'Generative AI' },
+                'hugging face': { risk: 'limited', logo: 'huggingface', type: 'ML Platform' },
+                'replicate': { risk: 'limited', logo: 'replicate', type: 'ML Platform' },
+
+                // Writing & Content AI
                 'grammarly': { risk: 'minimal', logo: 'grammarly', type: 'Writing AI' },
+                'jasper': { risk: 'limited', logo: 'jasper', type: 'Content AI' },
+                'copy.ai': { risk: 'limited', logo: 'copyai', type: 'Content AI' },
+                'writesonic': { risk: 'limited', logo: 'writesonic', type: 'Content AI' },
+                'notion ai': { risk: 'limited', logo: 'notion', type: 'Productivity AI' },
+                'wordtune': { risk: 'minimal', logo: 'wordtune', type: 'Writing AI' },
+                'quillbot': { risk: 'minimal', logo: 'quillbot', type: 'Writing AI' },
+                'deepl': { risk: 'minimal', logo: 'deepl', type: 'Translation AI' },
+                'textio': { risk: 'limited', logo: 'textio', type: 'Writing AI' },
+
+                // Image & Video AI
+                'midjourney': { risk: 'limited', logo: 'midjourney', type: 'Image Generation' },
+                'stable diffusion': { risk: 'limited', logo: 'stability', type: 'Image Generation' },
+                'stability ai': { risk: 'limited', logo: 'stability', type: 'Image Generation' },
+                'runway': { risk: 'limited', logo: 'runway', type: 'Video AI' },
+                'synthesia': { risk: 'limited', logo: 'synthesia', type: 'Video AI' },
+                'lumen5': { risk: 'limited', logo: 'lumen5', type: 'Video AI' },
+                'pictory': { risk: 'limited', logo: 'pictory', type: 'Video AI' },
+                'descript': { risk: 'limited', logo: 'descript', type: 'Audio/Video AI' },
+                'canva ai': { risk: 'minimal', logo: 'canva', type: 'Design AI' },
+                'adobe firefly': { risk: 'limited', logo: 'adobe', type: 'Image Generation' },
+                'beautiful.ai': { risk: 'minimal', logo: 'beautifulai', type: 'Presentation AI' },
+                'gamma': { risk: 'minimal', logo: 'gamma', type: 'Presentation AI' },
+                'tome': { risk: 'minimal', logo: 'tome', type: 'Presentation AI' },
+
+                // Voice & Speech AI
+                'elevenlabs': { risk: 'limited', logo: 'elevenlabs', type: 'Voice AI' },
+                'murf': { risk: 'limited', logo: 'murf', type: 'Voice AI' },
+                'speechify': { risk: 'minimal', logo: 'speechify', type: 'Text-to-Speech' },
+                'krisp': { risk: 'minimal', logo: 'krisp', type: 'Audio AI' },
+
+                // Meeting & Transcription AI
+                'otter': { risk: 'limited', logo: 'otter', type: 'Transcription AI' },
+                'fireflies': { risk: 'limited', logo: 'fireflies', type: 'Meeting AI' },
+                'fathom': { risk: 'limited', logo: 'fathom', type: 'Meeting AI' },
+                'read.ai': { risk: 'limited', logo: 'readai', type: 'Meeting AI' },
+                'sembly': { risk: 'limited', logo: 'sembly', type: 'Meeting AI' },
+                'tldv': { risk: 'limited', logo: 'tldv', type: 'Meeting AI' },
+                'avoma': { risk: 'limited', logo: 'avoma', type: 'Meeting AI' },
+                'supernormal': { risk: 'limited', logo: 'supernormal', type: 'Meeting AI' },
+
+                // Sales & Revenue AI
+                'gong': { risk: 'limited', logo: 'gong', type: 'Sales AI' },
+                'chorus': { risk: 'limited', logo: 'chorus', type: 'Sales AI' },
+                'clari': { risk: 'limited', logo: 'clari', type: 'Revenue AI' },
+                'salesforce einstein': { risk: 'limited', logo: 'salesforce', type: 'Sales AI' },
+                'salesforce': { risk: 'limited', logo: 'salesforce', type: 'CRM AI' },
+                'hubspot ai': { risk: 'limited', logo: 'hubspot', type: 'Marketing AI' },
+                'drift': { risk: 'limited', logo: 'drift', type: 'Conversational AI' },
+                'outreach': { risk: 'limited', logo: 'outreach', type: 'Sales AI' },
+                'apollo': { risk: 'limited', logo: 'apollo', type: 'Sales AI' },
+                'zoominfo': { risk: 'limited', logo: 'zoominfo', type: 'Sales Intelligence' },
+                '6sense': { risk: 'limited', logo: '6sense', type: 'Revenue AI' },
+
+                // Customer Service AI
+                'intercom': { risk: 'limited', logo: 'intercom', type: 'Support AI' },
+                'zendesk ai': { risk: 'limited', logo: 'zendesk', type: 'Support AI' },
+                'freshdesk': { risk: 'limited', logo: 'freshworks', type: 'Support AI' },
+                'ada': { risk: 'limited', logo: 'ada', type: 'Chatbot AI' },
+                'forethought': { risk: 'limited', logo: 'forethought', type: 'Support AI' },
+                'kustomer': { risk: 'limited', logo: 'kustomer', type: 'Support AI' },
+
+                // HR/Recruitment AI - HIGH RISK under EU AI Act
                 'workday': { risk: 'high', logo: 'workday', type: 'HR AI' },
-                'hirevue': { risk: 'high', logo: 'hirevue', type: 'HR/Recruitment AI' }
+                'hirevue': { risk: 'high', logo: 'hirevue', type: 'Recruitment AI' },
+                'greenhouse': { risk: 'high', logo: 'greenhouse', type: 'Recruitment AI' },
+                'lever': { risk: 'high', logo: 'lever', type: 'Recruitment AI' },
+                'icims': { risk: 'high', logo: 'icims', type: 'Recruitment AI' },
+                'smartrecruiters': { risk: 'high', logo: 'smartrecruiters', type: 'Recruitment AI' },
+                'eightfold': { risk: 'high', logo: 'eightfold', type: 'Talent AI' },
+                'phenom': { risk: 'high', logo: 'phenom', type: 'Talent AI' },
+                'beamery': { risk: 'high', logo: 'beamery', type: 'Talent AI' },
+                'seekout': { risk: 'high', logo: 'seekout', type: 'Recruiting AI' },
+                'gem': { risk: 'high', logo: 'gem', type: 'Recruiting AI' },
+                'pymetrics': { risk: 'high', logo: 'pymetrics', type: 'Assessment AI' },
+                'harver': { risk: 'high', logo: 'harver', type: 'Assessment AI' },
+                'criteria': { risk: 'high', logo: 'criteria', type: 'Assessment AI' },
+                'codility': { risk: 'high', logo: 'codility', type: 'Technical Assessment' },
+                'hackerrank': { risk: 'high', logo: 'hackerrank', type: 'Technical Assessment' },
+                'bamboohr': { risk: 'limited', logo: 'bamboohr', type: 'HR Platform' },
+
+                // Code & Development AI
+                'github copilot': { risk: 'limited', logo: 'github', type: 'Code AI' },
+                'tabnine': { risk: 'limited', logo: 'tabnine', type: 'Code AI' },
+                'codeium': { risk: 'limited', logo: 'codeium', type: 'Code AI' },
+                'replit': { risk: 'limited', logo: 'replit', type: 'Code AI' },
+                'cursor': { risk: 'limited', logo: 'cursor', type: 'Code AI' },
+                'amazon codewhisperer': { risk: 'limited', logo: 'aws', type: 'Code AI' },
+                'sourcegraph': { risk: 'minimal', logo: 'sourcegraph', type: 'Code Search' },
+
+                // Data & Analytics AI
+                'datarobot': { risk: 'limited', logo: 'datarobot', type: 'AutoML' },
+                'h2o': { risk: 'limited', logo: 'h2o', type: 'ML Platform' },
+                'databricks': { risk: 'limited', logo: 'databricks', type: 'Data AI' },
+                'snowflake cortex': { risk: 'limited', logo: 'snowflake', type: 'Data AI' },
+                'tableau ai': { risk: 'minimal', logo: 'tableau', type: 'Analytics AI' },
+                'thoughtspot': { risk: 'limited', logo: 'thoughtspot', type: 'Analytics AI' },
+
+                // Security AI
+                'crowdstrike': { risk: 'minimal', logo: 'crowdstrike', type: 'Security AI' },
+                'sentinelone': { risk: 'minimal', logo: 'sentinelone', type: 'Security AI' },
+                'darktrace': { risk: 'minimal', logo: 'darktrace', type: 'Security AI' },
+                'abnormal security': { risk: 'minimal', logo: 'abnormal', type: 'Security AI' },
+
+                // Legal & Compliance AI
+                'harvey ai': { risk: 'limited', logo: 'harvey', type: 'Legal AI' },
+                'casetext': { risk: 'limited', logo: 'casetext', type: 'Legal AI' },
+                'kira systems': { risk: 'limited', logo: 'kira', type: 'Contract AI' },
+                'ironclad': { risk: 'limited', logo: 'ironclad', type: 'Contract AI' },
+                'docusign ai': { risk: 'limited', logo: 'docusign', type: 'Contract AI' },
+
+                // Finance AI
+                'planful': { risk: 'limited', logo: 'planful', type: 'Finance AI' },
+                'anaplan': { risk: 'limited', logo: 'anaplan', type: 'Planning AI' },
+                'highradius': { risk: 'limited', logo: 'highradius', type: 'Finance AI' }
             };
 
             const detectedSystems = [];
@@ -4479,7 +4655,257 @@
         }
 
         function exportReport() {
-            alert('Export functionality will generate a PDF report of your posture scan results.');
+            if (!scanData) {
+                alert('No scan data available to export.');
+                return;
+            }
+
+            // Show loading state
+            const exportBtn = document.querySelector('button[onclick="exportReport()"]');
+            const originalText = exportBtn.innerHTML;
+            exportBtn.innerHTML = `
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
+                    <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"/>
+                </svg>
+                Generating...
+            `;
+            exportBtn.disabled = true;
+
+            // Create PDF-optimized content
+            const pdfContent = generatePDFContent();
+
+            // Create temporary container
+            const container = document.createElement('div');
+            container.innerHTML = pdfContent;
+            container.style.position = 'absolute';
+            container.style.left = '-9999px';
+            container.style.top = '0';
+            container.style.width = '210mm';
+            document.body.appendChild(container);
+
+            // PDF options
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `EU-AI-Act-Posture-Report-${scanData.tenant.name.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            // Generate PDF
+            html2pdf().set(opt).from(container).save().then(() => {
+                document.body.removeChild(container);
+                exportBtn.innerHTML = originalText;
+                exportBtn.disabled = false;
+                showToast('PDF report downloaded successfully!');
+            }).catch(err => {
+                console.error('PDF generation failed:', err);
+                document.body.removeChild(container);
+                exportBtn.innerHTML = originalText;
+                exportBtn.disabled = false;
+                alert('Failed to generate PDF. Please try again.');
+            });
+        }
+
+        function generatePDFContent() {
+            const statusColors = {
+                'Critical': '#dc2626',
+                'Needs Attention': '#f59e0b',
+                'Good': '#22c55e',
+                'Excellent': '#10b981'
+            };
+
+            const riskColors = {
+                'prohibited': '#dc2626',
+                'high': '#f59e0b',
+                'limited': '#3b82f6',
+                'minimal': '#22c55e'
+            };
+
+            // Build AI Systems table rows
+            const aiSystemsRows = scanData.aiSystems.map(sys => `
+                <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${sys.name}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${sys.type}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${sys.users}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                        <span style="background: ${riskColors[sys.risk] || '#6b7280'}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px;">
+                            ${sys.risk.toUpperCase()}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Build Gaps list
+            const gapsList = scanData.gaps.map(gap => `
+                <div style="margin-bottom: 12px; padding: 12px; background: ${gap.priority === 1 ? '#fef2f2' : '#fffbeb'}; border-radius: 6px; border-left: 4px solid ${gap.priority === 1 ? '#dc2626' : '#f59e0b'};">
+                    <div style="font-weight: 600; color: #111827; margin-bottom: 4px;">${gap.title}</div>
+                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 8px;">${gap.description}</div>
+                    <div style="font-size: 12px; color: #374151;"><strong>Recommendation:</strong> ${gap.solution}</div>
+                </div>
+            `).join('');
+
+            // Build Compliance Checks
+            const checksList = scanData.checks.map(check => `
+                <tr>
+                    <td style="padding: 6px 8px; border-bottom: 1px solid #e5e7eb;">
+                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${check.status === 'pass' ? '#22c55e' : check.status === 'warn' ? '#f59e0b' : '#dc2626'}; margin-right: 8px;"></span>
+                        ${check.name}
+                    </td>
+                    <td style="padding: 6px 8px; border-bottom: 1px solid #e5e7eb; text-align: right; color: #6b7280;">${check.value}</td>
+                </tr>
+            `).join('');
+
+            // Build Data Governance table
+            const dgRows = scanData.dataGovernance.map(dg => `
+                <tr>
+                    <td style="padding: 6px 8px; border-bottom: 1px solid #e5e7eb; font-weight: 500;">${dg.control}</td>
+                    <td style="padding: 6px 8px; border-bottom: 1px solid #e5e7eb; font-size: 11px; color: #2563eb;">${dg.article || 'N/A'}</td>
+                    <td style="padding: 6px 8px; border-bottom: 1px solid #e5e7eb;">
+                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${dg.status === 'green' ? '#22c55e' : dg.status === 'red' ? '#dc2626' : '#f59e0b'}; margin-right: 6px;"></span>
+                        ${dg.status === 'green' ? 'Configured' : 'Review Needed'}
+                    </td>
+                    <td style="padding: 6px 8px; border-bottom: 1px solid #e5e7eb; color: #6b7280;">${dg.coverage}</td>
+                </tr>
+            `).join('');
+
+            // Risk Classification summary
+            const riskSummary = `
+                <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                    <div style="flex: 1; padding: 12px; background: #fef2f2; border-radius: 6px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: 700; color: #dc2626;">${scanData.riskClassification.prohibited}</div>
+                        <div style="font-size: 11px; color: #991b1b;">Prohibited</div>
+                    </div>
+                    <div style="flex: 1; padding: 12px; background: #fffbeb; border-radius: 6px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: 700; color: #f59e0b;">${scanData.riskClassification.highRisk}</div>
+                        <div style="font-size: 11px; color: #92400e;">High-Risk</div>
+                    </div>
+                    <div style="flex: 1; padding: 12px; background: #eff6ff; border-radius: 6px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: 700; color: #3b82f6;">${scanData.riskClassification.limited}</div>
+                        <div style="font-size: 11px; color: #1e40af;">Limited</div>
+                    </div>
+                    <div style="flex: 1; padding: 12px; background: #f0fdf4; border-radius: 6px; text-align: center;">
+                        <div style="font-size: 24px; font-weight: 700; color: #22c55e;">${scanData.riskClassification.minimal}</div>
+                        <div style="font-size: 11px; color: #166534;">Minimal</div>
+                    </div>
+                </div>
+            `;
+
+            return `
+                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; line-height: 1.5; padding: 20px;">
+                    <!-- Header -->
+                    <div style="border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <h1 style="margin: 0 0 4px 0; font-size: 24px; color: #2563eb;">EU AI Act Posture Report</h1>
+                                <div style="color: #6b7280; font-size: 13px;">Generated by QuantiveCyber Posture Scanner</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-weight: 600; color: #111827;">${scanData.tenant.name}</div>
+                                <div style="font-size: 12px; color: #6b7280;">${scanData.tenant.scanTime}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Executive Summary -->
+                    <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                        <h2 style="margin: 0 0 16px 0; font-size: 16px; color: #111827;">Executive Summary</h2>
+                        <div style="display: flex; align-items: center; gap: 24px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 48px; font-weight: 700; color: ${statusColors[scanData.score.status] || '#6b7280'};">${scanData.score.overall}</div>
+                                <div style="font-size: 12px; color: #6b7280;">out of 100</div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 18px; font-weight: 600; color: ${statusColors[scanData.score.status] || '#6b7280'}; margin-bottom: 4px;">${scanData.score.status}</div>
+                                <div style="font-size: 13px; color: #6b7280;">${scanData.score.description}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Risk Classification -->
+                    <div style="margin-bottom: 24px;">
+                        <h2 style="margin: 0 0 12px 0; font-size: 16px; color: #111827;">AI Risk Classification</h2>
+                        ${riskSummary}
+                    </div>
+
+                    <!-- AI Systems Discovered -->
+                    <div style="margin-bottom: 24px; page-break-inside: avoid;">
+                        <h2 style="margin: 0 0 12px 0; font-size: 16px; color: #111827;">Discovered AI Systems (${scanData.aiSystems.length})</h2>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                            <thead>
+                                <tr style="background: #f1f5f9;">
+                                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">System</th>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Type</th>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Users</th>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Risk Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${aiSystemsRows}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Priority Gaps -->
+                    <div style="margin-bottom: 24px; page-break-inside: avoid;">
+                        <h2 style="margin: 0 0 12px 0; font-size: 16px; color: #111827;">Priority Compliance Gaps (${scanData.gaps.length})</h2>
+                        ${gapsList || '<div style="color: #6b7280; font-size: 13px;">No critical gaps identified.</div>'}
+                    </div>
+
+                    <!-- Compliance Checks -->
+                    <div style="margin-bottom: 24px; page-break-inside: avoid;">
+                        <h2 style="margin: 0 0 12px 0; font-size: 16px; color: #111827;">Compliance Checks</h2>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                            <tbody>
+                                ${checksList}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Data Governance -->
+                    <div style="margin-bottom: 24px; page-break-inside: avoid;">
+                        <h2 style="margin: 0 0 12px 0; font-size: 16px; color: #111827;">Data Governance Status</h2>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                            <thead>
+                                <tr style="background: #f1f5f9;">
+                                    <th style="padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Control</th>
+                                    <th style="padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">EU AI Act Req.</th>
+                                    <th style="padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Status</th>
+                                    <th style="padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Coverage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${dgRows}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Footer -->
+                    <div style="border-top: 1px solid #e5e7eb; padding-top: 16px; margin-top: 24px; font-size: 11px; color: #6b7280;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <strong>QuantiveCyber</strong> | posture-scanner.quantivecyber.com
+                            </div>
+                            <div>
+                                Report generated: ${new Date().toLocaleString()}
+                            </div>
+                        </div>
+                        <div style="margin-top: 8px;">
+                            This report is for planning purposes only and does not constitute legal advice.
+                            Please consult with legal counsel for EU AI Act compliance requirements.
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         // ============================================
