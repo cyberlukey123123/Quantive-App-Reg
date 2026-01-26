@@ -1512,6 +1512,36 @@
             font-size: 0.75rem;
         }
 
+        /* Privacy Disclaimer */
+        .privacy-disclaimer {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 24px;
+            padding: 14px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .privacy-disclaimer svg {
+            flex-shrink: 0;
+            color: var(--ink-tertiary);
+            margin-top: 2px;
+        }
+
+        .privacy-disclaimer p {
+            font-size: 0.75rem;
+            color: var(--ink-tertiary);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .privacy-disclaimer strong {
+            color: var(--ink-secondary);
+        }
+
         /* Toast animations */
         @keyframes slideUp {
             from {
@@ -1576,6 +1606,18 @@
                     </svg>
                     Instant results
                 </div>
+            </div>
+
+            <div class="privacy-disclaimer">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <p>
+                    <strong>Privacy Notice:</strong> This tool runs entirely in your browser. We do not store your credentials or tenant data.
+                    However, we log basic connection info (tenant name, user email, scan timestamp) to track usage.
+                </p>
             </div>
         </div>
     </div>
