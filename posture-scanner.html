@@ -2914,8 +2914,10 @@
                 "SecurityEvents.Read.All",              // Security alerts
                 "SecurityActions.Read.All",             // Security recommendations
                 "ThreatIndicators.Read.All",            // Threat intelligence
-                // Information Protection
-                "InformationProtectionPolicy.Read",     // Sensitivity labels & policies (user scope)
+                // Information Protection & Sensitivity Labels
+                "InformationProtectionPolicy.Read",     // DLP policies (user scope)
+                "SensitivityLabel.Read",                // Get labels (user scope)
+                "SensitivityLabel.Evaluate",            // Evaluate labels for content
                 // Cloud App Security
                 "CloudApp-Discovery.Read.All",          // MDCA discovered apps
                 // SharePoint
@@ -2933,7 +2935,8 @@
             reports: ["Reports.Read.All"],
             sites: ["Sites.Read.All"],
             security: ["SecurityEvents.Read.All"],
-            informationProtection: ["InformationProtectionPolicy.Read.All"],
+            sensitivityLabels: ["SensitivityLabel.Read"],
+            informationProtection: ["InformationProtectionPolicy.Read"],
             cloudAppDiscovery: ["CloudApp-Discovery.Read.All"]
         };
 
@@ -3489,19 +3492,23 @@
                 const oauthGrants = await callGraphAPI("/oauth2PermissionGrants?$top=200", ["Directory.Read.All"]).catch(() => ({ value: [] }));
 
                 updateLoadingStatus("Reading sensitivity labels...", 35);
-                // Sensitivity labels - try multiple endpoints for compatibility
+                // Sensitivity labels - use SensitivityLabel.Read permission
                 const [sensitivityLabels, labelPolicies] = await Promise.all([
-                    callGraphAPIBeta("/security/informationProtection/sensitivityLabels", ["InformationProtectionPolicy.Read.All"])
-                        .catch(() => callGraphAPIBeta("/informationProtection/policy/labels", ["InformationProtectionPolicy.Read.All"]))
+                    // Try user-scoped endpoint first, then tenant-scoped
+                    callGraphAPIBeta("/me/informationProtection/sensitivityLabels", ["SensitivityLabel.Read"])
+                        .catch(() => callGraphAPIBeta("/informationProtection/sensitivityLabels", ["SensitivityLabel.Read"]))
+                        .catch(() => callGraphAPIBeta("/security/informationProtection/sensitivityLabels", ["InformationProtectionPolicy.Read"]))
                         .catch(() => ({ value: [] })),
-                    callGraphAPIBeta("/security/informationProtection/labelPolicies", ["InformationProtectionPolicy.Read.All"])
+                    // Label policies
+                    callGraphAPIBeta("/me/informationProtection/labelPolicySettings", ["SensitivityLabel.Read"])
+                        .catch(() => callGraphAPIBeta("/informationProtection/labelPolicySettings", ["InformationProtectionPolicy.Read"]))
                         .catch(() => ({ value: [] }))
                 ]);
 
                 updateLoadingStatus("Reading DLP policies...", 45);
                 // DLP Policies - try different endpoints
-                const dlpPolicies = await callGraphAPIBeta("/security/informationProtection/policy/dlpPolicies", ["InformationProtectionPolicy.Read.All"])
-                    .catch(() => callGraphAPIBeta("/informationProtection/policy/dlpPolicies", ["InformationProtectionPolicy.Read.All"]))
+                const dlpPolicies = await callGraphAPIBeta("/security/informationProtection/policy/dlpPolicies", ["InformationProtectionPolicy.Read"])
+                    .catch(() => callGraphAPIBeta("/informationProtection/policy/dlpPolicies", ["InformationProtectionPolicy.Read"]))
                     .catch(() => ({ value: [] }));
 
                 updateLoadingStatus("Checking Conditional Access...", 55);
