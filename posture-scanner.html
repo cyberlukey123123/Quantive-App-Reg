@@ -2908,7 +2908,11 @@
                 "Policy.Read.All",
                 "AuditLog.Read.All",
                 "Reports.Read.All",
-                "Sites.Read.All"
+                "Sites.Read.All",
+                // Security & Compliance permissions
+                "SecurityEvents.Read.All",              // Security alerts
+                "InformationProtectionPolicy.Read.All", // DLP & Sensitivity policies
+                "CloudApp-Discovery.Read.All"           // MDCA discovered apps inventory
             ]
         };
 
@@ -2920,7 +2924,10 @@
             policies: ["Policy.Read.All"],
             audit: ["AuditLog.Read.All"],
             reports: ["Reports.Read.All"],
-            sites: ["Sites.Read.All"]
+            sites: ["Sites.Read.All"],
+            security: ["SecurityEvents.Read.All"],
+            informationProtection: ["InformationProtectionPolicy.Read.All"],
+            cloudAppDiscovery: ["CloudApp-Discovery.Read.All"]
         };
 
         // Initialize MSAL instance
@@ -3465,36 +3472,82 @@
                 };
 
                 // Fetch all data in parallel where possible
-                updateLoadingStatus("Reading application registrations...", 20);
+                updateLoadingStatus("Reading application registrations...", 15);
                 const [apps, servicePrincipals] = await Promise.all([
-                    callGraphAPI("/applications?$top=100", ["Application.Read.All"]).catch(() => ({ value: [] })),
-                    callGraphAPI("/servicePrincipals?$top=100", ["Application.Read.All"]).catch(() => ({ value: [] }))
+                    callGraphAPI("/applications?$top=200", ["Application.Read.All"]).catch(() => ({ value: [] })),
+                    callGraphAPI("/servicePrincipals?$top=200", ["Application.Read.All"]).catch(() => ({ value: [] }))
                 ]);
 
-                updateLoadingStatus("Scanning OAuth consents...", 30);
-                const oauthGrants = await callGraphAPI("/oauth2PermissionGrants?$top=100", ["Directory.Read.All"]).catch(() => ({ value: [] }));
+                updateLoadingStatus("Scanning OAuth consents...", 25);
+                const oauthGrants = await callGraphAPI("/oauth2PermissionGrants?$top=200", ["Directory.Read.All"]).catch(() => ({ value: [] }));
 
-                updateLoadingStatus("Reading sensitivity labels...", 50);
-                // Note: Sensitivity labels require specific licensing - skip if not available
-                const sensitivityLabels = await callGraphAPIBeta("/security/informationProtection/sensitivityLabels", ["Policy.Read.All"]).catch(() => ({ value: [] }));
+                updateLoadingStatus("Reading sensitivity labels...", 35);
+                // Sensitivity labels - try multiple endpoints for compatibility
+                const [sensitivityLabels, labelPolicies] = await Promise.all([
+                    callGraphAPIBeta("/security/informationProtection/sensitivityLabels", ["InformationProtectionPolicy.Read.All"])
+                        .catch(() => callGraphAPIBeta("/informationProtection/policy/labels", ["InformationProtectionPolicy.Read.All"]))
+                        .catch(() => ({ value: [] })),
+                    callGraphAPIBeta("/security/informationProtection/labelPolicies", ["InformationProtectionPolicy.Read.All"])
+                        .catch(() => ({ value: [] }))
+                ]);
 
-                updateLoadingStatus("Checking policies...", 60);
+                updateLoadingStatus("Reading DLP policies...", 45);
+                // DLP Policies - try different endpoints
+                const dlpPolicies = await callGraphAPIBeta("/security/informationProtection/policy/dlpPolicies", ["InformationProtectionPolicy.Read.All"])
+                    .catch(() => callGraphAPIBeta("/informationProtection/policy/dlpPolicies", ["InformationProtectionPolicy.Read.All"]))
+                    .catch(() => ({ value: [] }));
+
+                updateLoadingStatus("Checking Conditional Access...", 55);
                 const conditionalAccessPolicies = await callGraphAPIBeta("/identity/conditionalAccess/policies", ["Policy.Read.All"]).catch(() => ({ value: [] }));
 
-                updateLoadingStatus("Reading directory settings...", 70);
+                updateLoadingStatus("Reading security alerts...", 60);
+                // Security Alerts - includes Defender for Cloud Apps alerts
+                const [securityAlerts, secureScore] = await Promise.all([
+                    callGraphAPIBeta("/security/alerts_v2?$top=100&$filter=vendorInformation/provider eq 'MCAS' or vendorInformation/provider eq 'Microsoft Defender for Cloud Apps'", ["SecurityEvents.Read.All"])
+                        .catch(() => callGraphAPIBeta("/security/alerts?$top=100", ["SecurityEvents.Read.All"]))
+                        .catch(() => ({ value: [] })),
+                    callGraphAPIBeta("/security/secureScores?$top=1", ["SecurityEvents.Read.All"])
+                        .catch(() => ({ value: [] }))
+                ]);
+
+                updateLoadingStatus("Reading Cloud App Discovery...", 70);
+                // Defender for Cloud Apps - Discovered Apps Inventory
+                const discoveredApps = await callGraphAPIBeta("/security/dataDiscovery/cloudAppDiscovery/uploadedStreams", ["CloudApp-Discovery.Read.All"])
+                    .catch(() => ({ value: [] }));
+
+                updateLoadingStatus("Reading directory settings...", 80);
                 const directorySettings = await callGraphAPIBeta("/settings", ["Directory.Read.All"]).catch(() => ({ value: [] }));
 
-                updateLoadingStatus("Checking subscriptions...", 80);
+                updateLoadingStatus("Checking subscriptions...", 85);
                 const subscriptions = await callGraphAPI("/subscribedSkus", ["Directory.Read.All"]).catch(() => ({ value: [] }));
 
-                updateLoadingStatus("Analyzing AI systems...", 90);
+                updateLoadingStatus("Analyzing AI systems...", 95);
+
+                // Store raw data for detailed reporting
+                const collectedData = {
+                    apps: apps.value || [],
+                    servicePrincipals: servicePrincipals.value || [],
+                    oauthGrants: oauthGrants.value || [],
+                    sensitivityLabels: sensitivityLabels?.value || [],
+                    labelPolicies: labelPolicies?.value || [],
+                    dlpPolicies: dlpPolicies?.value || [],
+                    conditionalAccessPolicies: conditionalAccessPolicies?.value || [],
+                    securityAlerts: securityAlerts?.value || [],
+                    secureScore: secureScore?.value?.[0] || null,
+                    discoveredApps: discoveredApps?.value || [],
+                    directorySettings: directorySettings?.value || [],
+                    subscriptions: subscriptions?.value || []
+                };
 
                 // Process collected data
-                processApplicationData(apps.value || [], servicePrincipals.value || [], oauthGrants.value || []);
-                processSensitivityLabels(sensitivityLabels?.value || []);
-                processConditionalAccess(conditionalAccessPolicies?.value || []);
-                processSubscriptions(subscriptions?.value || []);
-                processDataGovernance(sensitivityLabels, directorySettings);
+                processApplicationData(collectedData.apps, collectedData.servicePrincipals, collectedData.oauthGrants);
+                processSensitivityLabels(collectedData.sensitivityLabels);
+                processDLPPolicies(collectedData.dlpPolicies);
+                processConditionalAccess(collectedData.conditionalAccessPolicies);
+                processSecurityAlerts(collectedData.securityAlerts);
+                processDiscoveredApps(collectedData.discoveredApps);
+                processSubscriptions(collectedData.subscriptions);
+                processDataGovernance(collectedData);
 
                 // Calculate scores
                 calculateScores();
@@ -3830,7 +3883,7 @@
             const hasLabels = labels && labels.length > 0;
             const labelDetails = hasLabels ? labels.map(l => ({
                 name: l.name || l.displayName || 'Unnamed Label',
-                description: l.description || l.tooltip || 'No description available'
+                description: l.description || l.tooltip || l.color ? `Priority: ${l.priority || 'N/A'}, Color: ${l.color || 'N/A'}` : 'No description available'
             })) : [];
 
             scanData.checks.push({
@@ -3839,6 +3892,164 @@
                 value: hasLabels ? `${labels.length} labels` : "Not configured",
                 details: labelDetails
             });
+
+            // Store for data governance section
+            scanData._sensitivityLabels = labels;
+        }
+
+        // Process DLP Policies
+        function processDLPPolicies(policies) {
+            const hasPolicies = policies && policies.length > 0;
+            const enabledPolicies = hasPolicies ? policies.filter(p => p.state === 'Enabled' || p.mode === 'Enable' || p.isEnabled) : [];
+
+            const policyDetails = hasPolicies ? policies.map(p => ({
+                name: p.name || p.displayName || 'Unnamed DLP Policy',
+                description: `Status: ${p.state || p.mode || 'Unknown'}, Locations: ${p.locations?.length || 'All'}`
+            })) : [];
+
+            scanData.checks.push({
+                name: "DLP policies active",
+                status: enabledPolicies.length > 0 ? "pass" : hasPolicies ? "warn" : "fail",
+                value: hasPolicies ? `${enabledPolicies.length} active / ${policies.length} total` : "Not configured",
+                details: policyDetails
+            });
+
+            // Store for data governance section
+            scanData._dlpPolicies = policies;
+        }
+
+        // Process Security Alerts (includes Defender for Cloud Apps)
+        function processSecurityAlerts(alerts) {
+            const hasAlerts = alerts && alerts.length > 0;
+
+            // Filter for AI-related alerts
+            const aiRelatedAlerts = hasAlerts ? alerts.filter(a => {
+                const title = (a.title || a.alertDisplayName || '').toLowerCase();
+                const desc = (a.description || '').toLowerCase();
+                return title.includes('ai') || title.includes('copilot') || title.includes('openai') ||
+                       title.includes('shadow') || title.includes('unsanctioned') ||
+                       desc.includes('ai') || desc.includes('generative');
+            }) : [];
+
+            // Filter for Cloud App Security alerts (shadow IT detection)
+            const mcasAlerts = hasAlerts ? alerts.filter(a => {
+                const provider = a.vendorInformation?.provider || a.providerName || '';
+                return provider.includes('MCAS') || provider.includes('Cloud App') || provider.includes('Defender for Cloud Apps');
+            }) : [];
+
+            // Check for shadow AI detections
+            if (mcasAlerts.length > 0 || aiRelatedAlerts.length > 0) {
+                const alertDetails = [...aiRelatedAlerts, ...mcasAlerts].slice(0, 10).map(a => ({
+                    name: a.title || a.alertDisplayName || 'Security Alert',
+                    description: `Severity: ${a.severity || 'Unknown'} - ${a.description?.substring(0, 100) || 'No description'}...`
+                }));
+
+                scanData.checks.push({
+                    name: "Shadow AI controls",
+                    status: mcasAlerts.length > 5 ? "fail" : mcasAlerts.length > 0 ? "warn" : "pass",
+                    value: `${mcasAlerts.length + aiRelatedAlerts.length} alerts`,
+                    details: alertDetails
+                });
+            } else {
+                scanData.checks.push({
+                    name: "Shadow AI controls",
+                    status: "warn",
+                    value: "No MDCA data",
+                    details: [{ name: "Defender for Cloud Apps", description: "Enable MDCA for shadow AI discovery and monitoring" }]
+                });
+            }
+
+            // Extract discovered apps from MCAS alerts if available
+            if (mcasAlerts.length > 0) {
+                mcasAlerts.forEach(alert => {
+                    const appName = alert.resources?.find(r => r.resourceType === 'Application')?.resourceIdentifier;
+                    if (appName && !scanData.aiSystems.find(s => s.name.toLowerCase() === appName.toLowerCase())) {
+                        // Check if it's an AI app
+                        const lowerName = appName.toLowerCase();
+                        if (lowerName.includes('ai') || lowerName.includes('gpt') || lowerName.includes('copilot')) {
+                            scanData.aiSystems.push({
+                                name: appName,
+                                type: 'Detected by MDCA',
+                                users: 'Unknown',
+                                dataActivity: 'Unknown',
+                                risk: 'unknown',
+                                logo: 'default',
+                                shadow: true,
+                                source: 'Defender for Cloud Apps'
+                            });
+                        }
+                    }
+                });
+            }
+
+            // Store for reference
+            scanData._securityAlerts = alerts;
+        }
+
+        // Process Discovered Apps from Defender for Cloud Apps
+        function processDiscoveredApps(streams) {
+            if (!streams || streams.length === 0) {
+                console.log("No Cloud App Discovery streams found");
+                return;
+            }
+
+            // The streams contain discovered apps data
+            // Each stream may have associated discovered apps
+            streams.forEach(stream => {
+                const streamApps = stream.discoveredCloudApps || stream.apps || [];
+
+                streamApps.forEach(app => {
+                    const appName = app.displayName || app.name || 'Unknown App';
+                    const lowerName = appName.toLowerCase();
+
+                    // Check if already in our list
+                    if (scanData.aiSystems.find(s => s.name.toLowerCase() === lowerName)) {
+                        return;
+                    }
+
+                    // Determine if this is an AI-related app
+                    const aiIndicators = ['ai', 'gpt', 'copilot', 'openai', 'claude', 'anthropic', 'gemini',
+                        'chatgpt', 'bard', 'perplexity', 'midjourney', 'dall-e', 'stable diffusion',
+                        'grammarly', 'jasper', 'notion', 'otter', 'fireflies', 'gong', 'chorus'];
+
+                    const isAI = aiIndicators.some(indicator => lowerName.includes(indicator)) ||
+                        (app.category || '').toLowerCase().includes('artificial intelligence') ||
+                        (app.tags || []).some(t => t.toLowerCase().includes('ai'));
+
+                    if (isAI) {
+                        // Determine risk level based on app category and data access
+                        let risk = 'unknown';
+                        const category = (app.category || '').toLowerCase();
+
+                        if (category.includes('hr') || category.includes('recruitment')) {
+                            risk = 'high';
+                        } else if (category.includes('productivity') || category.includes('collaboration')) {
+                            risk = 'limited';
+                        } else if (category.includes('security')) {
+                            risk = 'minimal';
+                        }
+
+                        scanData.aiSystems.push({
+                            name: appName,
+                            type: app.category || 'Cloud AI App',
+                            users: app.userCount || app.users || 'Unknown',
+                            dataActivity: app.traffic ? `${(app.traffic / 1024 / 1024).toFixed(1)} MB` : 'Unknown',
+                            risk: risk,
+                            logo: 'default',
+                            shadow: !app.isSanctioned,
+                            source: 'Defender for Cloud Apps'
+                        });
+
+                        // Update risk classification
+                        if (risk === 'high') scanData.riskClassification.highRisk++;
+                        else if (risk === 'limited' || risk === 'unknown') scanData.riskClassification.limited++;
+                        else if (risk === 'minimal') scanData.riskClassification.minimal++;
+                    }
+                });
+            });
+
+            // Store for reference
+            scanData._discoveredApps = streams;
         }
 
         // Process Conditional Access policies
@@ -3905,14 +4116,43 @@
         }
 
         // Process data governance status
-        function processDataGovernance(sensitivityLabels, directorySettings) {
-            const hasLabels = sensitivityLabels?.value?.length > 0;
+        function processDataGovernance(collectedData) {
+            // Extract data from collected object
+            const sensitivityLabels = collectedData.sensitivityLabels || [];
+            const dlpPolicies = collectedData.dlpPolicies || [];
+            const securityAlerts = collectedData.securityAlerts || [];
+            const discoveredApps = collectedData.discoveredApps || [];
+            const secureScore = collectedData.secureScore;
+
+            const hasLabels = sensitivityLabels.length > 0;
+            const hasDLP = dlpPolicies.length > 0;
+            const activeDLP = dlpPolicies.filter(p => p.state === 'Enabled' || p.mode === 'Enable' || p.isEnabled);
+
+            // Check for MDCA/Cloud App Security from alerts or discovered apps
+            const hasMDCA = discoveredApps.length > 0 || securityAlerts.some(a => {
+                const provider = a.vendorInformation?.provider || a.providerName || '';
+                return provider.includes('MCAS') || provider.includes('Cloud App');
+            });
+
+            // Count discovered AI apps
+            const discoveredAppCount = discoveredApps.reduce((count, stream) => {
+                return count + (stream.discoveredCloudApps?.length || stream.apps?.length || 0);
+            }, 0);
+
+            // Check secure score for various controls
+            const secureScoreControls = secureScore?.controlScores || [];
+            const getControlScore = (keywords) => {
+                const control = secureScoreControls.find(c =>
+                    keywords.some(kw => (c.controlName || '').toLowerCase().includes(kw))
+                );
+                return control ? { score: control.score, max: control.maxScore } : null;
+            };
 
             scanData.dataGovernance = [
                 {
                     control: "Sensitivity Labels",
                     status: hasLabels ? "green" : "red",
-                    coverage: hasLabels ? `${sensitivityLabels.value.length} labels configured` : "Not configured",
+                    coverage: hasLabels ? `${sensitivityLabels.length} labels configured` : "Not configured",
                     article: "Art. 10 - Data Governance",
                     articleDesc: "Requires appropriate data governance for training, validation and testing datasets",
                     action: "Manage Labels",
@@ -3920,12 +4160,23 @@
                 },
                 {
                     control: "DLP Policies",
-                    status: "orange",
-                    coverage: "Unable to verify",
+                    status: hasDLP ? (activeDLP.length > 0 ? "green" : "orange") : "red",
+                    coverage: hasDLP ? `${activeDLP.length} active / ${dlpPolicies.length} total` : "Not configured",
                     article: "Art. 10 & 15 - Data Protection",
                     articleDesc: "Ensures AI systems process data in compliance with quality and accuracy requirements",
                     action: "Configure DLP",
                     actionUrl: "https://purview.microsoft.com/datalossprevention"
+                },
+                {
+                    control: "Defender for Cloud Apps",
+                    status: hasMDCA ? "green" : "orange",
+                    coverage: hasMDCA
+                        ? (discoveredAppCount > 0 ? `${discoveredAppCount} apps discovered` : `Active - ${securityAlerts.length} alerts`)
+                        : "Not detected - enable for shadow AI discovery",
+                    article: "Art. 9 - Risk Management",
+                    articleDesc: "Discover and control shadow AI applications accessing corporate data",
+                    action: "Open MDCA",
+                    actionUrl: "https://security.microsoft.com/cloudapps"
                 },
                 {
                     control: "SharePoint Permissions",
@@ -3946,18 +4197,18 @@
                     actionUrl: "https://admin.microsoft.com/sharepoint?page=sharing"
                 },
                 {
-                    control: "Insider Risk Policies",
+                    control: "Insider Risk Management",
                     status: "orange",
-                    coverage: "Check compliance center",
+                    coverage: "Check Purview portal",
                     article: "Art. 9 - Risk Management",
                     articleDesc: "High-risk AI systems require continuous risk identification and mitigation",
-                    action: "Configure Policies",
+                    action: "Configure IRM",
                     actionUrl: "https://purview.microsoft.com/insiderriskmanagement"
                 },
                 {
                     control: "Retention Policies",
                     status: "orange",
-                    coverage: "Check compliance center",
+                    coverage: "Check Purview portal",
                     article: "Art. 12 - Record Keeping",
                     articleDesc: "High-risk AI systems must maintain logs for traceability and audit purposes",
                     action: "Manage Retention",
