@@ -509,91 +509,119 @@
             font-weight: 600;
         }
 
-        /* Risk Classification */
-        .risk-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+        /* Risk Classification - Horizontal Layout */
+        .risk-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .risk-row {
+            display: flex;
+            align-items: center;
             gap: 12px;
-        }
-
-        @media (max-width: 600px) {
-            .risk-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .risk-item {
-            padding: 16px 12px;
-            border-radius: 10px;
-            text-align: center;
+            padding: 12px 14px;
+            border-radius: 8px;
             border: 1px solid transparent;
-            transition: all 0.15s ease;
         }
 
-        .risk-item.prohibited {
+        .risk-row.prohibited {
             background: var(--danger-light);
             border-color: var(--danger-border);
         }
 
-        .risk-item.high {
+        .risk-row.high {
             background: var(--warning-light);
             border-color: var(--warning-border);
         }
 
-        .risk-item.limited {
+        .risk-row.limited {
             background: var(--primary-light);
             border-color: #bfdbfe;
         }
 
-        .risk-item.minimal {
+        .risk-row.minimal {
             background: var(--success-light);
             border-color: var(--success-border);
         }
 
-        .risk-item-icon {
-            width: 36px;
-            height: 36px;
-            margin: 0 auto 8px;
-            border-radius: 8px;
+        .risk-row-badge {
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 70px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
         }
 
-        .risk-item.prohibited .risk-item-icon {
+        .risk-row.prohibited .risk-row-badge {
             background: var(--danger);
-            color: var(--white);
+            color: white;
         }
 
-        .risk-item.high .risk-item-icon {
+        .risk-row.high .risk-row-badge {
             background: var(--warning);
-            color: var(--white);
+            color: white;
         }
 
-        .risk-item.limited .risk-item-icon {
+        .risk-row.limited .risk-row-badge {
             background: var(--primary);
-            color: var(--white);
+            color: white;
         }
 
-        .risk-item.minimal .risk-item-icon {
+        .risk-row.minimal .risk-row-badge {
             background: var(--success);
-            color: var(--white);
+            color: white;
         }
 
-        .risk-item-count {
-            font-size: 1.5rem;
+        .risk-row-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .risk-row-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .risk-row-count {
+            font-size: 0.875rem;
             font-weight: 700;
             color: var(--ink);
-            line-height: 1;
         }
 
-        .risk-item-label {
-            font-size: 0.6875rem;
-            font-weight: 600;
+        .risk-row-desc {
+            font-size: 0.75rem;
             color: var(--ink-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 4px;
+        }
+
+        .risk-row-systems {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .risk-system-tag {
+            font-size: 0.6875rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.7);
+            color: var(--ink-secondary);
+            white-space: nowrap;
+        }
+
+        .risk-row-none {
+            font-size: 0.75rem;
+            color: var(--ink-muted);
+            font-style: italic;
         }
 
         /* Category Bars */
@@ -2063,44 +2091,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="risk-grid">
-                            <div class="risk-item prohibited">
-                                <div class="risk-item-icon">
-                                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-                                    </svg>
-                                </div>
-                                <div class="risk-item-count" id="prohibitedCount">0</div>
-                                <div class="risk-item-label">Prohibited</div>
-                            </div>
-                            <div class="risk-item high">
-                                <div class="risk-item-icon">
-                                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                                    </svg>
-                                </div>
-                                <div class="risk-item-count" id="highRiskCount">3</div>
-                                <div class="risk-item-label">High-Risk</div>
-                            </div>
-                            <div class="risk-item limited">
-                                <div class="risk-item-icon">
-                                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                                    </svg>
-                                </div>
-                                <div class="risk-item-count" id="limitedCount">5</div>
-                                <div class="risk-item-label">Limited</div>
-                            </div>
-                            <div class="risk-item minimal">
-                                <div class="risk-item-icon">
-                                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="20 6 9 17 4 12"/>
-                                    </svg>
-                                </div>
-                                <div class="risk-item-count" id="minimalCount">4</div>
-                                <div class="risk-item-label">Minimal</div>
-                            </div>
+                        <div class="risk-list" id="riskClassificationList">
+                            <!-- Dynamically populated -->
                         </div>
                     </div>
                 </div>
@@ -3709,11 +3701,8 @@
             document.getElementById('statHighRisk').textContent = scanData.riskClassification.highRisk;
             document.getElementById('statCopilotUsers').textContent = scanData.aiSystems.find(s => s.name.includes('Copilot'))?.users || 0;
 
-            // Risk counts
-            document.getElementById('prohibitedCount').textContent = scanData.riskClassification.prohibited;
-            document.getElementById('highRiskCount').textContent = scanData.riskClassification.highRisk;
-            document.getElementById('limitedCount').textContent = scanData.riskClassification.limited;
-            document.getElementById('minimalCount').textContent = scanData.riskClassification.minimal;
+            // Risk Classification - Dynamic rendering with system names
+            renderRiskClassification();
 
             // Categories
             const categoryList = document.getElementById('categoryList');
@@ -3822,6 +3811,57 @@
             `).join('');
 
             updateAlertBanner();
+        }
+
+        function renderRiskClassification() {
+            const riskLevels = [
+                {
+                    key: 'prohibited',
+                    label: 'Prohibited',
+                    count: scanData.riskClassification.prohibited,
+                    desc: 'Banned under EU AI Act - must be removed immediately',
+                    filter: s => s.risk === 'prohibited'
+                },
+                {
+                    key: 'high',
+                    label: 'High-Risk',
+                    count: scanData.riskClassification.highRisk,
+                    desc: 'Requires conformity assessment, human oversight & documentation',
+                    filter: s => s.risk === 'high'
+                },
+                {
+                    key: 'limited',
+                    label: 'Limited',
+                    count: scanData.riskClassification.limited,
+                    desc: 'Transparency obligations - must disclose AI use to users',
+                    filter: s => s.risk === 'limited' || s.risk === 'unknown'
+                },
+                {
+                    key: 'minimal',
+                    label: 'Minimal',
+                    count: scanData.riskClassification.minimal,
+                    desc: 'No mandatory requirements - voluntary best practices apply',
+                    filter: s => s.risk === 'minimal'
+                }
+            ];
+
+            const list = document.getElementById('riskClassificationList');
+            list.innerHTML = riskLevels.map(level => {
+                const systems = scanData.aiSystems.filter(level.filter);
+                const systemTags = systems.length > 0
+                    ? `<div class="risk-row-systems">${systems.map(s => `<span class="risk-system-tag">${s.name}</span>`).join('')}</div>`
+                    : `<div class="risk-row-none">No systems in this category</div>`;
+
+                return `
+                    <div class="risk-row ${level.key}">
+                        <div class="risk-row-badge">${level.count} ${level.label}</div>
+                        <div class="risk-row-content">
+                            <div class="risk-row-desc">${level.desc}</div>
+                            ${systemTags}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function renderAISystems(filter) {
