@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EU AI Act Posture Scanner | QuantiveCyber</title>
+    <title>AI Readiness Scanner | QuantiveCyber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -438,12 +438,14 @@
 
         .score-ring {
             position: relative;
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             flex-shrink: 0;
         }
 
         .score-ring svg {
+            width: 100%;
+            height: 100%;
             transform: rotate(-90deg);
         }
 
@@ -1008,8 +1010,8 @@
         }
 
         .score-category-name {
-            width: 120px;
-            font-size: 0.75rem;
+            width: 110px;
+            font-size: 0.6875rem;
             font-weight: 500;
             color: var(--ink-secondary);
             flex-shrink: 0;
@@ -2659,8 +2661,8 @@
             <div class="connect-logo">
                 <img src="logo.png" alt="QuantiveCyber" style="height: 48px;" onerror="this.parentElement.innerHTML='<div class=\'connect-logo-text\'>QuantiveCyber</div><div class=\'connect-logo-sub\'>Security you can measure</div>'">
             </div>
-            <h1 class="connect-title">EU AI Act Posture Scanner</h1>
-            <p class="connect-description">Connect your Microsoft 365 tenant to automatically assess your EU AI Act compliance posture. We scan your environment for AI systems, data governance controls, and security configurations.</p>
+            <h1 class="connect-title">AI Readiness Scanner</h1>
+            <p class="connect-description">Connect your Microsoft 365 tenant to assess your organisation's readiness to securely adopt AI tools like Microsoft Copilot and AI agents. We scan your environment for security controls, data governance, and AI configurations.</p>
 
             <button class="btn btn-primary connect-btn" onclick="startScan()">
                 <svg class="icon" viewBox="0 0 23 23" fill="currentColor">
@@ -2745,7 +2747,7 @@
                 <div class="header-left">
                     <img src="logo.png" alt="QuantiveCyber" class="logo" onerror="this.outerHTML='<span class=\'logo-placeholder\'>QuantiveCyber</span>'">
                     <div class="header-divider"></div>
-                    <span class="header-title">EU AI Act Posture Scanner</span>
+                    <span class="header-title">AI Readiness Scanner</span>
                 </div>
                 <div class="header-right">
                     <div class="tenant-info">
@@ -2795,7 +2797,7 @@
                 </div>
                 <div class="alert-content">
                     <div class="alert-title">Action Required</div>
-                    <div class="alert-text">Your organisation has compliance gaps that should be addressed before the August 2026 deadline.</div>
+                    <div class="alert-text">Address security gaps below to improve your AI readiness posture.</div>
                 </div>
                 <button class="btn btn-secondary" id="alertBannerBtn" onclick="scrollToGaps()">View Gaps</button>
             </div>
@@ -2865,7 +2867,7 @@
                                     <line x1="6" y1="20" x2="6" y2="14"/>
                                 </svg>
                             </div>
-                            Compliance Posture Score
+                            AI Readiness Score
                         </div>
                         <span class="card-badge" style="background: var(--bg); color: var(--ink-secondary);" id="scorePointsBadge">0 / 100 pts</span>
                     </div>
@@ -2890,7 +2892,7 @@
                                 <div class="score-summary-details">
                                     <div class="score-summary-points" id="scorePointsText">Earning 58 of 100 possible points</div>
                                     <div class="score-summary-status" id="scoreStatus" style="color: var(--warning);">Partially Ready</div>
-                                    <div class="score-summary-desc" id="scoreDescription">You have foundational controls but notable gaps remain. Focus on priority areas to achieve compliance before August 2026.</div>
+                                    <div class="score-summary-desc" id="scoreDescription">Basic controls in place but gaps remain. Copilot deployment possible with restrictions.</div>
                                 </div>
                             </div>
 
@@ -2909,8 +2911,9 @@
                                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                                 </svg>
                             </div>
-                            AI Risk Classification
+                            EU AI Act Risk Classification
                         </div>
+                        <span class="card-badge" style="background: var(--bg); color: var(--ink-tertiary); font-size: 0.625rem;">Informational</span>
                     </div>
                     <div class="card-body">
                         <div class="risk-list" id="riskClassificationList">
@@ -3224,7 +3227,7 @@
             <!-- CTA -->
             <div class="card cta-card" style="margin-top: 20px;">
                 <h3>Need Help Achieving Compliance?</h3>
-                <p>This automated scan provides an indication of your posture. Our full EU AI Act Readiness Assessment includes expert analysis, detailed remediation plans, and hands-on implementation support.</p>
+                <p>This automated scan provides an indication of your AI readiness posture. Our full 100-Point AI Readiness Assessment includes expert analysis, detailed remediation plans, and hands-on implementation support.</p>
                 <button class="btn btn-primary" onclick="openContactModal()">Book Expert Assessment</button>
                 <div class="connect-features" style="margin-top: 20px;">
                     <div class="connect-feature">
@@ -3666,9 +3669,9 @@
             },
             score: {
                 overall: 58,
-                status: "Partially Ready",
+                status: "Elevated Risk",
                 statusColor: "var(--warning)",
-                description: "You have foundational controls but notable gaps remain. Focus on priority areas to achieve compliance."
+                description: "Foundational controls in place but notable gaps remain. Copilot deployment possible with restrictions. Address priority areas before full AI rollout."
             },
             riskClassification: {
                 prohibited: 0,
@@ -3676,14 +3679,82 @@
                 limited: 12,
                 minimal: 3
             },
+            // New AI Readiness categories (100 pts total)
+            // Cat totals: 10+20+15+5+11+39 = 100
             categories: [
-                { name: "AI Inventory", score: 75, color: "var(--primary)" },
-                { name: "Data Governance", score: 65, color: "var(--purple)" },
-                { name: "Access Controls", score: 80, color: "var(--success)" },
-                { name: "Human Oversight", score: 40, color: "var(--warning)" },
-                { name: "Transparency", score: 45, color: "#06b6d4" },
-                { name: "Governance", score: 35, color: "var(--danger)" }
+                { name: "Data Visibility", score: 80, earned: 8, max: 10, color: "var(--success)" },
+                { name: "Identity & Access", score: 65, earned: 13, max: 20, color: "var(--warning)" },
+                { name: "Classification", score: 60, earned: 9, max: 15, color: "var(--warning)" },
+                { name: "Device Security", score: 60, earned: 3, max: 5, color: "var(--warning)" },
+                { name: "Collaboration", score: 64, earned: 7, max: 11, color: "var(--warning)" },
+                { name: "AI Governance", score: 46, earned: 18, max: 39, color: "var(--danger)" }
             ],
+            // Identity checks for Category 2
+            identityChecks: {
+                mfaAdmins: true,
+                mfaAllUsers: false,
+                mfaPartial: true,
+                legacyAuthBlocked: true,
+                pimEnabled: false,
+                pimLicensed: true,
+                accessReviewsEnabled: false,
+                accessReviewsLicensed: true,
+                roleQuality: 'partial',
+                globalAdminCount: 6,
+                signInRiskEnabled: false,
+                identityProtectionLicensed: true
+            },
+            // Data protection checks for Category 3
+            dataProtection: {
+                encryptionConfigured: true,
+                markingsOnly: false,
+                autoLabelingEnabled: false,
+                autoLabelingPartial: true,
+                autoLabelingAccuracy: 'medium',
+                userLabelingAdoption: 'medium'
+            },
+            // Device security checks for Category 4
+            deviceSecurity: {
+                purviewOnboarded: 'medium',
+                endpointDlpEnabled: false,
+                endpointDlpPartial: true
+            },
+            // Collaboration security checks for Category 5
+            collaborationSecurity: {
+                sharingRestricted: false,
+                sharingPartiallyRestricted: true,
+                guestAccessControlled: true,
+                guestAccessPartial: false,
+                containerLabelsDeployed: false,
+                containerLabelsPartial: true,
+                oversharingMinimal: false,
+                oversharingModerate: true,
+                sharingDefaultSecure: false,
+                sharingDefaultOrg: true
+            },
+            // AI Governance checks for Category 6
+            aiGovernance: {
+                monitoringEnabled: false,
+                monitoringPartial: true,
+                aiDlpEnabled: false,
+                aiDlpPartial: true,
+                restrictedSearchEnabled: false,
+                restrictedSearchPartial: true,
+                labelInheritanceEnabled: true,
+                oversharingAuditComplete: false,
+                oversharingAuditInProgress: true,
+                oversharingAuditAware: false,
+                irmAiEnabled: false,
+                dspmEnabled: false,
+                dspmPartial: false,
+                dspmLicensed: false,
+                agentSettingsConfigured: false,
+                irmAgentPolicies: false,
+                irmAgentPoliciesDefault: true,
+                caAgentsEnabled: false,
+                adaptiveProtectionEnabled: false,
+                adaptiveProtectionLicensed: false
+            },
             aiSystems: [
                 // Microsoft AI - Licensed/Built-in
                 { name: "Microsoft Copilot for M365", type: "Productivity AI", users: 45, dataActivity: "2.4 GB", risk: "limited", logo: "microsoft", shadow: false, source: "Licensed" },
@@ -3712,7 +3783,7 @@
                 {
                     priority: 1,
                     title: "No AI Governance Policy",
-                    description: "Your organisation lacks a formal AI acceptable use policy. This is required for EU AI Act compliance and should define permitted AI uses.",
+                    description: "Your organisation lacks a formal AI acceptable use policy. Essential for safe Copilot deployment and AI governance.",
                     solution: "Create an AI Acceptable Use Policy using Microsoft Purview policy templates. Implement policy enforcement through Defender for Cloud Apps.",
                     products: ["Microsoft Purview", "Defender for Cloud Apps", "Entra ID"]
                 },
@@ -4998,242 +5069,636 @@
 
         // Calculate overall scores with detailed breakdown
         function calculateScores() {
-            // Define all scoring controls with clear point values
-            const scoreControls = [
-                // AI Inventory & Classification (25 points)
-                {
-                    id: 'ai-inventory',
-                    name: 'AI Systems Inventory',
-                    category: 'AI Inventory',
-                    points: 10,
-                    article: 'Art. 9',
-                    check: () => scanData.aiSystems.length > 0,
-                    status: () => scanData.aiSystems.length > 0 ? 'pass' : 'fail',
-                    current: () => scanData.aiSystems.length > 0 ? 10 : 0,
-                    description: 'Complete inventory of AI systems in use',
-                    action: 'Scan identifies AI applications in your environment'
-                },
-                {
-                    id: 'risk-classification',
-                    name: 'Risk Classification Complete',
-                    category: 'AI Inventory',
-                    points: 10,
-                    article: 'Art. 6',
-                    check: () => scanData.aiSystems.length > 0,
-                    status: () => scanData.aiSystems.length > 0 ? 'pass' : 'fail',
-                    current: () => scanData.aiSystems.length > 0 ? 10 : 0,
-                    description: 'AI systems classified by EU AI Act risk level',
-                    action: 'All discovered systems are automatically classified'
-                },
-                {
-                    id: 'no-prohibited',
-                    name: 'No Prohibited AI Systems',
-                    category: 'AI Inventory',
-                    points: 5,
-                    article: 'Art. 5',
-                    check: () => scanData.riskClassification.prohibited === 0,
-                    status: () => scanData.riskClassification.prohibited === 0 ? 'pass' : 'fail',
-                    current: () => scanData.riskClassification.prohibited === 0 ? 5 : 0,
-                    description: 'No banned AI systems detected',
-                    action: 'Remove any prohibited AI systems immediately'
-                },
+            // Helper to get check status
+            const getCheck = (keyword) => scanData.checks?.find(c => c.name.toLowerCase().includes(keyword.toLowerCase()));
+            const getCheckStatus = (keyword) => getCheck(keyword)?.status || 'fail';
 
-                // Data Governance (20 points)
+            // Define all 41 scoring controls across 6 AI Readiness categories
+            const scoreControls = [
+                // ==========================================
+                // CATEGORY 1: Data Visibility & Discovery (10 pts, 5 tests)
+                // ==========================================
                 {
-                    id: 'sensitivity-labels',
-                    name: 'Sensitivity Labels Configured',
-                    category: 'Data Governance',
-                    points: 10,
+                    id: '1.1-data-mapping',
+                    name: 'Business Data Mapping',
+                    category: 'Data Visibility',
+                    points: 2,
                     article: 'Art. 10',
-                    check: () => {
-                        const check = scanData.checks.find(c => c.name.includes("Sensitivity labels"));
-                        return check?.status === 'pass';
-                    },
-                    status: () => {
-                        const check = scanData.checks.find(c => c.name.includes("Sensitivity labels"));
-                        return check?.status || 'fail';
-                    },
+                    check: () => scanData.aiSystems?.length > 0,
+                    status: () => scanData.aiSystems?.length > 0 ? 'pass' : 'warn',
+                    current: () => scanData.aiSystems?.length > 0 ? 2 : 0,
+                    description: 'Data locations identified and mapped',
+                    action: 'Use Cloud Discovery to identify data sources',
+                    actionUrl: 'https://security.microsoft.com/cloudapps'
+                },
+                {
+                    id: '1.2-classification-coverage',
+                    name: 'Classification Coverage',
+                    category: 'Data Visibility',
+                    points: 3,
+                    article: 'Art. 10',
+                    check: () => getCheckStatus('Sensitivity labels') === 'pass',
+                    status: () => getCheckStatus('Sensitivity labels'),
                     current: () => {
-                        const check = scanData.checks.find(c => c.name.includes("Sensitivity labels"));
-                        return check?.status === 'pass' ? 10 : check?.status === 'warn' ? 5 : 0;
+                        const s = getCheckStatus('Sensitivity labels');
+                        return s === 'pass' ? 3 : s === 'warn' ? 1 : 0;
                     },
-                    description: 'Data classification labels to protect AI training data',
-                    action: 'Configure sensitivity labels in Microsoft Purview',
+                    description: 'Percentage of content with classification labels',
+                    action: 'Deploy sensitivity labels across workloads',
                     actionUrl: 'https://purview.microsoft.com/informationprotection'
                 },
                 {
-                    id: 'dlp-policies',
-                    name: 'DLP Policies Active',
-                    category: 'Data Governance',
-                    points: 10,
+                    id: '1.3-classification-accuracy',
+                    name: 'Classification Accuracy',
+                    category: 'Data Visibility',
+                    points: 2,
                     article: 'Art. 10',
+                    check: () => getCheckStatus('Sensitivity labels') === 'pass',
+                    status: () => getCheckStatus('Sensitivity labels') === 'pass' ? 'pass' : 'warn',
+                    current: () => getCheckStatus('Sensitivity labels') === 'pass' ? 2 : 0,
+                    description: 'Labels correctly match content sensitivity',
+                    action: 'Review Content Explorer for misclassifications',
+                    actionUrl: 'https://purview.microsoft.com/contentexplorer'
+                },
+                {
+                    id: '1.4-audit-logging',
+                    name: 'Audit Logging Enabled',
+                    category: 'Data Visibility',
+                    points: 1,
+                    article: 'Art. 12',
+                    check: () => getCheckStatus('Audit logging') === 'pass',
+                    status: () => getCheckStatus('Audit logging'),
+                    current: () => getCheckStatus('Audit logging') === 'pass' ? 1 : 0,
+                    description: 'Unified audit logging active for compliance',
+                    action: 'Enable audit logging in Purview',
+                    actionUrl: 'https://purview.microsoft.com/auditlogsearch'
+                },
+                {
+                    id: '1.5-shadow-it',
+                    name: 'Shadow IT Discovery',
+                    category: 'Data Visibility',
+                    points: 2,
+                    article: 'Art. 9',
                     check: () => {
-                        const check = scanData.checks.find(c => c.name.includes("DLP policies"));
-                        return check?.status === 'pass';
+                        const shadowAI = scanData.aiSystems?.filter(s => s.shadow) || [];
+                        return shadowAI.length > 0; // Discovery working if shadow AI found
                     },
                     status: () => {
-                        const check = scanData.checks.find(c => c.name.includes("DLP policies"));
-                        return check?.status || 'fail';
+                        const shadowAI = scanData.aiSystems?.filter(s => s.shadow) || [];
+                        return shadowAI.length > 0 ? 'pass' : 'warn';
                     },
                     current: () => {
-                        const check = scanData.checks.find(c => c.name.includes("DLP policies"));
-                        return check?.status === 'pass' ? 10 : check?.status === 'warn' ? 5 : 0;
+                        const shadowAI = scanData.aiSystems?.filter(s => s.shadow) || [];
+                        return shadowAI.length > 0 ? 2 : 0;
                     },
-                    description: 'Prevent sensitive data exposure to AI systems',
-                    action: 'Configure DLP policies in Microsoft Purview',
-                    actionUrl: 'https://purview.microsoft.com/datalossprevention'
+                    description: 'Visibility into unauthorized AI tool usage',
+                    action: 'Enable Defender for Cloud Apps discovery',
+                    actionUrl: 'https://security.microsoft.com/cloudapps'
                 },
 
-                // Access Controls (20 points)
+                // ==========================================
+                // CATEGORY 2: Identity & Access Governance (20 pts, 9 tests)
+                // ==========================================
                 {
-                    id: 'conditional-access',
+                    id: '2.1-mfa-admins',
+                    name: 'MFA for Admins',
+                    category: 'Identity & Access',
+                    points: 2,
+                    article: 'Art. 9',
+                    check: () => scanData.identityChecks?.mfaAdmins === true,
+                    status: () => scanData.identityChecks?.mfaAdmins ? 'pass' : 'fail',
+                    current: () => scanData.identityChecks?.mfaAdmins ? 2 : 0,
+                    description: 'Multi-factor authentication required for all admins',
+                    action: 'Enforce MFA for admin accounts via CA',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies'
+                },
+                {
+                    id: '2.2-mfa-users',
+                    name: 'MFA for All Users',
+                    category: 'Identity & Access',
+                    points: 2,
+                    article: 'Art. 9',
+                    check: () => scanData.identityChecks?.mfaAllUsers === true,
+                    status: () => scanData.identityChecks?.mfaAllUsers ? 'pass' : scanData.identityChecks?.mfaPartial ? 'warn' : 'fail',
+                    current: () => scanData.identityChecks?.mfaAllUsers ? 2 : scanData.identityChecks?.mfaPartial ? 1 : 0,
+                    description: 'MFA required for all users (<5% exclusions)',
+                    action: 'Deploy MFA for all users',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies'
+                },
+                {
+                    id: '2.3-legacy-auth',
+                    name: 'Legacy Auth Blocked',
+                    category: 'Identity & Access',
+                    points: 1,
+                    article: 'Art. 9',
+                    check: () => scanData.identityChecks?.legacyAuthBlocked === true,
+                    status: () => scanData.identityChecks?.legacyAuthBlocked ? 'pass' : 'fail',
+                    current: () => scanData.identityChecks?.legacyAuthBlocked ? 1 : 0,
+                    description: 'Block legacy authentication protocols',
+                    action: 'Create CA policy to block legacy auth',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies'
+                },
+                {
+                    id: '2.4-conditional-access',
                     name: 'Conditional Access Policies',
-                    category: 'Access Controls',
-                    points: 10,
+                    category: 'Identity & Access',
+                    points: 3,
                     article: 'Art. 9',
-                    check: () => {
-                        const check = scanData.checks.find(c => c.name.includes("Conditional Access"));
-                        return check?.status === 'pass';
-                    },
-                    status: () => {
-                        const check = scanData.checks.find(c => c.name.includes("Conditional Access"));
-                        return check?.status || 'fail';
-                    },
+                    check: () => getCheckStatus('Conditional Access') === 'pass',
+                    status: () => getCheckStatus('Conditional Access'),
                     current: () => {
-                        const check = scanData.checks.find(c => c.name.includes("Conditional Access"));
-                        return check?.status === 'pass' ? 10 : check?.status === 'warn' ? 5 : 0;
+                        const s = getCheckStatus('Conditional Access');
+                        return s === 'pass' ? 3 : s === 'warn' ? 2 : 0;
                     },
-                    description: 'Control access to AI applications',
-                    action: 'Configure Conditional Access in Entra ID',
+                    description: 'Comprehensive CA with device, location, app controls',
+                    action: 'Configure Conditional Access policies',
                     actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies'
                 },
                 {
-                    id: 'ai-specific-ca',
-                    name: 'AI-Specific Access Controls',
-                    category: 'Access Controls',
-                    points: 5,
+                    id: '2.5-pim',
+                    name: 'Privileged Identity Management',
+                    category: 'Identity & Access',
+                    points: 3,
+                    article: 'Art. 14',
+                    check: () => scanData.identityChecks?.pimEnabled === true,
+                    status: () => scanData.identityChecks?.pimEnabled ? 'pass' : scanData.identityChecks?.pimLicensed === false ? 'warn' : 'fail',
+                    current: () => scanData.identityChecks?.pimEnabled ? 3 : 0,
+                    description: 'Just-in-time privileged access (Entra P2)',
+                    action: 'Enable PIM for admin roles',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_Azure_PIMCommon/ResourceMenuBlade/~/MyActions',
+                    licenseRequired: 'Entra ID P2'
+                },
+                {
+                    id: '2.6-access-reviews',
+                    name: 'Access Reviews',
+                    category: 'Identity & Access',
+                    points: 3,
+                    article: 'Art. 14',
+                    check: () => scanData.identityChecks?.accessReviewsEnabled === true,
+                    status: () => scanData.identityChecks?.accessReviewsEnabled ? 'pass' : scanData.identityChecks?.accessReviewsLicensed === false ? 'warn' : 'fail',
+                    current: () => scanData.identityChecks?.accessReviewsEnabled ? 3 : 0,
+                    description: 'Regular access certification reviews (Entra P2)',
+                    action: 'Configure access reviews',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_ERM/DashboardBlade/~/Controls',
+                    licenseRequired: 'Entra ID P2'
+                },
+                {
+                    id: '2.7-role-quality',
+                    name: 'Role Assignment Quality',
+                    category: 'Identity & Access',
+                    points: 2,
                     article: 'Art. 9',
-                    check: () => {
-                        const check = scanData.checks.find(c => c.name.includes("AI-specific"));
-                        return check?.status === 'pass';
-                    },
+                    check: () => scanData.identityChecks?.roleQuality === 'good',
+                    status: () => scanData.identityChecks?.roleQuality === 'good' ? 'pass' : scanData.identityChecks?.roleQuality === 'partial' ? 'warn' : 'fail',
+                    current: () => scanData.identityChecks?.roleQuality === 'good' ? 2 : scanData.identityChecks?.roleQuality === 'partial' ? 1 : 0,
+                    description: 'Least privilege principle followed',
+                    action: 'Review and minimize role assignments',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_IAM/RolesManagementMenuBlade/~/AllRoles'
+                },
+                {
+                    id: '2.8-admin-count',
+                    name: 'Admin Account Count',
+                    category: 'Identity & Access',
+                    points: 2,
+                    article: 'Art. 9',
+                    check: () => scanData.identityChecks?.globalAdminCount <= 4,
                     status: () => {
-                        const check = scanData.checks.find(c => c.name.includes("AI-specific"));
-                        return check?.status || 'fail';
+                        const count = scanData.identityChecks?.globalAdminCount || 0;
+                        return count <= 4 ? 'pass' : count <= 8 ? 'warn' : 'fail';
                     },
                     current: () => {
-                        const check = scanData.checks.find(c => c.name.includes("AI-specific"));
-                        return check?.status === 'pass' ? 5 : 0;
+                        const count = scanData.identityChecks?.globalAdminCount || 0;
+                        return count <= 4 ? 2 : count <= 8 ? 1 : 0;
                     },
-                    description: 'Policies specifically targeting AI applications',
-                    action: 'Create CA policies for Copilot and AI apps',
+                    description: 'Optimal: 2-4 Global Admins',
+                    action: 'Reduce Global Admin count',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_IAM/RolesManagementMenuBlade/~/AllRoles'
+                },
+                {
+                    id: '2.9-signin-risk',
+                    name: 'Sign-in Risk Policies',
+                    category: 'Identity & Access',
+                    points: 2,
+                    article: 'Art. 9',
+                    check: () => scanData.identityChecks?.signInRiskEnabled === true,
+                    status: () => scanData.identityChecks?.signInRiskEnabled ? 'pass' : scanData.identityChecks?.identityProtectionLicensed === false ? 'warn' : 'fail',
+                    current: () => scanData.identityChecks?.signInRiskEnabled ? 2 : 0,
+                    description: 'Identity Protection risk policies (Entra P2)',
+                    action: 'Configure risk-based policies',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_IAM/IdentityProtectionMenuBlade/~/RiskPolicies',
+                    licenseRequired: 'Entra ID P2'
+                },
+
+                // ==========================================
+                // CATEGORY 3: Data Classification & Protection (15 pts, 6 tests)
+                // ==========================================
+                {
+                    id: '3.1-label-taxonomy',
+                    name: 'Label Taxonomy Structure',
+                    category: 'Classification',
+                    points: 3,
+                    article: 'Art. 10',
+                    check: () => getCheckStatus('Sensitivity labels') === 'pass',
+                    status: () => getCheckStatus('Sensitivity labels'),
+                    current: () => {
+                        const s = getCheckStatus('Sensitivity labels');
+                        return s === 'pass' ? 3 : s === 'warn' ? 1 : 0;
+                    },
+                    description: '4-8 labels with clear hierarchy',
+                    action: 'Design and deploy label taxonomy',
+                    actionUrl: 'https://purview.microsoft.com/informationprotection/labels'
+                },
+                {
+                    id: '3.2-protection-actions',
+                    name: 'Protection Actions Configured',
+                    category: 'Classification',
+                    points: 3,
+                    article: 'Art. 10',
+                    check: () => scanData.dataProtection?.encryptionConfigured === true,
+                    status: () => scanData.dataProtection?.encryptionConfigured ? 'pass' : 'warn',
+                    current: () => scanData.dataProtection?.encryptionConfigured ? 3 : scanData.dataProtection?.markingsOnly ? 1 : 0,
+                    description: 'Encryption and content markings on sensitive labels',
+                    action: 'Configure label protection settings',
+                    actionUrl: 'https://purview.microsoft.com/informationprotection/labels'
+                },
+                {
+                    id: '3.3-auto-labeling',
+                    name: 'Auto-labeling Policies',
+                    category: 'Classification',
+                    points: 3,
+                    article: 'Art. 10',
+                    check: () => scanData.dataProtection?.autoLabelingEnabled === true,
+                    status: () => scanData.dataProtection?.autoLabelingEnabled ? 'pass' : 'warn',
+                    current: () => scanData.dataProtection?.autoLabelingEnabled ? 3 : scanData.dataProtection?.autoLabelingPartial ? 1 : 0,
+                    description: 'Automatic classification for sensitive content',
+                    action: 'Configure auto-labeling policies',
+                    actionUrl: 'https://purview.microsoft.com/informationprotection/autolabeling'
+                },
+                {
+                    id: '3.4-auto-labeling-accuracy',
+                    name: 'Auto-labeling Performance',
+                    category: 'Classification',
+                    points: 2,
+                    article: 'Art. 10',
+                    check: () => scanData.dataProtection?.autoLabelingAccuracy === 'high',
+                    status: () => scanData.dataProtection?.autoLabelingAccuracy === 'high' ? 'pass' : 'warn',
+                    current: () => scanData.dataProtection?.autoLabelingAccuracy === 'high' ? 2 : scanData.dataProtection?.autoLabelingAccuracy === 'medium' ? 1 : 0,
+                    description: '<10% false positive rate in auto-labeling',
+                    action: 'Tune auto-labeling rules and SITs',
+                    actionUrl: 'https://purview.microsoft.com/informationprotection/autolabeling'
+                },
+                {
+                    id: '3.5-dlp-quality',
+                    name: 'DLP Policy Quality',
+                    category: 'Classification',
+                    points: 2,
+                    article: 'Art. 15',
+                    check: () => getCheckStatus('DLP policies') === 'pass',
+                    status: () => getCheckStatus('DLP policies'),
+                    current: () => {
+                        const s = getCheckStatus('DLP policies');
+                        return s === 'pass' ? 2 : s === 'warn' ? 1 : 0;
+                    },
+                    description: 'Well-tuned DLP policies with low false positives',
+                    action: 'Configure and tune DLP policies',
+                    actionUrl: 'https://purview.microsoft.com/datalossprevention/policies'
+                },
+                {
+                    id: '3.6-user-labeling',
+                    name: 'User Labeling Adoption',
+                    category: 'Classification',
+                    points: 2,
+                    article: 'Art. 4',
+                    check: () => scanData.dataProtection?.userLabelingAdoption === 'high',
+                    status: () => scanData.dataProtection?.userLabelingAdoption === 'high' ? 'pass' : scanData.dataProtection?.userLabelingAdoption === 'medium' ? 'warn' : 'fail',
+                    current: () => scanData.dataProtection?.userLabelingAdoption === 'high' ? 2 : scanData.dataProtection?.userLabelingAdoption === 'medium' ? 1 : 0,
+                    description: 'Active user engagement with manual labeling',
+                    action: 'Deploy labeling training and awareness',
+                    actionUrl: 'https://purview.microsoft.com/informationprotection/activityexplorer'
+                },
+
+                // ==========================================
+                // CATEGORY 4: Device & Endpoint Security (5 pts, 2 tests)
+                // ==========================================
+                {
+                    id: '4.1-device-onboarding',
+                    name: 'Devices Onboarded to Purview',
+                    category: 'Device Security',
+                    points: 3,
+                    article: 'Art. 9',
+                    check: () => scanData.deviceSecurity?.purviewOnboarded === 'high',
+                    status: () => scanData.deviceSecurity?.purviewOnboarded === 'high' ? 'pass' : scanData.deviceSecurity?.purviewOnboarded === 'medium' ? 'warn' : 'fail',
+                    current: () => {
+                        const level = scanData.deviceSecurity?.purviewOnboarded;
+                        return level === 'high' ? 3 : level === 'medium' ? 2 : level === 'low' ? 1 : 0;
+                    },
+                    description: '>80% devices onboarded for endpoint DLP',
+                    action: 'Onboard devices to Microsoft Purview',
+                    actionUrl: 'https://purview.microsoft.com/settings/deviceonboarding'
+                },
+                {
+                    id: '4.2-endpoint-dlp',
+                    name: 'Endpoint DLP Policies',
+                    category: 'Device Security',
+                    points: 2,
+                    article: 'Art. 10',
+                    check: () => scanData.deviceSecurity?.endpointDlpEnabled === true,
+                    status: () => scanData.deviceSecurity?.endpointDlpEnabled ? 'pass' : 'warn',
+                    current: () => scanData.deviceSecurity?.endpointDlpEnabled ? 2 : scanData.deviceSecurity?.endpointDlpPartial ? 1 : 0,
+                    description: 'USB, print, browser upload controls',
+                    action: 'Configure endpoint DLP policies',
+                    actionUrl: 'https://purview.microsoft.com/datalossprevention/policies'
+                },
+
+                // ==========================================
+                // CATEGORY 5: Collaboration Security (11 pts, 5 tests)
+                // ==========================================
+                {
+                    id: '5.1-external-sharing',
+                    name: 'External Sharing Policies',
+                    category: 'Collaboration',
+                    points: 3,
+                    article: 'Art. 10',
+                    check: () => scanData.collaborationSecurity?.sharingRestricted === true,
+                    status: () => scanData.collaborationSecurity?.sharingRestricted ? 'pass' : scanData.collaborationSecurity?.sharingPartiallyRestricted ? 'warn' : 'fail',
+                    current: () => scanData.collaborationSecurity?.sharingRestricted ? 3 : scanData.collaborationSecurity?.sharingPartiallyRestricted ? 2 : 0,
+                    description: 'Restricted sharing with domain controls',
+                    action: 'Configure SharePoint sharing policies',
+                    actionUrl: 'https://admin.microsoft.com/sharepoint?page=sharing'
+                },
+                {
+                    id: '5.2-guest-access',
+                    name: 'Guest Access Configuration',
+                    category: 'Collaboration',
+                    points: 2,
+                    article: 'Art. 9',
+                    check: () => scanData.collaborationSecurity?.guestAccessControlled === true,
+                    status: () => scanData.collaborationSecurity?.guestAccessControlled ? 'pass' : 'warn',
+                    current: () => scanData.collaborationSecurity?.guestAccessControlled ? 2 : scanData.collaborationSecurity?.guestAccessPartial ? 1 : 0,
+                    description: 'Guest access with expiration and review',
+                    action: 'Configure external identities settings',
+                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_IAM/CompanyRelationshipsMenuBlade/~/Settings'
+                },
+                {
+                    id: '5.3-container-labels',
+                    name: 'Sensitivity Labels on Sites/Teams',
+                    category: 'Collaboration',
+                    points: 2,
+                    article: 'Art. 10',
+                    check: () => scanData.collaborationSecurity?.containerLabelsDeployed === true,
+                    status: () => scanData.collaborationSecurity?.containerLabelsDeployed ? 'pass' : 'warn',
+                    current: () => scanData.collaborationSecurity?.containerLabelsDeployed ? 2 : scanData.collaborationSecurity?.containerLabelsPartial ? 1 : 0,
+                    description: 'Container labels protecting Teams and SharePoint sites',
+                    action: 'Enable sensitivity labels for containers',
+                    actionUrl: 'https://purview.microsoft.com/informationprotection/labels'
+                },
+                {
+                    id: '5.4-oversharing',
+                    name: 'Oversharing Detection',
+                    category: 'Collaboration',
+                    points: 2,
+                    article: 'Art. 9',
+                    check: () => scanData.collaborationSecurity?.oversharingMinimal === true,
+                    status: () => scanData.collaborationSecurity?.oversharingMinimal ? 'pass' : scanData.collaborationSecurity?.oversharingModerate ? 'warn' : 'fail',
+                    current: () => scanData.collaborationSecurity?.oversharingMinimal ? 2 : scanData.collaborationSecurity?.oversharingModerate ? 1 : 0,
+                    description: 'No significant oversharing detected',
+                    action: 'Review Data Access Governance reports',
+                    actionUrl: 'https://admin.microsoft.com/sharepoint?page=dataAccessGovernance'
+                },
+                {
+                    id: '5.5-sharing-defaults',
+                    name: 'Sharing Link Defaults',
+                    category: 'Collaboration',
+                    points: 2,
+                    article: 'Art. 10',
+                    check: () => scanData.collaborationSecurity?.sharingDefaultSecure === true,
+                    status: () => scanData.collaborationSecurity?.sharingDefaultSecure ? 'pass' : scanData.collaborationSecurity?.sharingDefaultOrg ? 'warn' : 'fail',
+                    current: () => scanData.collaborationSecurity?.sharingDefaultSecure ? 2 : scanData.collaborationSecurity?.sharingDefaultOrg ? 1 : 0,
+                    description: 'Default sharing: "Specific people" not "Anyone"',
+                    action: 'Set secure default sharing links',
+                    actionUrl: 'https://admin.microsoft.com/sharepoint?page=sharing'
+                },
+
+                // ==========================================
+                // CATEGORY 6: AI & Agent Governance (39 pts, 14 tests)
+                // ==========================================
+                {
+                    id: '6.1-ai-discovery',
+                    name: 'AI Tool Discovery',
+                    category: 'AI Governance',
+                    points: 3,
+                    article: 'Art. 9',
+                    check: () => scanData.aiSystems?.length > 0,
+                    status: () => scanData.aiSystems?.length > 0 ? 'pass' : 'fail',
+                    current: () => scanData.aiSystems?.length > 0 ? 3 : 0,
+                    description: 'Comprehensive AI app discovery via MDCA',
+                    action: 'Enable Cloud Discovery for Generative AI',
+                    actionUrl: 'https://security.microsoft.com/cloudapps'
+                },
+                {
+                    id: '6.2-ai-monitoring',
+                    name: 'AI Interaction Monitoring',
+                    category: 'AI Governance',
+                    points: 3,
+                    article: 'Art. 12',
+                    check: () => scanData.aiGovernance?.monitoringEnabled === true,
+                    status: () => scanData.aiGovernance?.monitoringEnabled ? 'pass' : 'warn',
+                    current: () => scanData.aiGovernance?.monitoringEnabled ? 3 : scanData.aiGovernance?.monitoringPartial ? 1 : 0,
+                    description: 'Activity monitoring for Copilot and AI interactions',
+                    action: 'Enable AI activity monitoring',
+                    actionUrl: 'https://purview.microsoft.com/activityexplorer'
+                },
+                {
+                    id: '6.3-ai-dlp',
+                    name: 'AI-Specific DLP',
+                    category: 'AI Governance',
+                    points: 3,
+                    article: 'Art. 10',
+                    check: () => scanData.aiGovernance?.aiDlpEnabled === true,
+                    status: () => scanData.aiGovernance?.aiDlpEnabled ? 'pass' : 'warn',
+                    current: () => scanData.aiGovernance?.aiDlpEnabled ? 3 : scanData.aiGovernance?.aiDlpPartial ? 1 : 0,
+                    description: 'DLP policies targeting AI/Copilot interactions',
+                    action: 'Configure DLP for Copilot locations',
+                    actionUrl: 'https://purview.microsoft.com/datalossprevention/policies'
+                },
+                {
+                    id: '6.4-external-ai',
+                    name: 'External AI Controls',
+                    category: 'AI Governance',
+                    points: 3,
+                    article: 'Art. 5',
+                    check: () => {
+                        const shadowAI = scanData.aiSystems?.filter(s => s.shadow) || [];
+                        return getCheckStatus('Shadow AI') === 'pass' || shadowAI.length === 0;
+                    },
+                    status: () => {
+                        const check = getCheckStatus('Shadow AI');
+                        return check === 'pass' ? 'pass' : check === 'warn' ? 'warn' : 'fail';
+                    },
+                    current: () => {
+                        const check = getCheckStatus('Shadow AI');
+                        return check === 'pass' ? 3 : check === 'warn' ? 1 : 0;
+                    },
+                    description: 'Block/control external AI via CA or MDCA',
+                    action: 'Configure CA policies or MDCA blocks for external AI',
+                    actionUrl: 'https://security.microsoft.com/cloudapps'
+                },
+                {
+                    id: '6.5-copilot-config',
+                    name: 'Copilot Configuration',
+                    category: 'AI Governance',
+                    points: 3,
+                    article: 'Art. 9',
+                    check: () => getCheckStatus('Copilot') === 'pass',
+                    status: () => getCheckStatus('Copilot'),
+                    current: () => {
+                        const s = getCheckStatus('Copilot');
+                        return s === 'pass' ? 3 : s === 'warn' ? 1 : 0;
+                    },
+                    description: 'Copilot settings configured with appropriate restrictions',
+                    action: 'Review Copilot admin settings',
+                    actionUrl: 'https://admin.microsoft.com/Adminportal/Home#/copilot'
+                },
+                {
+                    id: '6.6-restricted-search',
+                    name: 'Restricted SharePoint Search',
+                    category: 'AI Governance',
+                    points: 3,
+                    article: 'Art. 10',
+                    check: () => scanData.aiGovernance?.restrictedSearchEnabled === true,
+                    status: () => scanData.aiGovernance?.restrictedSearchEnabled ? 'pass' : 'warn',
+                    current: () => scanData.aiGovernance?.restrictedSearchEnabled ? 3 : scanData.aiGovernance?.restrictedSearchPartial ? 1 : 0,
+                    description: 'Sensitive sites excluded from Copilot search',
+                    action: 'Configure restricted SharePoint search',
+                    actionUrl: 'https://admin.microsoft.com/sharepoint?page=search'
+                },
+                {
+                    id: '6.7-label-inheritance',
+                    name: 'Label Inheritance for AI',
+                    category: 'AI Governance',
+                    points: 2,
+                    article: 'Art. 10',
+                    check: () => scanData.aiGovernance?.labelInheritanceEnabled === true,
+                    status: () => scanData.aiGovernance?.labelInheritanceEnabled ? 'pass' : 'warn',
+                    current: () => scanData.aiGovernance?.labelInheritanceEnabled ? 2 : 0,
+                    description: 'AI-generated content inherits source labels',
+                    action: 'Verify label inheritance in Copilot outputs',
+                    actionUrl: 'https://purview.microsoft.com/informationprotection'
+                },
+                {
+                    id: '6.8-ai-oversharing',
+                    name: 'AI Oversharing Audit',
+                    category: 'AI Governance',
+                    points: 4,
+                    article: 'Art. 9',
+                    check: () => scanData.aiGovernance?.oversharingAuditComplete === true,
+                    status: () => {
+                        if (scanData.aiGovernance?.oversharingAuditComplete) return 'pass';
+                        if (scanData.aiGovernance?.oversharingAuditInProgress) return 'warn';
+                        return 'fail';
+                    },
+                    current: () => {
+                        if (scanData.aiGovernance?.oversharingAuditComplete) return 4;
+                        if (scanData.aiGovernance?.oversharingAuditInProgress) return 2;
+                        if (scanData.aiGovernance?.oversharingAuditAware) return 1;
+                        return 0;
+                    },
+                    description: 'Oversharing audit complete, minimal exposure',
+                    action: 'Run DSPM or Data Access Governance audit',
+                    actionUrl: 'https://purview.microsoft.com/datariskmanagement'
+                },
+                {
+                    id: '6.9-irm-ai',
+                    name: 'Insider Risk for AI Users',
+                    category: 'AI Governance',
+                    points: 1,
+                    article: 'Art. 9',
+                    check: () => scanData.aiGovernance?.irmAiEnabled === true,
+                    status: () => scanData.aiGovernance?.irmAiEnabled ? 'pass' : 'warn',
+                    current: () => scanData.aiGovernance?.irmAiEnabled ? 1 : 0,
+                    description: 'IRM policy includes AI usage indicators',
+                    action: 'Add AI indicators to IRM policies',
+                    actionUrl: 'https://purview.microsoft.com/insiderriskmanagement/policies'
+                },
+                {
+                    id: '6.10-dspm',
+                    name: 'DSPM for AI',
+                    category: 'AI Governance',
+                    points: 4,
+                    article: 'Art. 9',
+                    check: () => scanData.aiGovernance?.dspmEnabled === true,
+                    status: () => {
+                        if (scanData.aiGovernance?.dspmEnabled) return 'pass';
+                        if (scanData.aiGovernance?.dspmLicensed === false) return 'warn';
+                        return 'fail';
+                    },
+                    current: () => {
+                        if (scanData.aiGovernance?.dspmEnabled) return 4;
+                        if (scanData.aiGovernance?.dspmPartial) return 2;
+                        return 0;
+                    },
+                    description: 'Data Security Posture Management for AI enabled',
+                    action: 'Enable and configure DSPM for AI',
+                    actionUrl: 'https://purview.microsoft.com/datariskmanagement',
+                    licenseRequired: 'E5 Compliance'
+                },
+                {
+                    id: '6.11-agent-settings',
+                    name: 'Agent Governance Settings',
+                    category: 'AI Governance',
+                    points: 3,
+                    article: 'Art. 14',
+                    check: () => scanData.aiGovernance?.agentSettingsConfigured === true,
+                    status: () => scanData.aiGovernance?.agentSettingsConfigured ? 'pass' : 'warn',
+                    current: () => scanData.aiGovernance?.agentSettingsConfigured ? 3 : 0,
+                    description: 'Copilot agent settings configured with restrictions',
+                    action: 'Configure agent governance settings',
+                    actionUrl: 'https://admin.microsoft.com/Adminportal/Home#/copilot/agents',
+                    licenseRequired: 'E5 + Copilot'
+                },
+                {
+                    id: '6.12-irm-agents',
+                    name: 'Insider Risk - Agent Policies',
+                    category: 'AI Governance',
+                    points: 2,
+                    article: 'Art. 9',
+                    check: () => scanData.aiGovernance?.irmAgentPolicies === true,
+                    status: () => scanData.aiGovernance?.irmAgentPolicies ? 'pass' : 'warn',
+                    current: () => scanData.aiGovernance?.irmAgentPolicies ? 2 : scanData.aiGovernance?.irmAgentPoliciesDefault ? 1 : 0,
+                    description: 'Risky Agents policy configured and tuned',
+                    action: 'Deploy IRM agent policies',
+                    actionUrl: 'https://purview.microsoft.com/insiderriskmanagement/policies'
+                },
+                {
+                    id: '6.13-ca-agents',
+                    name: 'Conditional Access for Agents',
+                    category: 'AI Governance',
+                    points: 3,
+                    article: 'Art. 14',
+                    check: () => scanData.aiGovernance?.caAgentsEnabled === true,
+                    status: () => scanData.aiGovernance?.caAgentsEnabled ? 'pass' : 'warn',
+                    current: () => scanData.aiGovernance?.caAgentsEnabled ? 3 : 0,
+                    description: 'CA policies for Agent IDs (Preview)',
+                    action: 'Create CA policies for AI agents',
                     actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Policies'
                 },
                 {
-                    id: 'oauth-review',
-                    name: 'OAuth App Consent Review',
-                    category: 'Access Controls',
-                    points: 5,
+                    id: '6.14-adaptive-protection',
+                    name: 'Adaptive Protection',
+                    category: 'AI Governance',
+                    points: 2,
                     article: 'Art. 9',
-                    check: () => {
-                        const grants = scanData.checks.find(c => c.name.includes("OAuth"));
-                        return grants?.status === 'pass';
-                    },
+                    check: () => scanData.aiGovernance?.adaptiveProtectionEnabled === true,
                     status: () => {
-                        const grants = scanData.checks.find(c => c.name.includes("OAuth"));
-                        return grants?.status || 'warn';
+                        if (scanData.aiGovernance?.adaptiveProtectionEnabled) return 'pass';
+                        if (scanData.aiGovernance?.adaptiveProtectionLicensed === false) return 'warn';
+                        return 'fail';
                     },
-                    current: () => {
-                        const grants = scanData.checks.find(c => c.name.includes("OAuth"));
-                        return grants?.status === 'pass' ? 5 : grants?.status === 'warn' ? 2 : 0;
-                    },
-                    description: 'Review and govern third-party AI app permissions',
-                    action: 'Review app consents in Entra ID',
-                    actionUrl: 'https://entra.microsoft.com/#view/Microsoft_AAD_IAM/ConsentPoliciesMenuBlade/~/UserSettings'
-                },
-
-                // Human Oversight (15 points)
-                {
-                    id: 'human-oversight',
-                    name: 'Human Oversight Documented',
-                    category: 'Human Oversight',
-                    points: 8,
-                    article: 'Art. 14',
-                    check: () => false, // Manual verification needed
-                    status: () => 'warn',
-                    current: () => 0,
-                    description: 'Document human review processes for AI decisions',
-                    action: 'Create human oversight policy and procedures',
-                    manual: true
-                },
-                {
-                    id: 'high-risk-oversight',
-                    name: 'High-Risk AI Oversight Process',
-                    category: 'Human Oversight',
-                    points: 7,
-                    article: 'Art. 14',
-                    check: () => scanData.riskClassification.highRisk === 0,
-                    status: () => scanData.riskClassification.highRisk === 0 ? 'pass' : 'warn',
-                    current: () => scanData.riskClassification.highRisk === 0 ? 7 : 0,
-                    description: 'Human review for high-risk AI system outputs',
-                    action: 'Implement oversight for HR AI, recruitment tools',
-                    manual: true
-                },
-
-                // Transparency (10 points)
-                {
-                    id: 'ai-notices',
-                    name: 'AI Transparency Notices',
-                    category: 'Transparency',
-                    points: 5,
-                    article: 'Art. 52',
-                    check: () => false,
-                    status: () => 'warn',
-                    current: () => 0,
-                    description: 'Inform users when interacting with AI',
-                    action: 'Add AI disclosure notices to Copilot, chatbots',
-                    manual: true
-                },
-                {
-                    id: 'ai-documentation',
-                    name: 'AI System Documentation',
-                    category: 'Transparency',
-                    points: 5,
-                    article: 'Art. 11',
-                    check: () => false,
-                    status: () => 'warn',
-                    current: () => 0,
-                    description: 'Document AI capabilities and limitations',
-                    action: 'Create AI system cards for each high-risk system',
-                    manual: true
-                },
-
-                // Governance & Training (10 points)
-                {
-                    id: 'ai-policy',
-                    name: 'AI Acceptable Use Policy',
-                    category: 'Governance',
-                    points: 5,
-                    article: 'Art. 4',
-                    check: () => false,
-                    status: () => 'warn',
-                    current: () => 0,
-                    description: 'Formal policy governing AI use in organisation',
-                    action: 'Create and publish AI acceptable use policy',
-                    manual: true
-                },
-                {
-                    id: 'ai-training',
-                    name: 'AI Literacy Training',
-                    category: 'Governance',
-                    points: 5,
-                    article: 'Art. 4',
-                    check: () => false,
-                    status: () => 'warn',
-                    current: () => 0,
-                    description: 'Staff training on AI risks and responsibilities',
-                    action: 'Deploy AI awareness training programme',
-                    manual: true
+                    current: () => scanData.aiGovernance?.adaptiveProtectionEnabled ? 2 : 0,
+                    description: 'IRM-to-DLP integration for dynamic protection',
+                    action: 'Enable Adaptive Protection',
+                    actionUrl: 'https://purview.microsoft.com/insiderriskmanagement/adaptiveprotection',
+                    licenseRequired: 'E5 Compliance'
                 }
             ];
 
@@ -5306,18 +5771,36 @@
                 };
             });
 
-            // Overall score
+            // Overall score with AI Readiness risk levels
             const overallPercent = Math.round((totalEarned / totalPossible) * 100);
+
+            // Risk level thresholds: 0-35 Critical, 36-70 Elevated, 71-100 Managed
+            let status, statusColor, aiReady, agentReady;
+            if (overallPercent >= 71) {
+                status = "Managed Risk";
+                statusColor = "var(--success)";
+                aiReady = "Ready";
+                agentReady = "Ready with Controls";
+            } else if (overallPercent >= 36) {
+                status = "Elevated Risk";
+                statusColor = "var(--warning)";
+                aiReady = "Conditional";
+                agentReady = "Not Ready";
+            } else {
+                status = "Critical Risk";
+                statusColor = "var(--danger)";
+                aiReady = "Not Ready";
+                agentReady = "Not Ready";
+            }
+
             scanData.score = {
                 overall: overallPercent,
                 earned: totalEarned,
                 possible: totalPossible,
-                status: overallPercent >= 80 ? "Well Prepared" :
-                        overallPercent >= 60 ? "Partially Ready" :
-                        overallPercent >= 40 ? "Needs Attention" : "Critical Gaps",
-                statusColor: overallPercent >= 80 ? "var(--success)" :
-                             overallPercent >= 60 ? "var(--warning)" :
-                             overallPercent >= 40 ? "var(--warning)" : "var(--danger)",
+                status,
+                statusColor,
+                aiReady,
+                agentReady,
                 description: generateScoreDescription(overallPercent)
             };
 
@@ -5326,59 +5809,80 @@
         }
 
         function generateScoreDescription(score) {
-            if (score >= 80) return "Your organisation has strong foundational controls for EU AI Act compliance. Continue monitoring and maintaining your governance practices.";
-            if (score >= 60) return "You have foundational controls but notable gaps remain. Focus on priority areas to achieve compliance before the August 2026 deadline.";
-            if (score >= 40) return "Several compliance areas need attention. Prioritise addressing the gaps identified below to improve your posture.";
-            return "Critical gaps exist in your AI governance. Immediate action is recommended to address compliance requirements.";
+            if (score >= 71) return "Your organisation has comprehensive controls in place. Safe for Microsoft Copilot deployment. Ready to begin AI agent governance with appropriate controls.";
+            if (score >= 36) return "Basic controls in place but gaps remain. Copilot deployment possible with restrictions. AI agents not recommended until gaps are addressed.";
+            return "Significant security gaps detected. Copilot would expose sensitive data. Urgent remediation required before any AI adoption.";
         }
 
         function generateGaps() {
             scanData.gaps = [];
 
             // Check for missing governance policy
-            const govCheck = scanData.checks.find(c => c.name.includes("AI governance"));
+            const govCheck = scanData.checks?.find(c => c.name.includes("AI governance"));
             if (govCheck?.status !== "pass") {
                 scanData.gaps.push({
                     priority: 1,
                     title: "AI Governance Policy Required",
-                    description: "No formal AI acceptable use policy was detected. This is a fundamental requirement for EU AI Act compliance.",
+                    description: "No formal AI acceptable use policy detected. Essential for safe Copilot and AI agent deployment.",
                     solution: "Create and publish an AI Acceptable Use Policy. Define permitted AI uses, approval processes, and accountability.",
                     products: ["Microsoft Purview", "SharePoint", "Entra ID"]
                 });
             }
 
             // Check for high-risk AI without oversight
-            if (scanData.riskClassification.highRisk > 0) {
+            if (scanData.riskClassification?.highRisk > 0) {
                 scanData.gaps.push({
                     priority: 1,
                     title: "High-Risk AI Requires Human Oversight",
-                    description: `${scanData.riskClassification.highRisk} high-risk AI system(s) detected. These require documented human oversight procedures under the EU AI Act.`,
+                    description: `${scanData.riskClassification.highRisk} high-risk AI system(s) detected (HR, recruitment, credit scoring). Human oversight procedures required.`,
                     solution: "Implement approval workflows using Power Automate. Document oversight procedures and assign accountability for each high-risk system.",
                     products: ["Power Automate", "Microsoft Purview", "Audit Logs"]
                 });
             }
 
             // Check for shadow AI
-            const shadowAI = scanData.aiSystems.filter(s => s.shadow);
+            const shadowAI = scanData.aiSystems?.filter(s => s.shadow) || [];
             if (shadowAI.length > 0) {
                 scanData.gaps.push({
                     priority: 2,
                     title: "Shadow AI Usage Detected",
-                    description: `${shadowAI.length} potentially unauthorized AI tool(s) detected via OAuth consents. Users may be sharing data with uncontrolled AI services.`,
+                    description: `${shadowAI.length} unauthorized AI tool(s) detected. Users may be sharing sensitive data with uncontrolled AI services.`,
                     solution: "Review and revoke unnecessary OAuth consents. Use Defender for Cloud Apps to monitor and control AI app usage.",
                     products: ["Defender for Cloud Apps", "Entra ID", "DLP"]
                 });
             }
 
             // Check sensitivity labels
-            const labelCheck = scanData.checks.find(c => c.name.includes("Sensitivity labels"));
+            const labelCheck = scanData.checks?.find(c => c.name.includes("Sensitivity labels"));
             if (labelCheck?.status !== "pass") {
                 scanData.gaps.push({
                     priority: 2,
                     title: "Data Classification Required",
-                    description: "Sensitivity labels are not configured or not widely deployed. Data classification is essential for controlling AI access to sensitive information.",
+                    description: "Sensitivity labels not deployed. Copilot will surface unclassified data - classification is essential for controlling AI access.",
                     solution: "Configure and deploy Microsoft Purview sensitivity labels. Enable auto-labeling for sensitive content types.",
                     products: ["Microsoft Purview", "Information Protection"]
+                });
+            }
+
+            // Check identity controls
+            if (!scanData.identityChecks?.mfaAllUsers) {
+                scanData.gaps.push({
+                    priority: 1,
+                    title: "MFA Not Enforced for All Users",
+                    description: "Multi-factor authentication gaps detected. AI tools require strong identity verification to prevent unauthorized access.",
+                    solution: "Deploy MFA for all users via Conditional Access. Ensure <5% exclusions.",
+                    products: ["Entra ID", "Conditional Access"]
+                });
+            }
+
+            // Check AI oversharing
+            if (!scanData.aiGovernance?.oversharingAuditComplete) {
+                scanData.gaps.push({
+                    priority: 2,
+                    title: "AI Oversharing Audit Incomplete",
+                    description: "Copilot can surface any content users have access to. Without an oversharing audit, sensitive data may be exposed.",
+                    solution: "Run Data Access Governance reports or enable DSPM for AI to identify and remediate overshared content.",
+                    products: ["SharePoint Admin", "DSPM for AI", "Data Access Governance"]
                 });
             }
         }
@@ -6052,18 +6556,22 @@
             banner.style.borderColor = '';
             banner.querySelector('.alert-icon').style.background = '';
 
-            if (scanData.riskClassification.prohibited > 0) {
+            if (scanData.riskClassification?.prohibited > 0) {
                 banner.className = 'alert-banner danger';
                 banner.querySelector('.alert-title').textContent = 'Critical: Prohibited AI Detected';
-                banner.querySelector('.alert-text').textContent = 'Your organisation is using AI practices that are banned under the EU AI Act. Immediate action required.';
-            } else if (score >= 80) {
+                banner.querySelector('.alert-text').textContent = 'AI systems detected that are banned under the EU AI Act. Remove immediately before deploying Copilot.';
+            } else if (score >= 71) {
                 banner.className = 'alert-banner success';
-                banner.querySelector('.alert-title').textContent = 'Good Standing';
-                banner.querySelector('.alert-text').textContent = 'Your organisation is well-prepared for EU AI Act compliance. Continue maintaining your governance practices.';
-            } else {
+                banner.querySelector('.alert-title').textContent = 'Ready for AI';
+                banner.querySelector('.alert-text').textContent = 'Your organisation has managed risk levels. Safe to deploy Microsoft Copilot and begin AI agent governance.';
+            } else if (score >= 36) {
                 banner.className = 'alert-banner warning';
-                banner.querySelector('.alert-title').textContent = 'Action Required';
-                banner.querySelector('.alert-text').textContent = 'Your organisation has compliance gaps that should be addressed before the August 2026 deadline.';
+                banner.querySelector('.alert-title').textContent = 'Elevated Risk - Action Required';
+                banner.querySelector('.alert-text').textContent = 'Copilot deployment possible with restrictions. Address the gaps below before full AI rollout.';
+            } else {
+                banner.className = 'alert-banner danger';
+                banner.querySelector('.alert-title').textContent = 'Critical Risk - Not AI Ready';
+                banner.querySelector('.alert-text').textContent = 'Significant security gaps detected. Copilot would expose sensitive data. Remediation required.';
             }
         }
 
@@ -6117,7 +6625,7 @@
             // PDF options
             const opt = {
                 margin: [10, 10, 10, 10],
-                filename: `EU-AI-Act-Posture-Report-${scanData.tenant.name.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`,
+                filename: `AI-Readiness-Report-${scanData.tenant.name.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: {
                     scale: 2,
@@ -6237,8 +6745,8 @@
                     <div style="border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 24px;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div>
-                                <h1 style="margin: 0 0 4px 0; font-size: 24px; color: #2563eb;">EU AI Act Posture Report</h1>
-                                <div style="color: #6b7280; font-size: 13px;">Generated by QuantiveCyber Posture Scanner</div>
+                                <h1 style="margin: 0 0 4px 0; font-size: 24px; color: #2563eb;">AI Readiness Report</h1>
+                                <div style="color: #6b7280; font-size: 13px;">Generated by QuantiveCyber AI Readiness Scanner</div>
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-weight: 600; color: #111827;">${scanData.tenant.name}</div>
@@ -6309,7 +6817,7 @@
                             <thead>
                                 <tr style="background: #f1f5f9;">
                                     <th style="padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Control</th>
-                                    <th style="padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">EU AI Act Req.</th>
+                                    <th style="padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Article</th>
                                     <th style="padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Status</th>
                                     <th style="padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Coverage</th>
                                 </tr>
@@ -6332,7 +6840,7 @@
                         </div>
                         <div style="margin-top: 8px;">
                             This report is for planning purposes only and does not constitute legal advice.
-                            Please consult with legal counsel for EU AI Act compliance requirements.
+                            This assessment evaluates technical controls for AI readiness. Consult with legal counsel for EU AI Act compliance requirements.
                         </div>
                     </div>
                 </div>
@@ -6575,7 +7083,7 @@
         }
 
         function openContactModal() {
-            window.open('mailto:hello@quantivecyber.com?subject=EU AI Act Assessment Request&body=Hi, I would like to book a full EU AI Act assessment. My posture scan score was ' + scanData.score.overall + '/100.', '_blank');
+            window.open('mailto:hello@quantivecyber.com?subject=AI Readiness Assessment Request&body=Hi, I would like to book a full AI Readiness assessment. My scanner score was ' + scanData.score.overall + '/100.', '_blank');
         }
     </script>
 </body>
