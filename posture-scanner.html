@@ -1418,6 +1418,355 @@
             margin-bottom: 20px;
         }
 
+        /* ========================================
+           MOBILE RESPONSIVE STYLES
+           ======================================== */
+
+        /* Tablet and below */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 16px;
+                height: auto;
+                min-height: 56px;
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+
+            .header-inner {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .header-left {
+                gap: 10px;
+            }
+
+            .header-divider {
+                display: none;
+            }
+
+            .header-title {
+                display: none;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .tenant-info {
+                text-align: left;
+                margin-right: 0;
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .score-display {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .score-details {
+                text-align: center;
+            }
+
+            .score-meta {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            /* Systems table - stack on mobile */
+            .systems-table-header {
+                display: none;
+            }
+
+            .system-row {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                padding: 14px;
+                border: 1px solid var(--border-light);
+                border-radius: 8px;
+                margin-bottom: 8px;
+            }
+
+            .system-row:last-child {
+                margin-bottom: 0;
+            }
+
+            .system-info {
+                width: 100%;
+            }
+
+            .system-row > span:not(.system-info):not(.risk-badge) {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.8125rem;
+            }
+
+            .system-row > span:not(.system-info):not(.risk-badge)::before {
+                font-weight: 600;
+                color: var(--ink-tertiary);
+                font-size: 0.75rem;
+            }
+
+            .system-row > span:nth-child(2)::before { content: "Users: "; }
+            .system-row > span:nth-child(3)::before { content: "Data Activity: "; }
+            .system-row > span:nth-child(4)::before { content: "Source: "; }
+
+            .risk-badge {
+                align-self: flex-start;
+            }
+
+            /* Tabs scrollable */
+            .tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 4px;
+                margin-bottom: 12px;
+            }
+
+            .tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab {
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            /* Data governance table responsive */
+            .dg-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .dg-table thead {
+                display: none;
+            }
+
+            .dg-table tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .dg-table tr {
+                display: flex;
+                flex-direction: column;
+                padding: 14px;
+                border: 1px solid var(--border-light);
+                border-radius: 8px;
+                gap: 10px;
+            }
+
+            .dg-table td {
+                padding: 0;
+                border: none;
+            }
+
+            .dg-table td:first-child {
+                font-size: 0.9375rem;
+                width: 100%;
+            }
+
+            .dg-article {
+                background: var(--bg);
+                padding: 10px;
+                border-radius: 6px;
+            }
+
+            .dg-action-link {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+            }
+
+            /* Stats grid */
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            /* Alert banner */
+            .alert-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .alert-content {
+                width: 100%;
+            }
+
+            /* Gap items */
+            .gap-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .gap-priority {
+                align-self: flex-start;
+            }
+
+            .gap-products {
+                flex-wrap: wrap;
+            }
+
+            /* Check items */
+            .check-item {
+                flex-wrap: wrap;
+            }
+
+            .check-details {
+                margin-left: 0;
+            }
+
+            /* Risk classification */
+            .risk-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .risk-row-badge {
+                width: auto;
+            }
+
+            /* Footer */
+            .footer-inner {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-inner > div:last-child {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            /* Buttons */
+            .btn {
+                padding: 10px 14px;
+                font-size: 0.8125rem;
+            }
+
+            .btn-sm {
+                padding: 6px 10px;
+            }
+
+            /* Card adjustments */
+            .card-body {
+                padding: 16px;
+            }
+
+            .card-header {
+                padding: 14px 16px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            /* EU AI Act info section */
+            .info-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* Timeline adjustments */
+            .timeline-item {
+                padding-bottom: 16px;
+            }
+        }
+
+        /* Small mobile */
+        @media (max-width: 480px) {
+            .header-right {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-right .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .tenant-info {
+                text-align: center;
+            }
+
+            .score-ring {
+                width: 100px;
+                height: 100px;
+            }
+
+            .score-value {
+                font-size: 1.5rem;
+            }
+
+            .card-title {
+                font-size: 0.875rem;
+            }
+
+            .system-logo {
+                width: 28px;
+                height: 28px;
+            }
+
+            .system-name {
+                font-size: 0.8125rem;
+            }
+
+            /* Shared banner */
+            .shared-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+
+            /* Connect screen */
+            .connect-screen {
+                padding: 16px;
+            }
+
+            .connect-card {
+                padding: 24px 20px;
+            }
+
+            .connect-title {
+                font-size: 1.25rem;
+            }
+
+            .connect-description {
+                font-size: 0.875rem;
+            }
+
+            .connect-features {
+                gap: 12px;
+            }
+
+            .privacy-disclaimer {
+                padding: 12px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .privacy-disclaimer svg {
+                display: none;
+            }
+        }
+
         @media print {
             .header, .footer, .btn { display: none; }
             .container { max-width: 100%; padding: 0; }
