@@ -1087,6 +1087,66 @@
         .status-dot.orange { background: var(--warning); }
         .status-dot.red { background: var(--danger); }
 
+        /* Data Governance Table */
+        .dg-table th,
+        .dg-table td {
+            padding: 10px 12px;
+            vertical-align: top;
+        }
+
+        .dg-table th:first-child,
+        .dg-table td:first-child {
+            width: 140px;
+        }
+
+        .dg-table th:nth-child(2),
+        .dg-table td:nth-child(2) {
+            width: 220px;
+        }
+
+        .dg-article {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .dg-article-ref {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .dg-article-desc {
+            font-size: 0.7rem;
+            color: var(--ink-tertiary);
+            line-height: 1.4;
+        }
+
+        .dg-action-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--primary);
+            background: var(--primary-light);
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .dg-action-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .dg-action-link svg {
+            flex-shrink: 0;
+        }
+
         /* Timeline */
         .timeline {
             position: relative;
@@ -2239,12 +2299,14 @@
                         </div>
                     </div>
                     <div class="card-body" style="padding: 0;">
-                        <table class="data-table">
+                        <table class="data-table dg-table">
                             <thead>
                                 <tr>
                                     <th>Control</th>
+                                    <th>EU AI Act Requirement</th>
                                     <th>Status</th>
                                     <th>Coverage</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="dataGovernanceTable"></tbody>
@@ -2892,12 +2954,69 @@
                 { name: "AI transparency notices", status: "fail", value: "Missing" }
             ],
             dataGovernance: [
-                { control: "Sensitivity Labels", status: "green", coverage: "85% of content" },
-                { control: "DLP Policies", status: "green", coverage: "6 active policies" },
-                { control: "SharePoint Permissions", status: "orange", coverage: "Review needed" },
-                { control: "External Sharing", status: "green", coverage: "Restricted" },
-                { control: "Insider Risk Policies", status: "orange", coverage: "2 policies" },
-                { control: "Retention Policies", status: "green", coverage: "Applied" }
+                {
+                    control: "Sensitivity Labels",
+                    status: "green",
+                    coverage: "85% of content",
+                    article: "Art. 10 - Data Governance",
+                    articleDesc: "Requires appropriate data governance for training, validation and testing datasets",
+                    action: "Manage Labels",
+                    actionUrl: "https://compliance.microsoft.com/informationprotection"
+                },
+                {
+                    control: "DLP Policies",
+                    status: "green",
+                    coverage: "6 active policies",
+                    article: "Art. 10 & 15 - Data Protection",
+                    articleDesc: "Ensures AI systems process data in compliance with quality and accuracy requirements",
+                    action: "Configure DLP",
+                    actionUrl: "https://compliance.microsoft.com/datalossprevention"
+                },
+                {
+                    control: "SharePoint Permissions",
+                    status: "orange",
+                    coverage: "Review needed",
+                    article: "Art. 10(3) - Access Controls",
+                    articleDesc: "Data governance measures must include access management and traceability",
+                    action: "Review Permissions",
+                    actionUrl: "https://admin.microsoft.com/sharepoint"
+                },
+                {
+                    control: "External Sharing",
+                    status: "green",
+                    coverage: "Restricted",
+                    article: "Art. 10(5) - Data Minimization",
+                    articleDesc: "Only necessary data should be accessible; external sharing increases risk exposure",
+                    action: "Sharing Settings",
+                    actionUrl: "https://admin.microsoft.com/sharepoint?page=sharing"
+                },
+                {
+                    control: "Insider Risk Policies",
+                    status: "orange",
+                    coverage: "2 policies",
+                    article: "Art. 9 - Risk Management",
+                    articleDesc: "High-risk AI systems require continuous risk identification and mitigation",
+                    action: "Configure Policies",
+                    actionUrl: "https://compliance.microsoft.com/insiderriskmanagement"
+                },
+                {
+                    control: "Retention Policies",
+                    status: "green",
+                    coverage: "Applied",
+                    article: "Art. 12 - Record Keeping",
+                    articleDesc: "High-risk AI systems must maintain logs for traceability and audit purposes",
+                    action: "Manage Retention",
+                    actionUrl: "https://compliance.microsoft.com/informationgovernance"
+                },
+                {
+                    control: "Audit Logging",
+                    status: "green",
+                    coverage: "Active",
+                    article: "Art. 12 & 20 - Logging",
+                    articleDesc: "Automatic recording of events for traceability throughout AI system lifecycle",
+                    action: "View Audit Logs",
+                    actionUrl: "https://compliance.microsoft.com/auditlogsearch"
+                }
             ],
             timeline: [
                 { date: "February 2025", title: "Prohibited AI Practices", desc: "Ban on unacceptable-risk AI", status: "passed" },
@@ -3268,32 +3387,65 @@
                 {
                     control: "Sensitivity Labels",
                     status: hasLabels ? "green" : "red",
-                    coverage: hasLabels ? `${sensitivityLabels.value.length} labels configured` : "Not configured"
+                    coverage: hasLabels ? `${sensitivityLabels.value.length} labels configured` : "Not configured",
+                    article: "Art. 10 - Data Governance",
+                    articleDesc: "Requires appropriate data governance for training, validation and testing datasets",
+                    action: "Manage Labels",
+                    actionUrl: "https://compliance.microsoft.com/informationprotection"
                 },
                 {
                     control: "DLP Policies",
-                    status: "orange", // Would need compliance API for accurate check
-                    coverage: "Unable to verify"
+                    status: "orange",
+                    coverage: "Unable to verify",
+                    article: "Art. 10 & 15 - Data Protection",
+                    articleDesc: "Ensures AI systems process data in compliance with quality and accuracy requirements",
+                    action: "Configure DLP",
+                    actionUrl: "https://compliance.microsoft.com/datalossprevention"
                 },
                 {
                     control: "SharePoint Permissions",
                     status: "orange",
-                    coverage: "Manual review recommended"
+                    coverage: "Manual review recommended",
+                    article: "Art. 10(3) - Access Controls",
+                    articleDesc: "Data governance measures must include access management and traceability",
+                    action: "Review Permissions",
+                    actionUrl: "https://admin.microsoft.com/sharepoint"
                 },
                 {
                     control: "External Sharing",
                     status: "orange",
-                    coverage: "Check SharePoint admin"
+                    coverage: "Check SharePoint admin",
+                    article: "Art. 10(5) - Data Minimization",
+                    articleDesc: "Only necessary data should be accessible; external sharing increases risk exposure",
+                    action: "Sharing Settings",
+                    actionUrl: "https://admin.microsoft.com/sharepoint?page=sharing"
                 },
                 {
-                    control: "Audit Logging",
-                    status: "green",
-                    coverage: "Enabled by default"
+                    control: "Insider Risk Policies",
+                    status: "orange",
+                    coverage: "Check compliance center",
+                    article: "Art. 9 - Risk Management",
+                    articleDesc: "High-risk AI systems require continuous risk identification and mitigation",
+                    action: "Configure Policies",
+                    actionUrl: "https://compliance.microsoft.com/insiderriskmanagement"
                 },
                 {
                     control: "Retention Policies",
                     status: "orange",
-                    coverage: "Check compliance center"
+                    coverage: "Check compliance center",
+                    article: "Art. 12 - Record Keeping",
+                    articleDesc: "High-risk AI systems must maintain logs for traceability and audit purposes",
+                    action: "Manage Retention",
+                    actionUrl: "https://compliance.microsoft.com/informationgovernance"
+                },
+                {
+                    control: "Audit Logging",
+                    status: "green",
+                    coverage: "Enabled by default",
+                    article: "Art. 12 & 20 - Logging",
+                    articleDesc: "Automatic recording of events for traceability throughout AI system lifecycle",
+                    action: "View Audit Logs",
+                    actionUrl: "https://compliance.microsoft.com/auditlogsearch"
                 }
             ];
         }
@@ -3788,14 +3940,23 @@
             const dgTable = document.getElementById('dataGovernanceTable');
             dgTable.innerHTML = scanData.dataGovernance.map(row => `
                 <tr>
-                    <td>${row.control}</td>
+                    <td><strong>${row.control}</strong></td>
+                    <td>
+                        <div class="dg-article" title="${row.articleDesc || ''}">
+                            <span class="dg-article-ref">${row.article || 'N/A'}</span>
+                            ${row.articleDesc ? `<div class="dg-article-desc">${row.articleDesc}</div>` : ''}
+                        </div>
+                    </td>
                     <td>
                         <span class="status-indicator">
                             <span class="status-dot ${row.status}"></span>
-                            ${row.status === 'green' ? 'Configured' : 'Review Needed'}
+                            ${row.status === 'green' ? 'Configured' : row.status === 'red' ? 'Not Configured' : 'Review Needed'}
                         </span>
                     </td>
                     <td>${row.coverage}</td>
+                    <td>
+                        ${row.actionUrl ? `<a href="${row.actionUrl}" target="_blank" class="dg-action-link">${row.action || 'Configure'} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : '-'}
+                    </td>
                 </tr>
             `).join('');
 
@@ -4014,7 +4175,15 @@
                     v: c.value,
                     de: c.details ? c.details.map(d => ({ n: d.name, d: d.description })) : undefined
                 })),
-                dg: data.dataGovernance
+                dg: data.dataGovernance.map(d => ({
+                    c: d.control,
+                    s: d.status,
+                    co: d.coverage,
+                    ar: d.article,
+                    ad: d.articleDesc,
+                    ac: d.action,
+                    au: d.actionUrl
+                }))
             };
 
             const jsonStr = JSON.stringify(shareData);
@@ -4065,7 +4234,15 @@
                         value: c.v,
                         details: c.de ? c.de.map(d => ({ name: d.n, description: d.d })) : undefined
                     })),
-                    dataGovernance: data.dg,
+                    dataGovernance: data.dg.map(d => ({
+                        control: d.c,
+                        status: d.s,
+                        coverage: d.co,
+                        article: d.ar,
+                        articleDesc: d.ad,
+                        action: d.ac,
+                        actionUrl: d.au
+                    })),
                     timeline: demoData.timeline // Use static timeline
                 };
             } catch (e) {
