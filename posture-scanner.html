@@ -704,35 +704,124 @@
             letter-spacing: 0.5px;
         }
 
-        .system-row {
-            display: grid;
-            grid-template-columns: 1fr 100px 100px 100px 100px;
-            gap: 16px;
-            padding: 14px 16px;
+        /* AI Systems - Compact Card Grid */
+        .systems-container {
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        .ai-systems-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .risk-group {
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .risk-group-header {
+            display: flex;
             align-items: center;
-            border-bottom: 1px solid var(--border-light);
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--bg);
+            cursor: pointer;
             transition: background 0.15s ease;
         }
 
-        .system-row:hover {
-            background: var(--bg);
+        .risk-group-header:hover {
+            background: var(--border-light);
         }
 
-        .system-row:last-child {
-            border-bottom: none;
-        }
-
-        .system-info {
+        .risk-group-title {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .risk-group-title .risk-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .risk-dot.high { background: var(--warning); }
+        .risk-dot.limited { background: var(--primary); }
+        .risk-dot.minimal { background: var(--success); }
+        .risk-dot.unknown { background: var(--purple); }
+
+        .risk-group-count {
+            font-size: 0.75rem;
+            color: var(--ink-tertiary);
+            background: var(--surface);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .risk-group-chevron {
+            width: 16px;
+            height: 16px;
+            color: var(--ink-tertiary);
+            transition: transform 0.2s ease;
+        }
+
+        .risk-group.collapsed .risk-group-chevron {
+            transform: rotate(-90deg);
+        }
+
+        .risk-group-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+            padding: 10px;
+            background: var(--surface);
+        }
+
+        .risk-group.collapsed .risk-group-content {
+            display: none;
+        }
+
+        .system-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .system-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .system-card.expanded {
+            grid-column: 1 / -1;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .system-card-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
             min-width: 0;
         }
 
         .system-logo {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -743,42 +832,80 @@
         }
 
         .system-logo img {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             object-fit: contain;
         }
 
         .system-logo svg {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
         }
 
-        .system-details {
+        .system-card-info {
+            flex: 1;
             min-width: 0;
         }
 
         .system-name {
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             font-weight: 600;
             color: var(--ink);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.3;
         }
 
-        .system-type {
-            font-size: 0.75rem;
+        .system-meta {
+            font-size: 0.6875rem;
+            color: var(--ink-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .system-meta .risk-badge {
+            padding: 2px 6px;
+            font-size: 0.5625rem;
+        }
+
+        .system-card-details {
+            display: none;
+            padding-top: 10px;
+            margin-top: 10px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .system-card.expanded .system-card-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .detail-label {
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: var(--ink-tertiary);
         }
 
-        .system-users {
-            font-size: 0.8125rem;
-            color: var(--ink-secondary);
+        .detail-value {
+            font-size: 0.75rem;
+            color: var(--ink);
+            font-weight: 500;
         }
 
-        .system-source {
-            font-size: 0.75rem;
-            color: var(--ink-tertiary);
+        /* Legacy support for table header */
+        .systems-table-header {
+            display: none;
         }
 
         .risk-badge {
@@ -1483,44 +1610,21 @@
                 flex-wrap: wrap;
             }
 
-            /* Systems table - stack on mobile */
-            .systems-table-header {
-                display: none;
-            }
-
-            .system-row {
-                display: flex;
-                flex-direction: column;
+            /* AI Systems card grid - mobile */
+            .risk-group-content {
+                grid-template-columns: 1fr;
                 gap: 8px;
-                padding: 14px;
-                border: 1px solid var(--border-light);
-                border-radius: 8px;
-                margin-bottom: 8px;
+                padding: 10px;
             }
 
-            .system-row:last-child {
-                margin-bottom: 0;
+            .system-card {
+                padding: 10px;
             }
 
-            .system-info {
-                width: 100%;
+            .system-card.expanded .system-card-details {
+                grid-template-columns: 1fr;
+                gap: 8px;
             }
-
-            .system-row > span:not(.system-info):not(.risk-badge) {
-                display: flex;
-                justify-content: space-between;
-                font-size: 0.8125rem;
-            }
-
-            .system-row > span:not(.system-info):not(.risk-badge)::before {
-                font-weight: 600;
-                color: var(--ink-tertiary);
-                font-size: 0.75rem;
-            }
-
-            .system-row > span:nth-child(2)::before { content: "Users: "; }
-            .system-row > span:nth-child(3)::before { content: "Data Activity: "; }
-            .system-row > span:nth-child(4)::before { content: "Source: "; }
 
             .risk-badge {
                 align-self: flex-start;
@@ -2558,14 +2662,7 @@
                             <button class="tab" onclick="filterAISystems('limited', this)">Limited Risk</button>
                             <button class="tab" onclick="filterAISystems('shadow', this)">Shadow AI</button>
                         </div>
-                        <div class="systems-table">
-                            <div class="systems-table-header">
-                                <span>System</span>
-                                <span>Users</span>
-                                <span>Data Activity</span>
-                                <span>Source</span>
-                                <span>Risk Level</span>
-                            </div>
+                        <div class="systems-container">
                             <div id="aiSystemsList"></div>
                         </div>
                     </div>
@@ -5128,30 +5225,107 @@
         function renderAISystems(filter) {
             let systems = scanData.aiSystems;
 
+            // Apply filter
             if (filter === 'high') systems = systems.filter(s => s.risk === 'high');
             else if (filter === 'limited') systems = systems.filter(s => s.risk === 'limited');
             else if (filter === 'shadow') systems = systems.filter(s => s.shadow);
 
+            // Group systems by risk level
+            const riskGroups = [
+                { key: 'high', label: 'High-Risk', systems: systems.filter(s => s.risk === 'high'), expanded: true },
+                { key: 'limited', label: 'Limited Risk', systems: systems.filter(s => s.risk === 'limited'), expanded: true },
+                { key: 'minimal', label: 'Minimal Risk', systems: systems.filter(s => s.risk === 'minimal'), expanded: false },
+                { key: 'unknown', label: 'Shadow AI', systems: systems.filter(s => s.risk === 'unknown' || s.shadow), expanded: false }
+            ].filter(g => g.systems.length > 0);
+
             const list = document.getElementById('aiSystemsList');
-            list.innerHTML = systems.map(sys => `
-                <div class="system-row">
-                    <div class="system-info">
+
+            // If showing filtered view or very few systems, show flat list
+            if (filter !== 'all' || systems.length <= 4) {
+                list.innerHTML = `
+                    <div class="ai-systems-container">
+                        <div class="risk-group-content" style="padding: 0;">
+                            ${systems.map((sys, idx) => renderSystemCard(sys, idx)).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Show grouped view
+                list.innerHTML = `
+                    <div class="ai-systems-container">
+                        ${riskGroups.map(group => `
+                            <div class="risk-group ${group.expanded ? '' : 'collapsed'}" data-group="${group.key}">
+                                <div class="risk-group-header" onclick="toggleRiskGroup('${group.key}')">
+                                    <div class="risk-group-title">
+                                        <span class="risk-dot ${group.key}"></span>
+                                        ${group.label}
+                                        <span class="risk-group-count">${group.systems.length}</span>
+                                    </div>
+                                    <svg class="risk-group-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="risk-group-content">
+                                    ${group.systems.map((sys, idx) => renderSystemCard(sys, `${group.key}-${idx}`)).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            document.getElementById('aiSystemsBadge').textContent = `${systems.length} Systems`;
+        }
+
+        function renderSystemCard(sys, idx) {
+            return `
+                <div class="system-card" id="sys-${idx}" onclick="toggleSystemCard('sys-${idx}')">
+                    <div class="system-card-main">
                         <div class="system-logo">
                             ${companyLogos[sys.logo] || companyLogos.default}
                         </div>
-                        <div class="system-details">
+                        <div class="system-card-info">
                             <div class="system-name">${sys.name}</div>
-                            <div class="system-type">${sys.type}</div>
+                            <div class="system-meta">
+                                <span>${sys.users} users</span>
+                                <span class="risk-badge ${sys.risk}">${sys.risk}</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="system-users">${sys.users} users</div>
-                    <div class="system-activity">${sys.dataActivity || 'N/A'}</div>
-                    <div class="system-source">${sys.source}</div>
-                    <span class="risk-badge ${sys.risk}">${sys.risk}</span>
+                    <div class="system-card-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">${sys.type}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Data Activity</span>
+                            <span class="detail-value">${sys.dataActivity || 'Unknown'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Source</span>
+                            <span class="detail-value">${sys.source}</span>
+                        </div>
+                    </div>
                 </div>
-            `).join('');
+            `;
+        }
 
-            document.getElementById('aiSystemsBadge').textContent = `${systems.length} Systems`;
+        function toggleRiskGroup(groupKey) {
+            const group = document.querySelector(`.risk-group[data-group="${groupKey}"]`);
+            if (group) {
+                group.classList.toggle('collapsed');
+            }
+        }
+
+        function toggleSystemCard(cardId) {
+            const card = document.getElementById(cardId);
+            if (card) {
+                // Close other expanded cards
+                document.querySelectorAll('.system-card.expanded').forEach(c => {
+                    if (c.id !== cardId) c.classList.remove('expanded');
+                });
+                card.classList.toggle('expanded');
+            }
         }
 
         function filterAISystems(filter, btn) {
