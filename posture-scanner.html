@@ -1476,6 +1476,64 @@
             stroke: var(--success);
             flex-shrink: 0;
         }
+
+        /* Shared View Banner */
+        #sharedBanner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, #e0e7ff 100%);
+            border: 1px solid #c7d2fe;
+        }
+
+        .shared-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--ink-secondary);
+            font-size: 0.875rem;
+        }
+
+        .shared-banner-content svg {
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .shared-banner-content strong {
+            color: var(--primary);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+        }
+
+        /* Toast animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+            to {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1571,6 +1629,16 @@
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
                         </svg>
                         Export
+                    </button>
+                    <button class="btn btn-secondary" onclick="shareResults()" id="shareBtn">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="18" cy="5" r="3"/>
+                            <circle cx="6" cy="12" r="3"/>
+                            <circle cx="18" cy="19" r="3"/>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                        </svg>
+                        Share
                     </button>
                     <button class="btn btn-primary" onclick="refreshScan()">
                         <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2278,6 +2346,11 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             initializeMsal();
+
+            // Check for shared results first (highest priority)
+            if (checkForSharedResults()) {
+                return; // Shared view loaded, don't process other modes
+            }
 
             // Check for demo query parameter (from landing page)
             const urlParams = new URLSearchParams(window.location.search);
@@ -3362,6 +3435,213 @@
 
         function exportReport() {
             alert('Export functionality will generate a PDF report of your posture scan results.');
+        }
+
+        // ============================================
+        // SHARE RESULTS FUNCTIONALITY
+        // ============================================
+
+        // Compress and encode scan data for URL sharing
+        function encodeShareData(data) {
+            // Create a minimal version of scan data for sharing
+            const shareData = {
+                v: 1, // version
+                t: data.tenant.name,
+                d: data.tenant.scanTime,
+                s: {
+                    o: data.score.overall,
+                    st: data.score.status,
+                    c: data.score.statusColor,
+                    de: data.score.description
+                },
+                r: data.riskClassification,
+                cat: data.categories.map(c => ({ n: c.name, s: c.score, c: c.color })),
+                ai: data.aiSystems.map(a => ({
+                    n: a.name,
+                    t: a.type,
+                    u: a.users,
+                    r: a.risk,
+                    l: a.logo,
+                    sh: a.shadow,
+                    so: a.source
+                })),
+                g: data.gaps.map(g => ({
+                    p: g.priority,
+                    ti: g.title,
+                    de: g.description,
+                    so: g.solution,
+                    pr: g.products
+                })),
+                ch: data.checks.map(c => ({ n: c.name, s: c.status, v: c.value })),
+                dg: data.dataGovernance
+            };
+
+            const jsonStr = JSON.stringify(shareData);
+            // Use base64 encoding
+            return btoa(encodeURIComponent(jsonStr));
+        }
+
+        // Decode shared data from URL
+        function decodeShareData(encoded) {
+            try {
+                const jsonStr = decodeURIComponent(atob(encoded));
+                const data = JSON.parse(jsonStr);
+
+                // Reconstruct full scan data structure
+                return {
+                    tenant: {
+                        name: data.t,
+                        scanTime: data.d
+                    },
+                    score: {
+                        overall: data.s.o,
+                        status: data.s.st,
+                        statusColor: data.s.c,
+                        description: data.s.de
+                    },
+                    riskClassification: data.r,
+                    categories: data.cat.map(c => ({ name: c.n, score: c.s, color: c.c })),
+                    aiSystems: data.ai.map(a => ({
+                        name: a.n,
+                        type: a.t,
+                        users: a.u,
+                        risk: a.r,
+                        logo: a.l,
+                        shadow: a.sh,
+                        source: a.so
+                    })),
+                    gaps: data.g.map(g => ({
+                        priority: g.p,
+                        title: g.ti,
+                        description: g.de,
+                        solution: g.so,
+                        products: g.pr
+                    })),
+                    checks: data.ch.map(c => ({ name: c.n, status: c.s, value: c.v })),
+                    dataGovernance: data.dg,
+                    timeline: demoData.timeline // Use static timeline
+                };
+            } catch (e) {
+                console.error('Failed to decode share data:', e);
+                return null;
+            }
+        }
+
+        // Generate shareable link
+        function shareResults() {
+            if (!scanData) {
+                alert('No scan results to share. Please run a scan first.');
+                return;
+            }
+
+            const encoded = encodeShareData(scanData);
+            const shareUrl = window.location.origin + window.location.pathname + '#share=' + encoded;
+
+            // Check URL length
+            if (shareUrl.length > 8000) {
+                alert('Scan results are too large to share via URL. Please use the Export function instead.');
+                return;
+            }
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                showShareToast('Link copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = shareUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showShareToast('Link copied to clipboard!');
+            });
+        }
+
+        // Show toast notification
+        function showShareToast(message) {
+            // Remove existing toast if any
+            const existingToast = document.getElementById('shareToast');
+            if (existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'shareToast';
+            toast.innerHTML = `
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                ${message}
+            `;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 24px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--ink);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 0.875rem;
+                font-weight: 500;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideUp 0.3s ease;
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideDown 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Check for shared results on page load
+        function checkForSharedResults() {
+            const hash = window.location.hash;
+            if (hash.startsWith('#share=')) {
+                const encoded = hash.substring(7);
+                const sharedData = decodeShareData(encoded);
+
+                if (sharedData) {
+                    scanData = sharedData;
+                    isLiveData = false;
+                    renderDashboard();
+                    showSharedBanner();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Show banner for shared view
+        function showSharedBanner() {
+            const banner = document.createElement('div');
+            banner.id = 'sharedBanner';
+            banner.innerHTML = `
+                <div class="shared-banner-content">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="18" cy="5" r="3"/>
+                        <circle cx="6" cy="12" r="3"/>
+                        <circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                    <span><strong>Shared View</strong> — This is a read-only snapshot shared on ${scanData.tenant.scanTime}</span>
+                </div>
+                <a href="${window.location.pathname}" class="btn btn-secondary btn-sm">Run Your Own Scan</a>
+            `;
+
+            const dashboard = document.getElementById('dashboard');
+            const container = dashboard.querySelector('.container');
+            container.insertBefore(banner, container.firstChild);
+
+            // Hide rescan, share, and sign out buttons in shared view
+            document.querySelectorAll('.header-right .btn-primary, .header-right .btn-ghost, #shareBtn').forEach(btn => {
+                btn.style.display = 'none';
+            });
         }
 
         function openContactModal() {
