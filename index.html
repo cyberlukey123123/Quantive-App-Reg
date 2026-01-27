@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EU AI Act Posture Scanner | QuantiveCyber</title>
-    <meta name="description" content="Automatically assess your Microsoft 365 environment's compliance posture against the EU AI Act. Identify gaps, discover shadow AI, and get actionable recommendations.">
+    <title>AI Readiness Scanner | QuantiveCyber</title>
+    <meta name="description" content="Assess your Microsoft 365 environment's readiness to safely deploy Microsoft Copilot and AI agents. 100-point scoring across 41 security controls with actionable recommendations.">
     <style>
         * {
             margin: 0;
@@ -105,7 +105,7 @@
         .hero p {
             font-size: 1.25rem;
             color: #a0a0a0;
-            max-width: 700px;
+            max-width: 750px;
             margin: 0 auto 50px;
         }
 
@@ -150,6 +150,35 @@
             transform: translateY(-2px);
         }
 
+        /* Score Preview */
+        .score-preview {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .score-value.green { color: #22c55e; }
+        .score-value.yellow { color: #eab308; }
+        .score-value.red { color: #ef4444; }
+
+        .score-label {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            margin-top: 4px;
+        }
+
         /* Features Section */
         .features {
             max-width: 1200px;
@@ -161,21 +190,30 @@
             text-align: center;
             font-size: 2.5rem;
             color: #fff;
-            margin-bottom: 60px;
+            margin-bottom: 20px;
+        }
+
+        .features > p {
+            text-align: center;
+            color: #a0a0a0;
+            max-width: 700px;
+            margin: 0 auto 60px;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
         }
 
         .feature-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            padding: 32px;
+            padding: 28px;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
         .feature-card:hover {
@@ -184,32 +222,81 @@
             transform: translateY(-4px);
         }
 
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .feature-card.cat-1::before { background: #3b82f6; }
+        .feature-card.cat-2::before { background: #8b5cf6; }
+        .feature-card.cat-3::before { background: #22c55e; }
+        .feature-card.cat-4::before { background: #06b6d4; }
+        .feature-card.cat-5::before { background: #f59e0b; }
+        .feature-card.cat-6::before { background: #ef4444; }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
         .feature-icon {
-            width: 56px;
-            height: 56px;
+            width: 48px;
+            height: 48px;
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            flex-shrink: 0;
         }
 
         .feature-icon svg {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             stroke: #60a5fa;
         }
 
+        .feature-title {
+            flex: 1;
+        }
+
         .feature-card h3 {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             color: #fff;
-            margin-bottom: 12px;
+            margin-bottom: 2px;
+        }
+
+        .feature-points {
+            font-size: 0.8rem;
+            color: #60a5fa;
+            font-weight: 600;
         }
 
         .feature-card p {
             color: #a0a0a0;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .feature-tests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 14px;
+        }
+
+        .feature-test {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            color: #a0a0a0;
         }
 
         /* How It Works */
@@ -227,7 +314,14 @@
             text-align: center;
             font-size: 2.5rem;
             color: #fff;
-            margin-bottom: 60px;
+            margin-bottom: 20px;
+        }
+
+        .how-it-works > .how-it-works-inner > p {
+            text-align: center;
+            color: #a0a0a0;
+            max-width: 700px;
+            margin: 0 auto 60px;
         }
 
         .steps {
@@ -268,65 +362,169 @@
             font-size: 0.95rem;
         }
 
-        /* Compliance Categories */
-        .categories {
+        /* Risk Levels */
+        .risk-levels {
             max-width: 1200px;
             margin: 0 auto;
             padding: 80px 60px;
         }
 
-        .categories h2 {
+        .risk-levels h2 {
             text-align: center;
             font-size: 2.5rem;
             color: #fff;
             margin-bottom: 20px;
         }
 
-        .categories > p {
+        .risk-levels > p {
             text-align: center;
             color: #a0a0a0;
             max-width: 700px;
             margin: 0 auto 60px;
         }
 
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .risk-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .risk-card.critical {
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .risk-card.elevated {
+            border-color: rgba(245, 158, 11, 0.4);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .risk-card.managed {
+            border-color: rgba(34, 197, 94, 0.4);
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .risk-score {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .risk-card.critical .risk-score { color: #ef4444; }
+        .risk-card.elevated .risk-score { color: #f59e0b; }
+        .risk-card.managed .risk-score { color: #22c55e; }
+
+        .risk-card h3 {
+            font-size: 1.25rem;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .risk-card p {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .risk-status {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+        }
+
+        .status-item span:first-child {
+            color: #a0a0a0;
+        }
+
+        .status-item span:last-child {
+            font-weight: 600;
+        }
+
+        .risk-card.critical .status-item span:last-child { color: #ef4444; }
+        .risk-card.elevated .status-item span:last-child { color: #f59e0b; }
+        .risk-card.managed .status-item span:last-child { color: #22c55e; }
+
+        /* EU AI Act Info */
+        .eu-ai-act {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 80px 60px;
+        }
+
+        .eu-ai-act-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .eu-ai-act h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .eu-ai-act > .eu-ai-act-inner > p {
+            text-align: center;
+            color: #a0a0a0;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .eu-badge {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: #a78bfa;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
         .category-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
+            gap: 20px;
         }
 
         .category-card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
-            padding: 24px;
+            padding: 20px;
             border-left: 4px solid;
         }
 
-        .category-card.prohibited {
-            border-left-color: #ef4444;
-        }
-
-        .category-card.high-risk {
-            border-left-color: #f97316;
-        }
-
-        .category-card.limited {
-            border-left-color: #eab308;
-        }
-
-        .category-card.minimal {
-            border-left-color: #22c55e;
-        }
+        .category-card.prohibited { border-left-color: #ef4444; }
+        .category-card.high-risk { border-left-color: #f97316; }
+        .category-card.limited { border-left-color: #eab308; }
+        .category-card.minimal { border-left-color: #22c55e; }
 
         .category-card h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #fff;
             margin-bottom: 8px;
         }
 
         .category-card p {
             color: #a0a0a0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         /* CTA Section */
@@ -348,6 +546,9 @@
             color: #a0a0a0;
             font-size: 1.1rem;
             margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* Footer */
@@ -368,6 +569,12 @@
         }
 
         /* Responsive */
+        @media (max-width: 968px) {
+            .risk-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             nav {
                 padding: 20px 24px;
@@ -390,9 +597,14 @@
             }
 
             .features,
-            .categories,
-            .how-it-works {
+            .risk-levels,
+            .how-it-works,
+            .eu-ai-act {
                 padding: 60px 24px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
             }
 
             .cta-section {
@@ -401,6 +613,10 @@
 
             .steps {
                 flex-direction: column;
+            }
+
+            .score-preview {
+                gap: 24px;
             }
 
             footer {
@@ -420,16 +636,16 @@
             QuantiveCyber
         </a>
         <div class="nav-links">
-            <a href="https://eu-ai-act.quantivecyber.com">EU AI Act Assessment</a>
-            <a href="https://ai-readiness.quantivecyber.com">AI Readiness Check</a>
-            <a href="https://quantivecyber.com">Contact Us</a>
+            <a href="posture-scanner.html">AI Readiness Scanner</a>
+            <a href="https://quantivecyber.com">About Us</a>
+            <a href="https://quantivecyber.com/contact">Contact</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="badge">EU AI Act Compliance</div>
-        <h1>Assess Your <span>AI Compliance Posture</span> in Minutes</h1>
-        <p>Automatically scan your Microsoft 365 environment to identify AI systems, assess compliance gaps, and get actionable recommendations aligned with the EU AI Act.</p>
+        <div class="badge">100-Point AI Readiness Assessment</div>
+        <h1>Is Your Organisation <span>Ready for AI?</span></h1>
+        <p>Automatically assess your Microsoft 365 security posture to safely deploy Microsoft Copilot and AI agents. Our scanner evaluates 41 controls across 6 categories to give you a clear AI readiness score.</p>
         <div class="cta-buttons">
             <a href="posture-scanner.html" class="btn btn-primary">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -445,74 +661,158 @@
                 View Demo
             </a>
         </div>
+        <div class="score-preview">
+            <div class="score-item">
+                <div class="score-value">41</div>
+                <div class="score-label">Security Tests</div>
+            </div>
+            <div class="score-item">
+                <div class="score-value">6</div>
+                <div class="score-label">Categories</div>
+            </div>
+            <div class="score-item">
+                <div class="score-value">100</div>
+                <div class="score-label">Point Score</div>
+            </div>
+        </div>
     </section>
 
     <section class="features">
-        <h2>Comprehensive Compliance Scanning</h2>
+        <h2>What We Assess</h2>
+        <p>Our scanner evaluates your Microsoft 365 environment across 6 critical categories that determine AI readiness. Each category contains specific tests weighted by importance.</p>
         <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                        <polyline points="10 9 9 9 8 9"/>
-                    </svg>
+            <div class="feature-card cat-1">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <div class="feature-title">
+                        <h3>Data Visibility & Discovery</h3>
+                        <div class="feature-points">10 points | 5 tests</div>
+                    </div>
                 </div>
-                <h3>AI Systems Discovery</h3>
-                <p>Automatically detect AI applications across your Microsoft 365 tenant, including OAuth-consented apps, Copilot deployments, and third-party AI integrations.</p>
+                <p>Can you see where your sensitive data is? We check data mapping, classification coverage, audit logging, and shadow IT discovery.</p>
+                <div class="feature-tests">
+                    <span class="feature-test">Data Mapping</span>
+                    <span class="feature-test">Classification</span>
+                    <span class="feature-test">Audit Logs</span>
+                    <span class="feature-test">Shadow AI</span>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        <polyline points="9 12 11 14 15 10"/>
-                    </svg>
+            <div class="feature-card cat-2">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="feature-title">
+                        <h3>Identity & Access Governance</h3>
+                        <div class="feature-points">20 points | 9 tests</div>
+                    </div>
                 </div>
-                <h3>Risk Classification</h3>
-                <p>Classify discovered AI systems according to EU AI Act risk categories: Prohibited, High-Risk, Limited Risk, and Minimal Risk.</p>
+                <p>Who can access what? We evaluate MFA coverage, Conditional Access policies, PIM, access reviews, and admin account security.</p>
+                <div class="feature-tests">
+                    <span class="feature-test">MFA</span>
+                    <span class="feature-test">Conditional Access</span>
+                    <span class="feature-test">PIM</span>
+                    <span class="feature-test">Access Reviews</span>
+                    <span class="feature-test">Admin Count</span>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M12 8v4l2 2"/>
-                    </svg>
+            <div class="feature-card cat-3">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <div class="feature-title">
+                        <h3>Data Classification & Protection</h3>
+                        <div class="feature-points">15 points | 6 tests</div>
+                    </div>
                 </div>
-                <h3>Compliance Timeline</h3>
-                <p>Track critical EU AI Act deadlines and understand which requirements apply to your organization based on your AI deployment profile.</p>
+                <p>Is your data labelled and protected? We check sensitivity labels, DLP policies, auto-labeling accuracy, and user adoption.</p>
+                <div class="feature-tests">
+                    <span class="feature-test">Labels</span>
+                    <span class="feature-test">Encryption</span>
+                    <span class="feature-test">Auto-labeling</span>
+                    <span class="feature-test">DLP</span>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="3" y1="9" x2="21" y2="9"/>
-                        <line x1="9" y1="21" x2="9" y2="9"/>
-                    </svg>
+            <div class="feature-card cat-4">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                            <line x1="8" y1="21" x2="16" y2="21"/>
+                            <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                    </div>
+                    <div class="feature-title">
+                        <h3>Device & Endpoint Security</h3>
+                        <div class="feature-points">5 points | 2 tests</div>
+                    </div>
                 </div>
-                <h3>Data Governance Check</h3>
-                <p>Assess your data protection controls including sensitivity labels, DLP policies, and information barriers required for AI compliance.</p>
+                <p>Are devices secure? We check Purview device onboarding and endpoint DLP policies for USB, print, and browser controls.</p>
+                <div class="feature-tests">
+                    <span class="feature-test">Device Onboarding</span>
+                    <span class="feature-test">Endpoint DLP</span>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
+            <div class="feature-card cat-5">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="feature-title">
+                        <h3>Collaboration Security</h3>
+                        <div class="feature-points">11 points | 5 tests</div>
+                    </div>
                 </div>
-                <h3>Actionable Recommendations</h3>
-                <p>Get specific remediation guidance with direct links to Microsoft solutions like Purview, Defender, and Entra ID to close compliance gaps.</p>
+                <p>Is sharing controlled? We assess external sharing policies, guest access, container labels, and oversharing detection.</p>
+                <div class="feature-tests">
+                    <span class="feature-test">External Sharing</span>
+                    <span class="feature-test">Guest Access</span>
+                    <span class="feature-test">Oversharing</span>
+                    <span class="feature-test">Link Defaults</span>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="20" x2="18" y2="10"/>
-                        <line x1="12" y1="20" x2="12" y2="4"/>
-                        <line x1="6" y1="20" x2="6" y2="14"/>
-                    </svg>
+            <div class="feature-card cat-6">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+                            <rect x="9" y="9" width="6" height="6"/>
+                            <line x1="9" y1="1" x2="9" y2="4"/>
+                            <line x1="15" y1="1" x2="15" y2="4"/>
+                            <line x1="9" y1="20" x2="9" y2="23"/>
+                            <line x1="15" y1="20" x2="15" y2="23"/>
+                        </svg>
+                    </div>
+                    <div class="feature-title">
+                        <h3>AI & Agent Governance</h3>
+                        <div class="feature-points">39 points | 14 tests</div>
+                    </div>
                 </div>
-                <h3>Posture Scoring</h3>
-                <p>Receive an overall compliance score with category breakdowns to benchmark your progress and prioritize remediation efforts.</p>
+                <p>Are you AI-ready? The differentiator. We check Copilot config, DSPM for AI, restricted search, agent controls, and adaptive protection.</p>
+                <div class="feature-tests">
+                    <span class="feature-test">AI Discovery</span>
+                    <span class="feature-test">Copilot Config</span>
+                    <span class="feature-test">DSPM</span>
+                    <span class="feature-test">Agent Controls</span>
+                    <span class="feature-test">Oversharing Audit</span>
+                </div>
             </div>
         </div>
     </section>
@@ -520,57 +820,127 @@
     <section class="how-it-works">
         <div class="how-it-works-inner">
             <h2>How It Works</h2>
+            <p style="text-align: center; color: #a0a0a0; max-width: 700px; margin: 0 auto 60px;">Connect your Microsoft 365 tenant and get your AI Readiness score in minutes. Read-only access means zero risk to your environment.</p>
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
-                    <h3>Connect Your Tenant</h3>
-                    <p>Securely authenticate with your Microsoft 365 account. We use read-only permissions to scan your environment.</p>
+                    <h3>Connect Securely</h3>
+                    <p>Authenticate with your Microsoft 365 account. We request read-only permissions to scan your security configurations.</p>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
-                    <h3>Automated Discovery</h3>
-                    <p>Our scanner analyzes OAuth apps, policies, configurations, and data governance controls across your tenant.</p>
+                    <h3>Automated Analysis</h3>
+                    <p>Our scanner evaluates 41 security controls across Entra ID, Purview, Defender, SharePoint, and Copilot settings.</p>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
-                    <h3>Risk Assessment</h3>
-                    <p>AI systems are classified by EU AI Act risk category with compliance gaps identified against regulatory requirements.</p>
+                    <h3>Get Your Score</h3>
+                    <p>Receive your 100-point AI Readiness score with category breakdowns showing exactly where you stand.</p>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
-                    <h3>Get Recommendations</h3>
-                    <p>Receive a detailed report with prioritized actions and Microsoft solution mappings to achieve compliance.</p>
+                    <h3>Improve & Deploy</h3>
+                    <p>Follow prioritised recommendations with direct links to Microsoft admin portals to close gaps and deploy AI safely.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="categories">
-        <h2>EU AI Act Risk Categories</h2>
-        <p>The EU AI Act classifies AI systems into four risk categories, each with different compliance requirements.</p>
-        <div class="category-grid">
-            <div class="category-card prohibited">
-                <h3>Prohibited AI</h3>
-                <p>AI systems that pose unacceptable risks, including social scoring, real-time biometric identification, and manipulative AI. These are banned outright.</p>
+    <section class="risk-levels">
+        <h2>Understanding Your Score</h2>
+        <p>Your AI Readiness score determines whether it's safe to deploy Microsoft Copilot and AI agents in your environment.</p>
+        <div class="risk-grid">
+            <div class="risk-card critical">
+                <div class="risk-score">0-35</div>
+                <h3>Critical Risk</h3>
+                <p>Significant security gaps. Copilot would expose sensitive data. Remediation required before any AI adoption.</p>
+                <div class="risk-status">
+                    <div class="status-item">
+                        <span>AI Ready</span>
+                        <span>Not Ready</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Agents Ready</span>
+                        <span>Not Ready</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Breach Risk</span>
+                        <span>30-40%</span>
+                    </div>
+                </div>
             </div>
-            <div class="category-card high-risk">
-                <h3>High-Risk AI</h3>
-                <p>AI used in critical areas like employment, education, law enforcement, and essential services. Requires conformity assessments, human oversight, and documentation.</p>
+            <div class="risk-card elevated">
+                <div class="risk-score">36-70</div>
+                <h3>Elevated Risk</h3>
+                <p>Basic controls in place but gaps remain. Copilot possible with restrictions. Agents not recommended.</p>
+                <div class="risk-status">
+                    <div class="status-item">
+                        <span>AI Ready</span>
+                        <span>Conditional</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Agents Ready</span>
+                        <span>Not Ready</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Breach Risk</span>
+                        <span>15-25%</span>
+                    </div>
+                </div>
             </div>
-            <div class="category-card limited">
-                <h3>Limited Risk AI</h3>
-                <p>AI systems like chatbots and content generators that require transparency obligations. Users must be informed they are interacting with AI.</p>
+            <div class="risk-card managed">
+                <div class="risk-score">71-100</div>
+                <h3>Managed Risk</h3>
+                <p>Comprehensive controls in place. Safe for Copilot deployment. Ready for AI agent governance with controls.</p>
+                <div class="risk-status">
+                    <div class="status-item">
+                        <span>AI Ready</span>
+                        <span>Ready</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Agents Ready</span>
+                        <span>With Controls</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Breach Risk</span>
+                        <span>5-10%</span>
+                    </div>
+                </div>
             </div>
-            <div class="category-card minimal">
-                <h3>Minimal Risk AI</h3>
-                <p>Low-risk AI applications like spam filters and inventory management. No specific obligations but voluntary codes of conduct are encouraged.</p>
+        </div>
+    </section>
+
+    <section class="eu-ai-act">
+        <div class="eu-ai-act-inner">
+            <div style="text-align: center;">
+                <span class="eu-badge">Informational</span>
+            </div>
+            <h2>EU AI Act Risk Classification</h2>
+            <p style="text-align: center; color: #a0a0a0; max-width: 700px; margin: 0 auto 40px;">Our scanner also identifies discovered AI systems and classifies them according to EU AI Act risk categories. This helps you understand regulatory obligations alongside your technical readiness.</p>
+            <div class="category-grid">
+                <div class="category-card prohibited">
+                    <h3>Prohibited AI</h3>
+                    <p>Banned AI systems including social scoring and real-time biometric identification. Must be removed immediately.</p>
+                </div>
+                <div class="category-card high-risk">
+                    <h3>High-Risk AI</h3>
+                    <p>HR/recruitment AI, credit scoring. Requires conformity assessment, human oversight, and documentation.</p>
+                </div>
+                <div class="category-card limited">
+                    <h3>Limited Risk AI</h3>
+                    <p>Chatbots, AI assistants like Copilot. Must disclose AI use to users with transparency notices.</p>
+                </div>
+                <div class="category-card minimal">
+                    <h3>Minimal Risk AI</h3>
+                    <p>Spam filters, productivity AI. No mandatory requirements - voluntary best practices apply.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <section class="cta-section">
-        <h2>Ready to Assess Your AI Compliance?</h2>
-        <p>Get instant visibility into your Microsoft 365 AI posture and start your compliance journey today.</p>
+        <h2>Ready to Check Your AI Readiness?</h2>
+        <p>Get instant visibility into your Microsoft 365 security posture and understand if you're ready for Copilot and AI agents.</p>
         <div class="cta-buttons">
             <a href="posture-scanner.html" class="btn btn-primary">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -578,12 +948,12 @@
                 </svg>
                 Start Your Free Scan
             </a>
-            <a href="https://quantivecyber.com" class="btn btn-secondary">Contact Sales</a>
+            <a href="https://quantivecyber.com/contact" class="btn btn-secondary">Book a Consultation</a>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2025 QuantiveCyber. All rights reserved. | <a href="https://quantivecyber.com">quantivecyber.com</a></p>
+        <p>&copy; 2026 QuantiveCyber. All rights reserved. | <a href="https://quantivecyber.com">quantivecyber.com</a></p>
     </footer>
 </body>
 </html>
