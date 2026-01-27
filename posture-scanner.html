@@ -1339,7 +1339,6 @@
         .score-category-group {
             border: 1px solid var(--border-light);
             border-radius: 10px;
-            overflow: hidden;
             background: var(--surface);
         }
 
@@ -1455,9 +1454,8 @@
         .score-control-article[data-tooltip]:hover::after {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: calc(100% + 6px);
-            left: 50%;
-            transform: translateX(-50%);
+            top: calc(100% + 6px);
+            left: 0;
             background: #1a1a2e;
             color: #fff;
             padding: 8px 12px;
@@ -1475,11 +1473,10 @@
         .score-control-article[data-tooltip]:hover::before {
             content: '';
             position: absolute;
-            bottom: calc(100% + 2px);
-            left: 50%;
-            transform: translateX(-50%);
+            top: calc(100% + 2px);
+            left: 12px;
             border: 5px solid transparent;
-            border-top-color: #1a1a2e;
+            border-bottom-color: #1a1a2e;
             z-index: 1000;
         }
 
