@@ -1066,7 +1066,43 @@
         .score-control-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
+        }
+
+        .score-category-group {
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .score-category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .score-category-badge {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .score-category-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--border-light);
+        }
+
+        .score-category-controls .score-control-item {
+            border: none;
+            border-radius: 0;
+            background: var(--surface);
         }
 
         .score-control-item {
@@ -6110,6 +6146,7 @@
                     setTimeout(() => {
                         scanData = JSON.parse(JSON.stringify(demoData)); // Deep copy demo data
                         scanData.tenant.scanTime = new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
+                        calculateScores(); // Calculate scores to populate scoreBreakdown
                         renderDashboard();
                     }, 300);
                 }
@@ -6450,53 +6487,141 @@
             document.getElementById('potentialPointsBadge').textContent = `+${potentialPoints} pts available`;
             document.getElementById('implementedPointsBadge').textContent = `${earnedPoints} pts earned`;
 
-            // Render pending controls (improve your score)
-            const pendingList = document.getElementById('pendingControlsList');
-            pendingList.innerHTML = breakdown.pendingControls.map(control => `
-                <div class="score-control-item">
-                    <div class="score-control-icon ${control.status}">
-                        ${control.status === 'warn'
-                            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
-                            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}
-                    </div>
-                    <div class="score-control-content">
-                        <div class="score-control-header">
-                            <span class="score-control-name">${control.name}</span>
-                            <span class="score-control-article">${control.article}</span>
-                            ${control.manual ? '<span class="score-control-article" style="background: var(--warning-light); color: var(--warning);">Manual</span>' : ''}
-                        </div>
-                        <div class="score-control-desc">${control.description}</div>
-                        ${control.actionUrl
-                            ? `<a href="${control.actionUrl}" target="_blank" class="score-control-action">${control.action} <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
-                            : `<span class="score-control-action" style="cursor: default;">${control.action}</span>`}
-                    </div>
-                    <div class="score-control-points">
-                        <span class="score-control-impact">+${control.available}</span>
-                        <span class="score-control-label">points</span>
-                    </div>
-                </div>
-            `).join('');
+            // Group controls by category for better organization
+            const getCategoryColor = (category) => {
+                const colors = {
+                    'Data Visibility': 'var(--primary)',
+                    'Identity & Access': 'var(--purple)',
+                    'Classification': 'var(--success)',
+                    'Device Security': '#06b6d4',
+                    'Collaboration': 'var(--warning)',
+                    'AI Governance': 'var(--danger)'
+                };
+                return colors[category] || 'var(--ink-tertiary)';
+            };
 
-            // Render implemented controls
-            const implementedList = document.getElementById('implementedControlsList');
-            implementedList.innerHTML = breakdown.implementedControls.map(control => `
-                <div class="score-control-item implemented">
-                    <div class="score-control-icon pass">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <div class="score-control-content">
-                        <div class="score-control-header">
-                            <span class="score-control-name">${control.name}</span>
-                            <span class="score-control-article">${control.article}</span>
+            // Render pending controls (improve your score) - grouped by category
+            const pendingList = document.getElementById('pendingControlsList');
+
+            // Group pending by category
+            const pendingByCategory = {};
+            breakdown.pendingControls.forEach(control => {
+                if (!pendingByCategory[control.category]) {
+                    pendingByCategory[control.category] = [];
+                }
+                pendingByCategory[control.category].push(control);
+            });
+
+            let pendingHtml = '';
+            Object.entries(pendingByCategory).forEach(([category, controls]) => {
+                const categoryPoints = controls.reduce((sum, c) => sum + c.available, 0);
+                pendingHtml += `
+                    <div class="score-category-group">
+                        <div class="score-category-header" onclick="toggleCategoryGroup(this)" style="cursor: pointer;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="score-category-badge" style="background: ${getCategoryColor(category)}15; color: ${getCategoryColor(category)}; border: 1px solid ${getCategoryColor(category)}30;">${category}</span>
+                                <span style="font-size: 0.75rem; color: var(--ink-tertiary);">${controls.length} items</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 0.875rem; font-weight: 600; color: var(--success);">+${categoryPoints} pts</span>
+                                <svg class="category-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
                         </div>
-                        <div class="score-control-desc">${control.description}</div>
+                        <div class="score-category-controls">
+                            ${controls.map(control => `
+                                <div class="score-control-item">
+                                    <div class="score-control-icon ${control.status}">
+                                        ${control.status === 'warn'
+                                            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+                                            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}
+                                    </div>
+                                    <div class="score-control-content">
+                                        <div class="score-control-header">
+                                            <span class="score-control-name">${control.name}</span>
+                                            <span class="score-control-article">${control.article}</span>
+                                            ${control.licenseRequired ? `<span class="score-control-article" style="background: var(--purple-light); color: var(--purple);">${control.licenseRequired}</span>` : ''}
+                                        </div>
+                                        <div class="score-control-desc">${control.description}</div>
+                                        ${control.actionUrl
+                                            ? `<a href="${control.actionUrl}" target="_blank" class="score-control-action">${control.action} <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
+                                            : `<span class="score-control-action" style="cursor: default;">${control.action}</span>`}
+                                    </div>
+                                    <div class="score-control-points">
+                                        <span class="score-control-impact">+${control.available}</span>
+                                        <span class="score-control-label">points</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
-                    <div class="score-control-points">
-                        <span class="score-control-impact earned">${control.earned}</span>
-                        <span class="score-control-label">earned</span>
+                `;
+            });
+            pendingList.innerHTML = pendingHtml || '<div style="padding: 16px; text-align: center; color: var(--ink-tertiary);">All controls implemented!</div>';
+
+            // Render implemented controls - grouped by category
+            const implementedList = document.getElementById('implementedControlsList');
+
+            // Group implemented by category
+            const implementedByCategory = {};
+            breakdown.implementedControls.forEach(control => {
+                if (!implementedByCategory[control.category]) {
+                    implementedByCategory[control.category] = [];
+                }
+                implementedByCategory[control.category].push(control);
+            });
+
+            let implementedHtml = '';
+            Object.entries(implementedByCategory).forEach(([category, controls]) => {
+                const categoryPoints = controls.reduce((sum, c) => sum + c.earned, 0);
+                implementedHtml += `
+                    <div class="score-category-group">
+                        <div class="score-category-header" onclick="toggleCategoryGroup(this)" style="cursor: pointer;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="score-category-badge" style="background: ${getCategoryColor(category)}15; color: ${getCategoryColor(category)}; border: 1px solid ${getCategoryColor(category)}30;">${category}</span>
+                                <span style="font-size: 0.75rem; color: var(--ink-tertiary);">${controls.length} items</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 0.875rem; font-weight: 600; color: var(--success);">${categoryPoints} pts</span>
+                                <svg class="category-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
+                        </div>
+                        <div class="score-category-controls">
+                            ${controls.map(control => `
+                                <div class="score-control-item implemented">
+                                    <div class="score-control-icon pass">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                    </div>
+                                    <div class="score-control-content">
+                                        <div class="score-control-header">
+                                            <span class="score-control-name">${control.name}</span>
+                                            <span class="score-control-article">${control.article}</span>
+                                        </div>
+                                        <div class="score-control-desc">${control.description}</div>
+                                    </div>
+                                    <div class="score-control-points">
+                                        <span class="score-control-impact earned">${control.earned}</span>
+                                        <span class="score-control-label">earned</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            });
+            implementedList.innerHTML = implementedHtml || '<div style="padding: 16px; text-align: center; color: var(--ink-tertiary);">No controls implemented yet</div>';
+        }
+
+        function toggleCategoryGroup(header) {
+            const controls = header.nextElementSibling;
+            const chevron = header.querySelector('.category-chevron');
+
+            if (controls.style.display === 'none') {
+                controls.style.display = 'block';
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                controls.style.display = 'none';
+                chevron.style.transform = 'rotate(-90deg)';
+            }
         }
 
         function toggleImplementedControls() {
