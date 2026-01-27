@@ -4185,14 +4185,16 @@
 
         // EU AI Act Article Explanations
         const euAiActArticles = {
-            'Art. 9': 'Risk Management System - Requires establishing, implementing, and maintaining a risk management system throughout the AI lifecycle.',
-            'Art. 10': 'Data Governance - Data used to train AI must be relevant, representative, and free of errors. Requires data quality controls.',
-            'Art. 12': 'Record-Keeping - AI systems must enable automatic recording of events (logs) for traceability and audit purposes.',
-            'Art. 14': 'Human Oversight - AI systems must be designed to allow effective human oversight and intervention.',
-            'Art. 15': 'Accuracy & Security - AI systems must achieve appropriate levels of accuracy, robustness, and cybersecurity.',
-            'Art. 20': 'Corrective Actions - Providers must take corrective action and inform authorities if AI systems present risks.',
-            'Art. 10 & 15': 'Data Governance & Security - Combines data quality requirements with accuracy and cybersecurity obligations.',
-            'Art. 12 & 20': 'Logging & Monitoring - Combines record-keeping with corrective action requirements for ongoing compliance.'
+            'Article 4': 'AI Literacy - Providers and deployers must ensure staff have sufficient AI literacy for safe operation.',
+            'Article 5': 'Prohibited AI Practices - Lists AI practices that are banned, including social scoring and real-time biometric identification.',
+            'Article 9': 'Risk Management System - Requires establishing, implementing, and maintaining a risk management system throughout the AI lifecycle.',
+            'Article 10': 'Data Governance - Data used to train AI must be relevant, representative, and free of errors. Requires data quality controls.',
+            'Article 12': 'Record-Keeping - AI systems must enable automatic recording of events (logs) for traceability and audit purposes.',
+            'Article 14': 'Human Oversight - AI systems must be designed to allow effective human oversight and intervention.',
+            'Article 15': 'Accuracy & Security - AI systems must achieve appropriate levels of accuracy, robustness, and cybersecurity.',
+            'Article 20': 'Corrective Actions - Providers must take corrective action and inform authorities if AI systems present risks.',
+            'Article 10 & 15': 'Data Governance & Security - Combines data quality requirements with accuracy and cybersecurity obligations.',
+            'Article 12 & 20': 'Logging & Monitoring - Combines record-keeping with corrective action requirements for ongoing compliance.'
         };
 
         // Get tooltip for article reference
@@ -4200,9 +4202,9 @@
             if (!article) return '';
             // Try exact match first
             if (euAiActArticles[article]) return euAiActArticles[article];
-            // Try to find partial match (e.g., "Art. 10" in "Art. 10(3)")
+            // Try to find partial match (e.g., "Article 10" in "Article 10(3)")
             for (const [key, value] of Object.entries(euAiActArticles)) {
-                if (article.includes(key.replace('Art. ', ''))) return value;
+                if (article.includes(key.replace('Article ', ''))) return value;
             }
             return 'EU AI Act compliance requirement';
         }
@@ -4413,7 +4415,7 @@
                     control: "Sensitivity Labels",
                     status: "green",
                     coverage: "85% of content",
-                    article: "Art. 10 - Data Governance",
+                    article: "Article 10 - Data Governance",
                     articleDesc: "Requires appropriate data governance for training, validation and testing datasets",
                     action: "Manage Labels",
                     actionUrl: "https://purview.microsoft.com/informationprotection"
@@ -4422,7 +4424,7 @@
                     control: "DLP Policies",
                     status: "green",
                     coverage: "6 active policies",
-                    article: "Art. 10 & 15 - Data Protection",
+                    article: "Article 10 & 15 - Data Protection",
                     articleDesc: "Ensures AI systems process data in compliance with quality and accuracy requirements",
                     action: "Configure DLP",
                     actionUrl: "https://purview.microsoft.com/datalossprevention"
@@ -4431,7 +4433,7 @@
                     control: "SharePoint Permissions",
                     status: "orange",
                     coverage: "Review needed",
-                    article: "Art. 10(3) - Access Controls",
+                    article: "Article 10(3) - Access Controls",
                     articleDesc: "Data governance measures must include access management and traceability",
                     action: "Review Permissions",
                     actionUrl: "https://admin.microsoft.com/sharepoint"
@@ -4440,7 +4442,7 @@
                     control: "External Sharing",
                     status: "green",
                     coverage: "Restricted",
-                    article: "Art. 10(5) - Data Minimization",
+                    article: "Article 10(5) - Data Minimization",
                     articleDesc: "Only necessary data should be accessible; external sharing increases risk exposure",
                     action: "Sharing Settings",
                     actionUrl: "https://admin.microsoft.com/sharepoint?page=sharing"
@@ -4449,7 +4451,7 @@
                     control: "Insider Risk Policies",
                     status: "orange",
                     coverage: "2 policies",
-                    article: "Art. 9 - Risk Management",
+                    article: "Article 9 - Risk Management",
                     articleDesc: "High-risk AI systems require continuous risk identification and mitigation",
                     action: "Configure Policies",
                     actionUrl: "https://purview.microsoft.com/insiderriskmanagement"
@@ -4458,7 +4460,7 @@
                     control: "Retention Policies",
                     status: "green",
                     coverage: "Applied",
-                    article: "Art. 12 - Record Keeping",
+                    article: "Article 12 - Record Keeping",
                     articleDesc: "High-risk AI systems must maintain logs for traceability and audit purposes",
                     action: "Manage Retention",
                     actionUrl: "https://purview.microsoft.com/informationgovernance"
@@ -4467,7 +4469,7 @@
                     control: "Audit Logging",
                     status: "green",
                     coverage: "Active",
-                    article: "Art. 12 & 20 - Logging",
+                    article: "Article 12 & 20 - Logging",
                     articleDesc: "Automatic recording of events for traceability throughout AI system lifecycle",
                     action: "View Audit Logs",
                     actionUrl: "https://purview.microsoft.com/auditlogsearch"
@@ -5559,7 +5561,7 @@
                     control: "Sensitivity Labels",
                     status: hasLabels ? "green" : "red",
                     coverage: hasLabels ? `${sensitivityLabels.length} labels configured` : "Not configured",
-                    article: "Art. 10 - Data Governance",
+                    article: "Article 10 - Data Governance",
                     articleDesc: "Requires appropriate data governance for training, validation and testing datasets",
                     action: "Manage Labels",
                     actionUrl: "https://purview.microsoft.com/informationprotection"
@@ -5572,7 +5574,7 @@
                         : (dlpActivityDetected
                             ? "DLP activity detected - verify in Purview portal"
                             : "Not detected via API - check Purview portal"),
-                    article: "Art. 10 & 15 - Data Protection",
+                    article: "Article 10 & 15 - Data Protection",
                     articleDesc: "Ensures AI systems process data in compliance with quality and accuracy requirements",
                     action: "Configure DLP",
                     actionUrl: "https://purview.microsoft.com/datalossprevention"
@@ -5583,7 +5585,7 @@
                     coverage: hasMDCA
                         ? (discoveredAppCount > 0 ? `${discoveredAppCount} apps discovered` : `Active - ${securityAlerts.length} alerts`)
                         : "Not detected - enable for shadow AI discovery",
-                    article: "Art. 9 - Risk Management",
+                    article: "Article 9 - Risk Management",
                     articleDesc: "Discover and control shadow AI applications accessing corporate data",
                     action: "Open MDCA",
                     actionUrl: "https://security.microsoft.com/cloudapps"
@@ -5592,7 +5594,7 @@
                     control: "SharePoint Permissions",
                     status: sharepointSettings ? "orange" : "orange",
                     coverage: sharepointSettings ? "Review access controls" : "Manual review recommended",
-                    article: "Art. 10(3) - Access Controls",
+                    article: "Article 10(3) - Access Controls",
                     articleDesc: "Data governance measures must include access management and traceability",
                     action: "Review Permissions",
                     actionUrl: "https://admin.microsoft.com/sharepoint"
@@ -5601,7 +5603,7 @@
                     control: "External Sharing",
                     status: sharingStatus,
                     coverage: sharingCoverage,
-                    article: "Art. 10(5) - Data Minimization",
+                    article: "Article 10(5) - Data Minimization",
                     articleDesc: "Only necessary data should be accessible; external sharing increases risk exposure",
                     action: "Sharing Settings",
                     actionUrl: "https://admin.microsoft.com/sharepoint?page=sharing"
@@ -5610,7 +5612,7 @@
                     control: "Insider Risk Management",
                     status: "orange",
                     coverage: "Check Purview portal",
-                    article: "Art. 9 - Risk Management",
+                    article: "Article 9 - Risk Management",
                     articleDesc: "High-risk AI systems require continuous risk identification and mitigation",
                     action: "Configure IRM",
                     actionUrl: "https://purview.microsoft.com/insiderriskmanagement"
@@ -5619,7 +5621,7 @@
                     control: "Retention Policies",
                     status: "orange",
                     coverage: "Check Purview portal",
-                    article: "Art. 12 - Record Keeping",
+                    article: "Article 12 - Record Keeping",
                     articleDesc: "High-risk AI systems must maintain logs for traceability and audit purposes",
                     action: "Manage Retention",
                     actionUrl: "https://purview.microsoft.com/informationgovernance"
@@ -5628,7 +5630,7 @@
                     control: "Audit Logging",
                     status: "green",
                     coverage: "Enabled by default",
-                    article: "Art. 12 & 20 - Logging",
+                    article: "Article 12 & 20 - Logging",
                     articleDesc: "Automatic recording of events for traceability throughout AI system lifecycle",
                     action: "View Audit Logs",
                     actionUrl: "https://purview.microsoft.com/auditlogsearch"
@@ -5652,7 +5654,7 @@
                     name: 'Business Data Mapping',
                     category: 'Data Visibility',
                     points: 2,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.aiSystems?.length > 0,
                     status: () => scanData.aiSystems?.length > 0 ? 'pass' : 'warn',
                     current: () => scanData.aiSystems?.length > 0 ? 2 : 0,
@@ -5665,7 +5667,7 @@
                     name: 'Classification Coverage',
                     category: 'Data Visibility',
                     points: 3,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => getCheckStatus('Sensitivity labels') === 'pass',
                     status: () => getCheckStatus('Sensitivity labels'),
                     current: () => {
@@ -5681,7 +5683,7 @@
                     name: 'Classification Accuracy',
                     category: 'Data Visibility',
                     points: 2,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => getCheckStatus('Sensitivity labels') === 'pass',
                     status: () => getCheckStatus('Sensitivity labels') === 'pass' ? 'pass' : 'warn',
                     current: () => getCheckStatus('Sensitivity labels') === 'pass' ? 2 : 0,
@@ -5694,7 +5696,7 @@
                     name: 'Audit Logging Enabled',
                     category: 'Data Visibility',
                     points: 1,
-                    article: 'Art. 12',
+                    article: 'Article 12',
                     check: () => getCheckStatus('Audit logging') === 'pass',
                     status: () => getCheckStatus('Audit logging'),
                     current: () => getCheckStatus('Audit logging') === 'pass' ? 1 : 0,
@@ -5707,7 +5709,7 @@
                     name: 'Shadow IT Discovery',
                     category: 'Data Visibility',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => {
                         const shadowAI = scanData.aiSystems?.filter(s => s.shadow) || [];
                         return shadowAI.length > 0; // Discovery working if shadow AI found
@@ -5733,7 +5735,7 @@
                     name: 'MFA for Admins',
                     category: 'Identity & Access',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.identityChecks?.mfaAdmins === true,
                     status: () => scanData.identityChecks?.mfaAdmins ? 'pass' : 'fail',
                     current: () => scanData.identityChecks?.mfaAdmins ? 2 : 0,
@@ -5746,7 +5748,7 @@
                     name: 'MFA for All Users',
                     category: 'Identity & Access',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.identityChecks?.mfaAllUsers === true,
                     status: () => scanData.identityChecks?.mfaAllUsers ? 'pass' : scanData.identityChecks?.mfaPartial ? 'warn' : 'fail',
                     current: () => scanData.identityChecks?.mfaAllUsers ? 2 : scanData.identityChecks?.mfaPartial ? 1 : 0,
@@ -5759,7 +5761,7 @@
                     name: 'Legacy Auth Blocked',
                     category: 'Identity & Access',
                     points: 1,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.identityChecks?.legacyAuthBlocked === true,
                     status: () => scanData.identityChecks?.legacyAuthBlocked ? 'pass' : 'fail',
                     current: () => scanData.identityChecks?.legacyAuthBlocked ? 1 : 0,
@@ -5772,7 +5774,7 @@
                     name: 'Conditional Access Policies',
                     category: 'Identity & Access',
                     points: 3,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => getCheckStatus('Conditional Access') === 'pass',
                     status: () => getCheckStatus('Conditional Access'),
                     current: () => {
@@ -5788,7 +5790,7 @@
                     name: 'Privileged Identity Management',
                     category: 'Identity & Access',
                     points: 3,
-                    article: 'Art. 14',
+                    article: 'Article 14',
                     check: () => scanData.identityChecks?.pimEnabled === true,
                     status: () => scanData.identityChecks?.pimEnabled ? 'pass' : scanData.identityChecks?.pimLicensed === false ? 'warn' : 'fail',
                     current: () => scanData.identityChecks?.pimEnabled ? 3 : 0,
@@ -5802,7 +5804,7 @@
                     name: 'Access Reviews',
                     category: 'Identity & Access',
                     points: 3,
-                    article: 'Art. 14',
+                    article: 'Article 14',
                     check: () => scanData.identityChecks?.accessReviewsEnabled === true,
                     status: () => scanData.identityChecks?.accessReviewsEnabled ? 'pass' : scanData.identityChecks?.accessReviewsLicensed === false ? 'warn' : 'fail',
                     current: () => scanData.identityChecks?.accessReviewsEnabled ? 3 : 0,
@@ -5816,7 +5818,7 @@
                     name: 'Role Assignment Quality',
                     category: 'Identity & Access',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.identityChecks?.roleQuality === 'good',
                     status: () => scanData.identityChecks?.roleQuality === 'good' ? 'pass' : scanData.identityChecks?.roleQuality === 'partial' ? 'warn' : 'fail',
                     current: () => scanData.identityChecks?.roleQuality === 'good' ? 2 : scanData.identityChecks?.roleQuality === 'partial' ? 1 : 0,
@@ -5829,7 +5831,7 @@
                     name: 'Admin Account Count',
                     category: 'Identity & Access',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.identityChecks?.globalAdminCount <= 4,
                     status: () => {
                         const count = scanData.identityChecks?.globalAdminCount || 0;
@@ -5848,7 +5850,7 @@
                     name: 'Sign-in Risk Policies',
                     category: 'Identity & Access',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.identityChecks?.signInRiskEnabled === true,
                     status: () => scanData.identityChecks?.signInRiskEnabled ? 'pass' : scanData.identityChecks?.identityProtectionLicensed === false ? 'warn' : 'fail',
                     current: () => scanData.identityChecks?.signInRiskEnabled ? 2 : 0,
@@ -5866,7 +5868,7 @@
                     name: 'Label Taxonomy Structure',
                     category: 'Classification',
                     points: 3,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => getCheckStatus('Sensitivity labels') === 'pass',
                     status: () => getCheckStatus('Sensitivity labels'),
                     current: () => {
@@ -5882,7 +5884,7 @@
                     name: 'Protection Actions Configured',
                     category: 'Classification',
                     points: 3,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.dataProtection?.encryptionConfigured === true,
                     status: () => scanData.dataProtection?.encryptionConfigured ? 'pass' : 'warn',
                     current: () => scanData.dataProtection?.encryptionConfigured ? 3 : scanData.dataProtection?.markingsOnly ? 1 : 0,
@@ -5895,7 +5897,7 @@
                     name: 'Auto-labeling Policies',
                     category: 'Classification',
                     points: 3,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.dataProtection?.autoLabelingEnabled === true,
                     status: () => scanData.dataProtection?.autoLabelingEnabled ? 'pass' : 'warn',
                     current: () => scanData.dataProtection?.autoLabelingEnabled ? 3 : scanData.dataProtection?.autoLabelingPartial ? 1 : 0,
@@ -5908,7 +5910,7 @@
                     name: 'Auto-labeling Performance',
                     category: 'Classification',
                     points: 2,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.dataProtection?.autoLabelingAccuracy === 'high',
                     status: () => scanData.dataProtection?.autoLabelingAccuracy === 'high' ? 'pass' : 'warn',
                     current: () => scanData.dataProtection?.autoLabelingAccuracy === 'high' ? 2 : scanData.dataProtection?.autoLabelingAccuracy === 'medium' ? 1 : 0,
@@ -5921,7 +5923,7 @@
                     name: 'DLP Policy Quality',
                     category: 'Classification',
                     points: 2,
-                    article: 'Art. 15',
+                    article: 'Article 15',
                     check: () => getCheckStatus('DLP policies') === 'pass',
                     status: () => getCheckStatus('DLP policies'),
                     current: () => {
@@ -5937,7 +5939,7 @@
                     name: 'User Labeling Adoption',
                     category: 'Classification',
                     points: 2,
-                    article: 'Art. 4',
+                    article: 'Article 4',
                     check: () => scanData.dataProtection?.userLabelingAdoption === 'high',
                     status: () => scanData.dataProtection?.userLabelingAdoption === 'high' ? 'pass' : scanData.dataProtection?.userLabelingAdoption === 'medium' ? 'warn' : 'fail',
                     current: () => scanData.dataProtection?.userLabelingAdoption === 'high' ? 2 : scanData.dataProtection?.userLabelingAdoption === 'medium' ? 1 : 0,
@@ -5954,7 +5956,7 @@
                     name: 'Devices Onboarded to Purview',
                     category: 'Device Security',
                     points: 3,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.deviceSecurity?.purviewOnboarded === 'high',
                     status: () => scanData.deviceSecurity?.purviewOnboarded === 'high' ? 'pass' : scanData.deviceSecurity?.purviewOnboarded === 'medium' ? 'warn' : 'fail',
                     current: () => {
@@ -5970,7 +5972,7 @@
                     name: 'Endpoint DLP Policies',
                     category: 'Device Security',
                     points: 2,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.deviceSecurity?.endpointDlpEnabled === true,
                     status: () => scanData.deviceSecurity?.endpointDlpEnabled ? 'pass' : 'warn',
                     current: () => scanData.deviceSecurity?.endpointDlpEnabled ? 2 : scanData.deviceSecurity?.endpointDlpPartial ? 1 : 0,
@@ -5987,7 +5989,7 @@
                     name: 'External Sharing Policies',
                     category: 'Collaboration',
                     points: 3,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.collaborationSecurity?.sharingRestricted === true,
                     status: () => scanData.collaborationSecurity?.sharingRestricted ? 'pass' : scanData.collaborationSecurity?.sharingPartiallyRestricted ? 'warn' : 'fail',
                     current: () => scanData.collaborationSecurity?.sharingRestricted ? 3 : scanData.collaborationSecurity?.sharingPartiallyRestricted ? 2 : 0,
@@ -6000,7 +6002,7 @@
                     name: 'Guest Access Configuration',
                     category: 'Collaboration',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.collaborationSecurity?.guestAccessControlled === true,
                     status: () => scanData.collaborationSecurity?.guestAccessControlled ? 'pass' : 'warn',
                     current: () => scanData.collaborationSecurity?.guestAccessControlled ? 2 : scanData.collaborationSecurity?.guestAccessPartial ? 1 : 0,
@@ -6013,7 +6015,7 @@
                     name: 'Sensitivity Labels on Sites/Teams',
                     category: 'Collaboration',
                     points: 2,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.collaborationSecurity?.containerLabelsDeployed === true,
                     status: () => scanData.collaborationSecurity?.containerLabelsDeployed ? 'pass' : 'warn',
                     current: () => scanData.collaborationSecurity?.containerLabelsDeployed ? 2 : scanData.collaborationSecurity?.containerLabelsPartial ? 1 : 0,
@@ -6026,7 +6028,7 @@
                     name: 'Oversharing Detection',
                     category: 'Collaboration',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.collaborationSecurity?.oversharingMinimal === true,
                     status: () => scanData.collaborationSecurity?.oversharingMinimal ? 'pass' : scanData.collaborationSecurity?.oversharingModerate ? 'warn' : 'fail',
                     current: () => scanData.collaborationSecurity?.oversharingMinimal ? 2 : scanData.collaborationSecurity?.oversharingModerate ? 1 : 0,
@@ -6039,7 +6041,7 @@
                     name: 'Sharing Link Defaults',
                     category: 'Collaboration',
                     points: 2,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.collaborationSecurity?.sharingDefaultSecure === true,
                     status: () => scanData.collaborationSecurity?.sharingDefaultSecure ? 'pass' : scanData.collaborationSecurity?.sharingDefaultOrg ? 'warn' : 'fail',
                     current: () => scanData.collaborationSecurity?.sharingDefaultSecure ? 2 : scanData.collaborationSecurity?.sharingDefaultOrg ? 1 : 0,
@@ -6056,7 +6058,7 @@
                     name: 'AI Tool Discovery',
                     category: 'AI Governance',
                     points: 3,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.aiSystems?.length > 0,
                     status: () => scanData.aiSystems?.length > 0 ? 'pass' : 'fail',
                     current: () => scanData.aiSystems?.length > 0 ? 3 : 0,
@@ -6069,7 +6071,7 @@
                     name: 'AI Interaction Monitoring',
                     category: 'AI Governance',
                     points: 3,
-                    article: 'Art. 12',
+                    article: 'Article 12',
                     check: () => scanData.aiGovernance?.monitoringEnabled === true,
                     status: () => scanData.aiGovernance?.monitoringEnabled ? 'pass' : 'warn',
                     current: () => scanData.aiGovernance?.monitoringEnabled ? 3 : scanData.aiGovernance?.monitoringPartial ? 1 : 0,
@@ -6082,7 +6084,7 @@
                     name: 'AI-Specific DLP',
                     category: 'AI Governance',
                     points: 3,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.aiGovernance?.aiDlpEnabled === true,
                     status: () => scanData.aiGovernance?.aiDlpEnabled ? 'pass' : 'warn',
                     current: () => scanData.aiGovernance?.aiDlpEnabled ? 3 : scanData.aiGovernance?.aiDlpPartial ? 1 : 0,
@@ -6095,7 +6097,7 @@
                     name: 'External AI Controls',
                     category: 'AI Governance',
                     points: 3,
-                    article: 'Art. 5',
+                    article: 'Article 5',
                     check: () => {
                         const shadowAI = scanData.aiSystems?.filter(s => s.shadow) || [];
                         return getCheckStatus('Shadow AI') === 'pass' || shadowAI.length === 0;
@@ -6117,7 +6119,7 @@
                     name: 'Copilot Configuration',
                     category: 'AI Governance',
                     points: 3,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => getCheckStatus('Copilot') === 'pass',
                     status: () => getCheckStatus('Copilot'),
                     current: () => {
@@ -6133,7 +6135,7 @@
                     name: 'Restricted SharePoint Search',
                     category: 'AI Governance',
                     points: 3,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.aiGovernance?.restrictedSearchEnabled === true,
                     status: () => scanData.aiGovernance?.restrictedSearchEnabled ? 'pass' : 'warn',
                     current: () => scanData.aiGovernance?.restrictedSearchEnabled ? 3 : scanData.aiGovernance?.restrictedSearchPartial ? 1 : 0,
@@ -6146,7 +6148,7 @@
                     name: 'Label Inheritance for AI',
                     category: 'AI Governance',
                     points: 2,
-                    article: 'Art. 10',
+                    article: 'Article 10',
                     check: () => scanData.aiGovernance?.labelInheritanceEnabled === true,
                     status: () => scanData.aiGovernance?.labelInheritanceEnabled ? 'pass' : 'warn',
                     current: () => scanData.aiGovernance?.labelInheritanceEnabled ? 2 : 0,
@@ -6159,7 +6161,7 @@
                     name: 'AI Oversharing Audit',
                     category: 'AI Governance',
                     points: 4,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.aiGovernance?.oversharingAuditComplete === true,
                     status: () => {
                         if (scanData.aiGovernance?.oversharingAuditComplete) return 'pass';
@@ -6181,7 +6183,7 @@
                     name: 'Insider Risk for AI Users',
                     category: 'AI Governance',
                     points: 1,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.aiGovernance?.irmAiEnabled === true,
                     status: () => scanData.aiGovernance?.irmAiEnabled ? 'pass' : 'warn',
                     current: () => scanData.aiGovernance?.irmAiEnabled ? 1 : 0,
@@ -6194,7 +6196,7 @@
                     name: 'DSPM for AI',
                     category: 'AI Governance',
                     points: 4,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.aiGovernance?.dspmEnabled === true,
                     status: () => {
                         if (scanData.aiGovernance?.dspmEnabled) return 'pass';
@@ -6216,7 +6218,7 @@
                     name: 'Agent Governance Settings',
                     category: 'AI Governance',
                     points: 3,
-                    article: 'Art. 14',
+                    article: 'Article 14',
                     check: () => scanData.aiGovernance?.agentSettingsConfigured === true,
                     status: () => scanData.aiGovernance?.agentSettingsConfigured ? 'pass' : 'warn',
                     current: () => scanData.aiGovernance?.agentSettingsConfigured ? 3 : 0,
@@ -6230,7 +6232,7 @@
                     name: 'Insider Risk - Agent Policies',
                     category: 'AI Governance',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.aiGovernance?.irmAgentPolicies === true,
                     status: () => scanData.aiGovernance?.irmAgentPolicies ? 'pass' : 'warn',
                     current: () => scanData.aiGovernance?.irmAgentPolicies ? 2 : scanData.aiGovernance?.irmAgentPoliciesDefault ? 1 : 0,
@@ -6243,7 +6245,7 @@
                     name: 'Conditional Access for Agents',
                     category: 'AI Governance',
                     points: 3,
-                    article: 'Art. 14',
+                    article: 'Article 14',
                     check: () => scanData.aiGovernance?.caAgentsEnabled === true,
                     status: () => scanData.aiGovernance?.caAgentsEnabled ? 'pass' : 'warn',
                     current: () => scanData.aiGovernance?.caAgentsEnabled ? 3 : 0,
@@ -6256,7 +6258,7 @@
                     name: 'Adaptive Protection',
                     category: 'AI Governance',
                     points: 2,
-                    article: 'Art. 9',
+                    article: 'Article 9',
                     check: () => scanData.aiGovernance?.adaptiveProtectionEnabled === true,
                     status: () => {
                         if (scanData.aiGovernance?.adaptiveProtectionEnabled) return 'pass';
