@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="author" content="QuantiveCyber">
+    <meta name="copyright" content="© 2025 QuantiveCyber. All Rights Reserved.">
     <title>AI Readiness Scanner | QuantiveCyber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,6 +95,26 @@
 
         [data-theme="dark"] body {
             background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%);
+        }
+
+        [data-theme="dark"] .alert-banner.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        [data-theme="dark"] .alert-banner.info {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        [data-theme="dark"] .alert-banner.danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        [data-theme="dark"] .alert-banner.success {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
         }
 
         body {
@@ -524,6 +547,131 @@
             margin-bottom: 20px;
             position: relative;
             z-index: 1;
+        }
+
+        /* Info Button */
+        .info-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--ink-tertiary);
+            padding: 2px;
+            margin-left: 6px;
+            display: inline-flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .info-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Article Reference Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 16px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .modal-content {
+            background: #1e1e3f;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--ink-tertiary);
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--bg);
+            color: var(--ink);
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+            overflow-y: auto;
+            max-height: calc(80vh - 80px);
+        }
+
+        .article-item {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .article-item:last-child {
+            border-bottom: none;
+        }
+
+        .article-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .article-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .article-description {
+            font-size: 0.8125rem;
+            color: var(--ink-secondary);
+            line-height: 1.5;
         }
 
         @media (max-width: 1200px) {
@@ -2843,6 +2991,19 @@
     </style>
 </head>
 <body>
+    <!-- JavaScript Required Notice -->
+    <noscript>
+        <div style="position: fixed; inset: 0; background: #0a0a1a; color: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; font-family: sans-serif; text-align: center; padding: 40px; z-index: 9999;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <h1 style="font-size: 1.5rem; margin: 0;">JavaScript Required</h1>
+            <p style="color: #888; max-width: 400px;">This application requires JavaScript to function. Please enable JavaScript in your browser settings and refresh the page.</p>
+        </div>
+    </noscript>
+
     <!-- Connect Screen -->
     <div class="connect-screen" id="connectScreen">
         <div class="connect-card">
@@ -3133,6 +3294,13 @@
                                 </svg>
                             </div>
                             EU AI Act Risk Classification
+                            <button class="info-btn" onclick="showArticleReference()" title="View EU AI Act Articles">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                </svg>
+                            </button>
                         </div>
                         <span class="card-badge" style="background: var(--bg); color: var(--ink-tertiary); font-size: 0.625rem;">Informational</span>
                     </div>
@@ -3478,6 +3646,82 @@
             </div>
         </div>
 
+        <!-- EU AI Act Article Reference Modal -->
+        <div class="modal-overlay" id="articleModal" onclick="closeArticleModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                        EU AI Act - Article Reference
+                    </h2>
+                    <button class="modal-close" onclick="closeArticleModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="article-item">
+                        <span class="article-number">Article 6</span>
+                        <div class="article-title">Classification Rules for High-Risk AI Systems</div>
+                        <div class="article-description">Defines which AI systems are considered high-risk based on their intended purpose and the potential harm they may cause.</div>
+                    </div>
+                    <div class="article-item">
+                        <span class="article-number">Article 9</span>
+                        <div class="article-title">Risk Management System</div>
+                        <div class="article-description">Requires providers to establish, implement, document and maintain a risk management system throughout the entire lifecycle of a high-risk AI system. This includes identifying known and foreseeable risks, estimating and evaluating risks, and adopting suitable risk management measures.</div>
+                    </div>
+                    <div class="article-item">
+                        <span class="article-number">Article 10</span>
+                        <div class="article-title">Data and Data Governance</div>
+                        <div class="article-description">Training, validation and testing data sets shall be subject to appropriate data governance practices. Data must be relevant, representative, free of errors, and complete. Requires examination for possible biases and appropriate measures to address them.</div>
+                    </div>
+                    <div class="article-item">
+                        <span class="article-number">Article 12</span>
+                        <div class="article-title">Record-Keeping</div>
+                        <div class="article-description">High-risk AI systems shall technically allow for automatic recording of events ('logs') over the lifetime of the system. Logging must enable traceability of the AI system's functioning, including input data, reference databases used, and outputs produced.</div>
+                    </div>
+                    <div class="article-item">
+                        <span class="article-number">Article 13</span>
+                        <div class="article-title">Transparency and Information to Users</div>
+                        <div class="article-description">High-risk AI systems shall be designed and developed to ensure their operation is sufficiently transparent. Users must be provided with clear information about the AI system's capabilities and limitations.</div>
+                    </div>
+                    <div class="article-item">
+                        <span class="article-number">Article 14</span>
+                        <div class="article-title">Human Oversight</div>
+                        <div class="article-description">High-risk AI systems shall be designed to allow effective oversight by natural persons during use. Human oversight aims to prevent or minimise risks to health, safety, or fundamental rights. Includes ability to fully understand, interpret outputs, decide not to use, or intervene.</div>
+                    </div>
+                    <div class="article-item">
+                        <span class="article-number">Article 15</span>
+                        <div class="article-title">Accuracy, Robustness and Cybersecurity</div>
+                        <div class="article-description">High-risk AI systems shall be designed to achieve appropriate levels of accuracy, robustness, and cybersecurity. Systems must be resilient against attempts by unauthorised third parties to exploit vulnerabilities.</div>
+                    </div>
+                    <div class="article-item">
+                        <span class="article-number">Article 17</span>
+                        <div class="article-title">Quality Management System</div>
+                        <div class="article-description">Providers shall establish a quality management system ensuring compliance with the regulation. Includes strategies for regulatory compliance, techniques for design, development and examination of the AI system.</div>
+                    </div>
+                    <div class="article-item">
+                        <span class="article-number">Article 20</span>
+                        <div class="article-title">Corrective Actions</div>
+                        <div class="article-description">Providers must take immediate corrective action if the AI system presents a risk. This includes withdrawal, disabling, recall, or informing relevant authorities about non-compliance and corrective actions taken.</div>
+                    </div>
+                    <div class="article-item">
+                        <span class="article-number">Article 52</span>
+                        <div class="article-title">Transparency Obligations for Certain AI Systems</div>
+                        <div class="article-description">Users must be informed when interacting with an AI system (e.g., chatbots). AI-generated content must be marked as artificially generated or manipulated. Applies to emotion recognition and biometric categorisation systems.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <footer class="footer">
             <div class="footer-inner">
                 <span>2025 QuantiveCyber. Automated scan for planning purposes only. Not legal advice.</span>
@@ -3490,6 +3734,52 @@
     </div>
 
     <script>
+        // ============================================
+        // CODE PROTECTION
+        // ============================================
+        (function() {
+            // Disable right-click context menu
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Disable keyboard shortcuts for developer tools and view source
+            document.addEventListener('keydown', function(e) {
+                // F12
+                if (e.keyCode === 123) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+Shift+I (Dev Tools)
+                if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+Shift+J (Console)
+                if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+U (View Source)
+                if (e.ctrlKey && e.keyCode === 85) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+S (Save)
+                if (e.ctrlKey && e.keyCode === 83) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            // Console warning
+            console.log('%c⚠️ Warning', 'color: red; font-size: 24px; font-weight: bold;');
+            console.log('%cThis is proprietary software owned by QuantiveCyber.', 'color: #666; font-size: 14px;');
+            console.log('%cUnauthorized copying or distribution is prohibited.', 'color: #666; font-size: 14px;');
+            console.log('%c© 2025 QuantiveCyber - All Rights Reserved', 'color: #2563eb; font-size: 12px;');
+        })();
+
         // ============================================
         // TRACKING CONFIGURATION
         // ============================================
@@ -6948,6 +7238,24 @@
                 chevron.style.transform = 'rotate(-90deg)';
             }
         }
+
+        function showArticleReference() {
+            document.getElementById('articleModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('articleModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeArticleModal();
+            }
+        });
 
         function toggleCheckDetails(index) {
             const checkItem = document.getElementById(`check-${index}`);
