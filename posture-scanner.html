@@ -25,6 +25,7 @@
             --bg: #f9fafb;
             --bg-secondary: #f3f4f6;
             --white: #ffffff;
+            --surface: #ffffff;
             --border: #e5e7eb;
             --border-light: #f3f4f6;
 
@@ -50,6 +51,47 @@
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        /* Dark Mode Theme */
+        [data-theme="dark"] {
+            --ink: #e0e0e0;
+            --ink-secondary: #b0b0b0;
+            --ink-tertiary: #888888;
+            --ink-muted: #666666;
+            --bg: #0a0a1a;
+            --bg-secondary: #12122a;
+            --white: #1a1a3a;
+            --surface: #1a1a3a;
+            --border: rgba(255, 255, 255, 0.1);
+            --border-light: rgba(255, 255, 255, 0.05);
+
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: rgba(59, 130, 246, 0.15);
+
+            --success: #22c55e;
+            --success-light: rgba(34, 197, 94, 0.15);
+            --success-border: rgba(34, 197, 94, 0.3);
+
+            --warning: #f59e0b;
+            --warning-light: rgba(245, 158, 11, 0.15);
+            --warning-border: rgba(245, 158, 11, 0.3);
+
+            --danger: #ef4444;
+            --danger-light: rgba(239, 68, 68, 0.15);
+            --danger-border: rgba(239, 68, 68, 0.3);
+
+            --purple: #a78bfa;
+            --purple-light: rgba(139, 92, 246, 0.15);
+
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%);
         }
 
         body {
@@ -87,8 +129,6 @@
             height: 64px;
             display: flex;
             align-items: center;
-            position: sticky;
-            top: 0;
             z-index: 100;
         }
 
@@ -280,6 +320,8 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 16px;
             margin-bottom: 24px;
+            position: relative;
+            z-index: 10;
         }
 
         @media (max-width: 1024px) {
@@ -302,6 +344,81 @@
             display: flex;
             align-items: flex-start;
             gap: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+            transform: translateY(-2px);
+            z-index: 100;
+        }
+
+        .stat-card-popup {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: none;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        [data-theme="dark"] .stat-card-popup {
+            background: #1e1e3f;
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-card:hover .stat-card-popup {
+            display: block;
+        }
+
+        .stat-popup-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--ink-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .stat-popup-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            font-size: 0.8125rem;
+            color: var(--ink-secondary);
+        }
+
+        .stat-popup-item .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .stat-popup-item .dot.pass { background: var(--success); }
+        .stat-popup-item .dot.fail { background: var(--danger); }
+        .stat-popup-item .dot.warn { background: var(--warning); }
+        .stat-popup-item .dot.license { background: var(--purple); }
+
+        .stat-popup-empty {
+            font-size: 0.8125rem;
+            color: var(--ink-muted);
+            text-align: center;
+            padding: 12px 0;
         }
 
         .stat-icon {
@@ -405,6 +522,8 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         @media (max-width: 1200px) {
@@ -1181,6 +1300,39 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-weight: 500;
+            position: relative;
+            cursor: help;
+        }
+
+        .score-control-article[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 400;
+            white-space: normal;
+            width: 240px;
+            text-align: left;
+            line-height: 1.4;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .score-control-article[data-tooltip]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #1a1a2e;
+            z-index: 1000;
         }
 
         .score-control-desc {
@@ -1213,11 +1365,11 @@
         .score-control-impact {
             font-size: 0.875rem;
             font-weight: 700;
-            color: var(--success);
+            color: var(--warning);
         }
 
         .score-control-impact.earned {
-            color: var(--ink-tertiary);
+            color: var(--success);
         }
 
         .score-control-label {
@@ -2790,6 +2942,22 @@
                         <div class="tenant-name" id="tenantName">Contoso Ltd</div>
                         <div class="scan-time" id="scanTime">Last scan: Just now</div>
                     </div>
+                    <button class="btn btn-ghost" onclick="toggleDarkMode()" id="darkModeToggle" title="Toggle dark mode">
+                        <svg class="icon-sm dark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                        <svg class="icon-sm light-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                    </button>
                     <button class="btn btn-secondary" onclick="exportReport()">
                         <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
@@ -2851,6 +3019,10 @@
                         <div class="stat-value" id="statControlsPassed">0/41</div>
                         <div class="stat-label">Controls Passing</div>
                     </div>
+                    <div class="stat-card-popup" id="popupControlsPassed">
+                        <div class="stat-popup-title">Passing Controls by Category</div>
+                        <div id="popupControlsPassedContent"></div>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon orange">
@@ -2864,6 +3036,10 @@
                         <div class="stat-value" id="statCriticalGaps">0</div>
                         <div class="stat-label">Critical Gaps</div>
                     </div>
+                    <div class="stat-card-popup" id="popupCriticalGaps">
+                        <div class="stat-popup-title">High-Impact Missing Controls (3+ pts)</div>
+                        <div id="popupCriticalGapsContent"></div>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon purple">
@@ -2876,6 +3052,10 @@
                         <div class="stat-value" id="statLicenseGaps">0</div>
                         <div class="stat-label">License Gaps</div>
                     </div>
+                    <div class="stat-card-popup" id="popupLicenseGaps">
+                        <div class="stat-popup-title">Controls Blocked by Licensing</div>
+                        <div id="popupLicenseGapsContent"></div>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon blue">
@@ -2887,6 +3067,10 @@
                     <div class="stat-content">
                         <div class="stat-value" id="statPointsToReady">+71</div>
                         <div class="stat-label">Points to AI Ready</div>
+                    </div>
+                    <div class="stat-card-popup" id="popupPointsToReady">
+                        <div class="stat-popup-title">AI Readiness Threshold</div>
+                        <div id="popupPointsToReadyContent"></div>
                     </div>
                 </div>
             </div>
@@ -2960,37 +3144,12 @@
                 </div>
             </div>
 
-            <!-- Improve Your Score Section -->
-            <div class="section-full" style="margin-top: 20px;">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="card-title-icon" style="background: var(--success-light); color: var(--success);">
-                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                                    <polyline points="17 6 23 6 23 12"/>
-                                </svg>
-                            </div>
-                            Improve Your Score
-                        </div>
-                        <span class="card-badge" style="background: var(--success-light); color: var(--success);" id="potentialPointsBadge">+0 pts available</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="improve-score-section">
-                            <div class="score-control-list" id="pendingControlsList">
-                                <!-- Dynamically populated -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Implemented Controls (Collapsible) -->
+            <!-- Implemented Controls -->
             <div class="section-full" style="margin-top: 20px;">
                 <div class="card">
                     <div class="card-header" style="cursor: pointer;" onclick="toggleImplementedControls()">
                         <div class="card-title">
-                            <div class="card-title-icon" style="background: var(--primary-light); color: var(--primary);">
+                            <div class="card-title-icon" style="background: var(--success-light); color: var(--success);">
                                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                                     <polyline points="22 4 12 14.01 9 11.01"/>
@@ -3008,6 +3167,36 @@
                     <div class="card-body" id="implementedControlsBody" style="display: none;">
                         <div class="score-control-list" id="implementedControlsList">
                             <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Improve Your Score Section (Collapsible) -->
+            <div class="section-full" style="margin-top: 20px;">
+                <div class="card">
+                    <div class="card-header" style="cursor: pointer;" onclick="toggleImproveScore()">
+                        <div class="card-title">
+                            <div class="card-title-icon" style="background: var(--warning-light); color: var(--warning);">
+                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                    <polyline points="17 6 23 6 23 12"/>
+                                </svg>
+                            </div>
+                            Improve Your Score
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="card-badge" style="background: var(--warning-light); color: var(--warning);" id="potentialPointsBadge">+0 pts available</span>
+                            <svg id="improveScoreChevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-body" id="improveScoreBody">
+                        <div class="improve-score-section">
+                            <div class="score-control-list" id="pendingControlsList">
+                                <!-- Dynamically populated -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3548,6 +3737,34 @@
             document.getElementById('connectScreen').style.display = 'flex';
         }
 
+        // Dark mode toggle
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+
+            if (isDark) {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                document.querySelector('.dark-icon').style.display = 'block';
+                document.querySelector('.light-icon').style.display = 'none';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                document.querySelector('.dark-icon').style.display = 'none';
+                document.querySelector('.light-icon').style.display = 'block';
+            }
+        }
+
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.querySelector('.dark-icon').style.display = 'none';
+                document.querySelector('.light-icon').style.display = 'block';
+            }
+        }
+
         // Get access token (silently if possible)
         async function getAccessToken(scopes = loginRequest.scopes) {
             if (!msalInstance || !currentAccount) {
@@ -3645,6 +3862,7 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
             initializeMsal();
 
             // Check for shared results first (highest priority)
@@ -3674,6 +3892,30 @@
             azure: `<svg viewBox="0 0 24 24" fill="#0089d6"><path d="M13.05 4.24L6.56 18.05L2 18l5.09-8.88L13.05 4.24M13.75 5.33l2.32 6.67l-5.2 5.95l8.67 1.8L22 5.33H13.75"/></svg>`,
             default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>`
         };
+
+        // EU AI Act Article Explanations
+        const euAiActArticles = {
+            'Art. 9': 'Risk Management System - Requires establishing, implementing, and maintaining a risk management system throughout the AI lifecycle.',
+            'Art. 10': 'Data Governance - Data used to train AI must be relevant, representative, and free of errors. Requires data quality controls.',
+            'Art. 12': 'Record-Keeping - AI systems must enable automatic recording of events (logs) for traceability and audit purposes.',
+            'Art. 14': 'Human Oversight - AI systems must be designed to allow effective human oversight and intervention.',
+            'Art. 15': 'Accuracy & Security - AI systems must achieve appropriate levels of accuracy, robustness, and cybersecurity.',
+            'Art. 20': 'Corrective Actions - Providers must take corrective action and inform authorities if AI systems present risks.',
+            'Art. 10 & 15': 'Data Governance & Security - Combines data quality requirements with accuracy and cybersecurity obligations.',
+            'Art. 12 & 20': 'Logging & Monitoring - Combines record-keeping with corrective action requirements for ongoing compliance.'
+        };
+
+        // Get tooltip for article reference
+        function getArticleTooltip(article) {
+            if (!article) return '';
+            // Try exact match first
+            if (euAiActArticles[article]) return euAiActArticles[article];
+            // Try to find partial match (e.g., "Art. 10" in "Art. 10(3)")
+            for (const [key, value] of Object.entries(euAiActArticles)) {
+                if (article.includes(key.replace('Art. ', ''))) return value;
+            }
+            return 'EU AI Act compliance requirement';
+        }
 
         // Microsoft Learn documentation links
         const msLearnLinks = {
@@ -6198,14 +6440,14 @@
             const breakdown = scanData.scoreBreakdown;
             if (breakdown) {
                 const allControls = breakdown.allControls || [];
-                const controlsPassed = allControls.filter(c => c.status() === 'pass').length;
-                const criticalGaps = allControls.filter(c => c.status() === 'fail' && c.points >= 3).length;
-                const licenseGaps = allControls.filter(c => c.status() === 'warn' && c.licenseRequired).length;
+                const passingControls = allControls.filter(c => c.status() === 'pass');
+                const criticalGapControls = allControls.filter(c => c.status() === 'fail' && c.points >= 3);
+                const licenseGapControls = allControls.filter(c => c.status() === 'warn' && c.licenseRequired);
                 const pointsToReady = Math.max(0, 71 - earned);
 
-                document.getElementById('statControlsPassed').textContent = `${controlsPassed}/${allControls.length}`;
-                document.getElementById('statCriticalGaps').textContent = criticalGaps;
-                document.getElementById('statLicenseGaps').textContent = licenseGaps;
+                document.getElementById('statControlsPassed').textContent = `${passingControls.length}/${allControls.length}`;
+                document.getElementById('statCriticalGaps').textContent = criticalGapControls.length;
+                document.getElementById('statLicenseGaps').textContent = licenseGapControls.length;
                 document.getElementById('statPointsToReady').textContent = pointsToReady === 0 ? 'AI Ready' : `+${pointsToReady}`;
 
                 // Update icon color based on AI Ready status
@@ -6214,6 +6456,45 @@
                     readyIcon.classList.remove('blue');
                     readyIcon.classList.add('green');
                 }
+
+                // Populate popup content - Controls Passing (grouped by category)
+                const passingByCategory = {};
+                passingControls.forEach(c => {
+                    if (!passingByCategory[c.category]) passingByCategory[c.category] = 0;
+                    passingByCategory[c.category]++;
+                });
+                const totalByCategory = {};
+                allControls.forEach(c => {
+                    if (!totalByCategory[c.category]) totalByCategory[c.category] = 0;
+                    totalByCategory[c.category]++;
+                });
+                document.getElementById('popupControlsPassedContent').innerHTML = Object.entries(passingByCategory).length > 0
+                    ? Object.entries(totalByCategory).map(([cat, total]) => {
+                        const passed = passingByCategory[cat] || 0;
+                        return `<div class="stat-popup-item"><span class="dot ${passed === total ? 'pass' : passed > 0 ? 'warn' : 'fail'}"></span>${cat}: ${passed}/${total}</div>`;
+                    }).join('')
+                    : '<div class="stat-popup-empty">No controls passing yet</div>';
+
+                // Populate popup content - Critical Gaps
+                document.getElementById('popupCriticalGapsContent').innerHTML = criticalGapControls.length > 0
+                    ? criticalGapControls.slice(0, 8).map(c => `<div class="stat-popup-item"><span class="dot fail"></span>${c.name} <span style="color: var(--danger); font-weight: 600; margin-left: auto;">+${c.points}pts</span></div>`).join('')
+                        + (criticalGapControls.length > 8 ? `<div class="stat-popup-item" style="color: var(--ink-muted);">...and ${criticalGapControls.length - 8} more</div>` : '')
+                    : '<div class="stat-popup-empty">No critical gaps - great!</div>';
+
+                // Populate popup content - License Gaps
+                document.getElementById('popupLicenseGapsContent').innerHTML = licenseGapControls.length > 0
+                    ? licenseGapControls.map(c => `<div class="stat-popup-item"><span class="dot license"></span>${c.name} <span style="color: var(--purple); font-size: 0.7rem; margin-left: auto;">${c.licenseRequired}</span></div>`).join('')
+                    : '<div class="stat-popup-empty">No license gaps detected</div>';
+
+                // Populate popup content - Points to AI Ready
+                document.getElementById('popupPointsToReadyContent').innerHTML = pointsToReady === 0
+                    ? `<div class="stat-popup-item"><span class="dot pass"></span>Score: ${earned}/100 - AI Ready!</div>
+                       <div class="stat-popup-item"><span class="dot pass"></span>Safe to deploy Copilot</div>
+                       <div class="stat-popup-item"><span class="dot warn"></span>Agents: Ready with controls</div>`
+                    : `<div class="stat-popup-item"><span class="dot ${earned >= 36 ? 'warn' : 'fail'}"></span>Current: ${earned}/100 points</div>
+                       <div class="stat-popup-item"><span class="dot pass"></span>Target: 71/100 (AI Ready)</div>
+                       <div class="stat-popup-item"><span class="dot ${earned >= 36 ? 'warn' : 'fail'}"></span>Gap: ${pointsToReady} points needed</div>
+                       <div class="stat-popup-item" style="margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border-light); font-size: 0.75rem; color: var(--ink-muted);">Reach 71+ points for safe Copilot deployment</div>`;
             }
 
             // Risk Classification - Dynamic rendering with system names
@@ -6541,7 +6822,7 @@
                                 <span style="font-size: 0.75rem; color: var(--ink-tertiary);">${controls.length} items</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 0.875rem; font-weight: 600; color: var(--success);">+${categoryPoints} pts</span>
+                                <span style="font-size: 0.875rem; font-weight: 600; color: var(--warning);">+${categoryPoints} pts</span>
                                 <svg class="category-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
                             </div>
                         </div>
@@ -6556,7 +6837,7 @@
                                     <div class="score-control-content">
                                         <div class="score-control-header">
                                             <span class="score-control-name">${control.name}</span>
-                                            <span class="score-control-article">${control.article}</span>
+                                            <span class="score-control-article" data-tooltip="${getArticleTooltip(control.article)}">${control.article}</span>
                                             ${control.licenseRequired ? `<span class="score-control-article" style="background: var(--purple-light); color: var(--purple);">${control.licenseRequired}</span>` : ''}
                                         </div>
                                         <div class="score-control-desc">${control.description}</div>
@@ -6612,7 +6893,7 @@
                                     <div class="score-control-content">
                                         <div class="score-control-header">
                                             <span class="score-control-name">${control.name}</span>
-                                            <span class="score-control-article">${control.article}</span>
+                                            <span class="score-control-article" data-tooltip="${getArticleTooltip(control.article)}">${control.article}</span>
                                         </div>
                                         <div class="score-control-desc">${control.description}</div>
                                     </div>
@@ -6652,6 +6933,19 @@
             } else {
                 body.style.display = 'none';
                 chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function toggleImproveScore() {
+            const body = document.getElementById('improveScoreBody');
+            const chevron = document.getElementById('improveScoreChevron');
+
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                body.style.display = 'none';
+                chevron.style.transform = 'rotate(-90deg)';
             }
         }
 
