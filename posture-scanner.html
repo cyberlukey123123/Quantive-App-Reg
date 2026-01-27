@@ -696,6 +696,53 @@
             }
         }
 
+        .dashboard-grid.score-config-grid {
+            grid-template-columns: 1fr 2fr;
+            align-items: start;
+        }
+
+        .dashboard-grid.score-config-grid .score-summary {
+            flex-direction: column;
+            text-align: center;
+            gap: 12px;
+        }
+
+        .dashboard-grid.score-config-grid .score-summary-details {
+            text-align: center;
+        }
+
+        .dashboard-grid.score-config-grid .tenant-config-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid.score-config-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid.score-config-grid {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-grid.score-config-grid .score-summary {
+                flex-direction: row;
+                text-align: left;
+            }
+            .dashboard-grid.score-config-grid .score-summary-details {
+                text-align: left;
+            }
+            .dashboard-grid.score-config-grid .tenant-config-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-grid.score-config-grid .tenant-config-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Score Display */
         .score-display {
             display: flex;
@@ -1334,6 +1381,176 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+        }
+
+        /* Tenant Configuration Cards */
+        .tenant-config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+        }
+
+        .config-card {
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            background: var(--surface);
+            overflow: hidden;
+            cursor: pointer;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .config-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .config-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--bg);
+        }
+
+        .config-card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .config-card-title {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .config-card-title h4 {
+            margin: 0;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .config-card-status {
+            font-size: 0.75rem;
+            color: var(--ink-secondary);
+            margin-top: 2px;
+            display: block;
+        }
+
+        .config-card-status.configured {
+            color: var(--success);
+        }
+
+        .config-card-status.partial {
+            color: var(--warning);
+        }
+
+        .config-card-status.not-configured {
+            color: var(--danger);
+        }
+
+        .config-card-chevron {
+            flex-shrink: 0;
+            color: var(--ink-tertiary);
+            transition: transform 0.2s;
+        }
+
+        .config-card.expanded .config-card-chevron {
+            transform: rotate(180deg);
+        }
+
+        .config-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .config-card.expanded .config-card-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .config-card-content {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .config-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.8125rem;
+        }
+
+        .config-item:last-child {
+            border-bottom: none;
+        }
+
+        .config-item-name {
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        .config-item-value {
+            color: var(--ink-secondary);
+            text-align: right;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .config-item-badge {
+            font-size: 0.6875rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .config-item-badge.green {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .config-item-badge.orange {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .config-item-badge.red {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .config-empty {
+            color: var(--ink-tertiary);
+            font-size: 0.8125rem;
+            text-align: center;
+            padding: 16px;
+        }
+
+        .config-list-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            font-size: 0.8125rem;
+            color: var(--ink);
+        }
+
+        .config-list-item::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            flex-shrink: 0;
         }
 
         .score-category-group {
@@ -2938,6 +3155,64 @@
             line-height: 1.4;
         }
 
+        /* Compliance Gaps List */
+        .compliance-gaps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .compliance-gap-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            background: var(--bg);
+            border-left: 3px solid var(--danger);
+        }
+
+        .compliance-gap-item.warning {
+            border-left-color: var(--warning);
+        }
+
+        .compliance-gap-item.info {
+            border-left-color: var(--primary);
+        }
+
+        .compliance-gap-icon {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            color: var(--danger);
+        }
+
+        .compliance-gap-item.warning .compliance-gap-icon {
+            color: var(--warning);
+        }
+
+        .compliance-gap-item.info .compliance-gap-icon {
+            color: var(--primary);
+        }
+
+        .compliance-gap-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .compliance-gap-title {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+
+        .compliance-gap-desc {
+            font-size: 0.75rem;
+            color: var(--ink-secondary);
+            line-height: 1.4;
+        }
+
         .source-links {
             display: flex;
             flex-wrap: wrap;
@@ -3240,10 +3515,10 @@
                 </div>
             </div>
 
-            <!-- Main Grid -->
-            <div class="dashboard-grid">
-                <!-- Score Card with Detailed Breakdown -->
-                <div class="card" style="grid-column: span 2;">
+            <!-- Score and Tenant Config Side-by-Side -->
+            <div class="dashboard-grid score-config-grid">
+                <!-- AI Readiness Score Card -->
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
                             <div class="card-title-icon" style="background: var(--primary-light); color: var(--primary);">
@@ -3288,29 +3563,271 @@
                     </div>
                 </div>
 
-                <!-- Risk Classification -->
+                <!-- Tenant Configuration Section -->
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <div class="card-title-icon" style="background: var(--warning-light); color: var(--warning);">
+                            <div class="card-title-icon" style="background: var(--purple-light); color: var(--purple);">
                                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                 </svg>
                             </div>
-                            EU AI Act Risk Classification
-                            <button class="info-btn" onclick="showArticleReference()" title="View EU AI Act Articles">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <line x1="12" y1="16" x2="12" y2="12"/>
-                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
-                                </svg>
-                            </button>
+                            Current Tenant Configuration
                         </div>
-                        <span class="card-badge" style="background: var(--bg); color: var(--ink-tertiary); font-size: 0.625rem;">Informational</span>
+                        <span class="card-badge" style="background: var(--purple-light); color: var(--purple);" id="tenantConfigBadge">10 Areas</span>
                     </div>
-                    <div class="card-body">
-                        <div class="risk-list" id="riskClassificationList">
-                            <!-- Dynamically populated -->
+                    <div class="card-body" id="tenantConfigBody">
+                        <div class="tenant-config-grid">
+                            <!-- Sensitivity Labels Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: var(--success-light); color: var(--success);">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                                            <line x1="7" y1="7" x2="7.01" y2="7"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Sensitivity Labels</h4>
+                                        <span class="config-card-status" id="labelsStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="labelsContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DLP Policies Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: var(--primary-light); color: var(--primary);">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>DLP Policies</h4>
+                                        <span class="config-card-status" id="dlpStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="dlpContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SharePoint Settings Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #dbeafe; color: #2563eb;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="18" cy="5" r="3"/>
+                                            <circle cx="6" cy="12" r="3"/>
+                                            <circle cx="18" cy="19" r="3"/>
+                                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>SharePoint & Sharing</h4>
+                                        <span class="config-card-status" id="sharepointStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="sharepointContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Identity & MFA Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: var(--warning-light); color: var(--warning);">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                            <circle cx="9" cy="7" r="4"/>
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Identity & MFA</h4>
+                                        <span class="config-card-status" id="mfaStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="mfaContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AI Governance / IRM Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: var(--danger-light); color: var(--danger);">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+                                            <rect x="9" y="9" width="6" height="6"/>
+                                            <line x1="9" y1="1" x2="9" y2="4"/>
+                                            <line x1="15" y1="1" x2="15" y2="4"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>AI Governance & IRM</h4>
+                                        <span class="config-card-status" id="irmStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="irmContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Licenses & Subscriptions Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #dbeafe; color: #2563eb;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                            <path d="M3 9h18"/>
+                                            <path d="M9 21V9"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Licenses & Subscriptions</h4>
+                                        <span class="config-card-status" id="licensesStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="licensesContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Security Score Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #dcfce7; color: #16a34a;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                            <polyline points="9 12 11 14 15 10"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Microsoft Secure Score</h4>
+                                        <span class="config-card-status" id="secureScoreStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="secureScoreContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- OAuth App Consents Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #fef3c7; color: #d97706;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                            <polyline points="10 17 15 12 10 7"/>
+                                            <line x1="15" y1="12" x2="3" y2="12"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>OAuth App Consents</h4>
+                                        <span class="config-card-status" id="oauthStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="oauthContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Discovered Cloud Apps Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #f3e8ff; color: #9333ea;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Discovered Cloud Apps</h4>
+                                        <span class="config-card-status" id="cloudAppsStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="cloudAppsContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Audit Logging Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #e0e7ff; color: #4f46e5;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                            <polyline points="14 2 14 8 20 8"/>
+                                            <line x1="16" y1="13" x2="8" y2="13"/>
+                                            <line x1="16" y1="17" x2="8" y2="17"/>
+                                            <polyline points="10 9 9 9 8 9"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Audit Logging</h4>
+                                        <span class="config-card-status" id="auditStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="auditContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3344,7 +3861,7 @@
                 </div>
             </div>
 
-            <!-- Improve Your Score Section (Collapsible) -->
+            <!-- Improve Your Score Section -->
             <div class="section-full" style="margin-top: 20px;">
                 <div class="card">
                     <div class="card-header" style="cursor: pointer;" onclick="toggleImproveScore()">
@@ -3358,13 +3875,14 @@
                             Improve Your Score
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="card-badge" style="background: var(--danger-light); color: var(--danger);" id="criticalGapsBadge">0 Critical Gaps</span>
                             <span class="card-badge" style="background: var(--warning-light); color: var(--warning);" id="potentialPointsBadge">+0 pts available</span>
                             <svg id="improveScoreChevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;">
                                 <polyline points="6 9 12 15 18 9"/>
                             </svg>
                         </div>
                     </div>
-                    <div class="card-body" id="improveScoreBody">
+                    <div class="card-body" id="improveScoreBody" style="display: none;">
                         <div class="improve-score-section">
                             <div class="score-control-list" id="pendingControlsList">
                                 <!-- Dynamically populated -->
@@ -3374,88 +3892,71 @@
                 </div>
             </div>
 
-            <!-- AI Systems -->
-            <div class="section-full">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="card-title-icon" style="background: var(--primary-light); color: var(--primary);">
-                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
-                                    <rect x="9" y="9" width="6" height="6"/>
-                                    <line x1="9" y1="1" x2="9" y2="4"/>
-                                    <line x1="15" y1="1" x2="15" y2="4"/>
-                                    <line x1="9" y1="20" x2="9" y2="23"/>
-                                    <line x1="15" y1="20" x2="15" y2="23"/>
-                                    <line x1="20" y1="9" x2="23" y2="9"/>
-                                    <line x1="20" y1="14" x2="23" y2="14"/>
-                                    <line x1="1" y1="9" x2="4" y2="9"/>
-                                    <line x1="1" y1="14" x2="4" y2="14"/>
-                                </svg>
-                            </div>
-                            Discovered AI Systems
+            <!-- AI Systems (Full Width) -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-title-icon" style="background: var(--primary-light); color: var(--primary);">
+                            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+                                <rect x="9" y="9" width="6" height="6"/>
+                                <line x1="9" y1="1" x2="9" y2="4"/>
+                                <line x1="15" y1="1" x2="15" y2="4"/>
+                                <line x1="9" y1="20" x2="9" y2="23"/>
+                                <line x1="15" y1="20" x2="15" y2="23"/>
+                                <line x1="20" y1="9" x2="23" y2="9"/>
+                                <line x1="20" y1="14" x2="23" y2="14"/>
+                                <line x1="1" y1="9" x2="4" y2="9"/>
+                                <line x1="1" y1="14" x2="4" y2="14"/>
+                            </svg>
                         </div>
-                        <span class="card-badge" style="background: var(--primary-light); color: var(--primary);" id="aiSystemsBadge">12 Systems</span>
+                        Discovered AI Systems
                     </div>
-                    <div class="card-body">
-                        <div class="tabs">
-                            <button class="tab active" onclick="filterAISystems('all', this)">All Systems</button>
-                            <button class="tab" onclick="filterAISystems('high', this)">High-Risk</button>
-                            <button class="tab" onclick="filterAISystems('limited', this)">Limited Risk</button>
-                            <button class="tab" onclick="filterAISystems('shadow', this)">Shadow AI</button>
-                        </div>
-                        <div class="systems-container">
-                            <div id="aiSystemsList"></div>
-                        </div>
+                    <span class="card-badge" style="background: var(--primary-light); color: var(--primary);" id="aiSystemsBadge">12 Systems</span>
+                </div>
+                <div class="card-body">
+                    <div class="tabs">
+                        <button class="tab active" onclick="filterAISystems('all', this)">All Systems</button>
+                        <button class="tab" onclick="filterAISystems('high', this)">High-Risk</button>
+                        <button class="tab" onclick="filterAISystems('limited', this)">Limited Risk</button>
+                        <button class="tab" onclick="filterAISystems('shadow', this)">Shadow AI</button>
+                    </div>
+                    <div class="systems-container">
+                        <div id="aiSystemsList"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Two Column -->
-            <div class="dashboard-grid two-col">
-                <!-- Priority Gaps -->
-                <div class="card" id="gapsSection">
+            <!-- Risk Classification and Timeline Grid (Side by Side) -->
+            <div class="dashboard-grid two-col" style="margin-top: 20px;">
+                <!-- EU AI Act Risk Classification -->
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <div class="card-title-icon" style="background: var(--danger-light); color: var(--danger);">
+                            <div class="card-title-icon" style="background: var(--warning-light); color: var(--warning);">
                                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                </svg>
+                            </div>
+                            EU AI Act Risk Classification
+                            <button class="info-btn" onclick="showArticleReference()" title="View EU AI Act Articles">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="10"/>
-                                    <line x1="12" y1="8" x2="12" y2="12"/>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
                                 </svg>
-                            </div>
-                            Priority Gaps
+                            </button>
                         </div>
-                        <span class="card-badge" style="background: var(--danger-light); color: var(--danger);" id="gapsBadge">4 Issues</span>
+                        <span class="card-badge" style="background: var(--bg); color: var(--ink-tertiary); font-size: 0.625rem;">Informational</span>
                     </div>
                     <div class="card-body">
-                        <div class="gaps-list" id="gapsList"></div>
+                        <div class="risk-list" id="riskClassificationList">
+                            <!-- Dynamically populated -->
+                        </div>
                     </div>
                 </div>
 
-                <!-- Compliance Checks -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="card-title-icon" style="background: var(--success-light); color: var(--success);">
-                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                                    <polyline points="22 4 12 14.01 9 11.01"/>
-                                </svg>
-                            </div>
-                            Compliance Checks
-                        </div>
-                        <span class="card-badge" style="background: var(--success-light); color: var(--success);">24/32 Passed</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="checks-list" id="checksList"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Timeline and Data Governance -->
-            <div class="dashboard-grid two-col">
-                <!-- Timeline -->
+                <!-- Compliance Timeline -->
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
@@ -3472,34 +3973,6 @@
                     </div>
                     <div class="card-body">
                         <div class="timeline" id="timeline"></div>
-                    </div>
-                </div>
-
-                <!-- Data Governance -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="card-title-icon" style="background: var(--purple-light); color: var(--purple);">
-                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                </svg>
-                            </div>
-                            Data Governance Status
-                        </div>
-                    </div>
-                    <div class="card-body" style="padding: 0;">
-                        <table class="data-table dg-table">
-                            <thead>
-                                <tr>
-                                    <th>Control</th>
-                                    <th>EU AI Act Requirement</th>
-                                    <th>Status</th>
-                                    <th>Coverage</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dataGovernanceTable"></tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -3534,29 +4007,14 @@
                         <div class="info-block">
                             <h4>
                                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-                                    <polyline points="2 17 12 22 22 17"/>
-                                    <polyline points="2 12 12 17 22 12"/>
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                    <line x1="12" y1="9" x2="12" y2="13"/>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
                                 </svg>
-                                Risk Classification
+                                Key Compliance Gaps
                             </h4>
-                            <div class="risk-level-list">
-                                <div class="risk-level-item prohibited">
-                                    <span class="risk-level-badge">Prohibited</span>
-                                    <span class="risk-level-text">Banned AI practices (e.g., social scoring, subliminal manipulation, real-time biometric ID in public)</span>
-                                </div>
-                                <div class="risk-level-item high">
-                                    <span class="risk-level-badge">High-Risk</span>
-                                    <span class="risk-level-text">AI in critical areas: HR/recruitment, credit scoring, education, law enforcement. Requires conformity assessment.</span>
-                                </div>
-                                <div class="risk-level-item limited">
-                                    <span class="risk-level-badge">Limited</span>
-                                    <span class="risk-level-text">AI with transparency obligations (chatbots, emotion recognition). Must disclose AI interaction to users.</span>
-                                </div>
-                                <div class="risk-level-item minimal">
-                                    <span class="risk-level-badge">Minimal</span>
-                                    <span class="risk-level-text">Low-risk AI (spam filters, AI-enabled games). No mandatory requirements, voluntary codes of conduct.</span>
-                                </div>
+                            <div class="compliance-gaps-list" id="complianceGapsList">
+                                <!-- Dynamically populated -->
                             </div>
                         </div>
                         <div class="info-block">
@@ -4832,6 +5290,10 @@
 
         // Process application and service principal data to identify AI systems
         function processApplicationData(apps, servicePrincipals, oauthGrants) {
+            // Store for tenant config display
+            scanData._oauthGrants = oauthGrants || [];
+            scanData._servicePrincipals = servicePrincipals || [];
+
             // Comprehensive AI detection keywords
             const aiKeywords = [
                 // General AI terms
@@ -5473,6 +5935,9 @@
                 value: aiPolicies.length > 0 ? `${aiPolicies.length} policies` : "Not found",
                 details: aiPolicyDetails.length > 0 ? aiPolicyDetails : undefined
             });
+
+            // Store policies for tenant config display
+            scanData.conditionalAccessPolicies = policies || [];
         }
 
         // Build a human-readable description for a Conditional Access policy
@@ -5488,6 +5953,9 @@
 
         // Process subscriptions for Copilot licenses
         function processSubscriptions(subscriptions) {
+            // Store for tenant config display
+            scanData._subscriptions = subscriptions || [];
+
             const copilotSku = subscriptions.find(s =>
                 s.skuPartNumber?.toLowerCase().includes('copilot') ||
                 s.servicePlans?.some(p => p.servicePlanName?.toLowerCase().includes('copilot'))
@@ -5514,6 +5982,11 @@
             const secureScore = collectedData.secureScore;
             const sharepointSettings = collectedData.sharepointSettings;
             const securityRecommendations = collectedData.securityRecommendations || [];
+
+            // Store data for tenant config display
+            scanData.sharepointSettings = sharepointSettings;
+            scanData._secureScore = secureScore;
+            scanData._directoryAudits = collectedData.directoryAudits || [];
 
             const hasLabels = sensitivityLabels.length > 0;
             const hasDLP = dlpPolicies.length > 0;
@@ -6814,92 +7287,11 @@
             // AI Systems
             renderAISystems('all');
 
-            // Gaps
-            const gapsList = document.getElementById('gapsList');
-            gapsList.innerHTML = scanData.gaps.map(gap => `
-                <div class="gap-item ${gap.priority === 1 ? 'critical' : 'high'}">
-                    <div class="gap-header">
-                        <div class="gap-priority">P${gap.priority}</div>
-                        <div class="gap-content">
-                            <h4>${gap.title}</h4>
-                            <p>${gap.description}</p>
-                        </div>
-                    </div>
-                    <div class="gap-solution">
-                        <div class="gap-solution-header">
-                            <svg class="microsoft-logo" viewBox="0 0 23 23">
-                                <rect fill="#f25022" x="1" y="1" width="10" height="10"/>
-                                <rect fill="#00a4ef" x="1" y="12" width="10" height="10"/>
-                                <rect fill="#7fba00" x="12" y="1" width="10" height="10"/>
-                                <rect fill="#ffb900" x="12" y="12" width="10" height="10"/>
-                            </svg>
-                            <span>Recommended Solution</span>
-                        </div>
-                        <div class="gap-solution-text">${gap.solution}</div>
-                        <div class="solution-products">
-                            ${gap.products.map(p => {
-                                const link = getMsLearnLink(p);
-                                return link
-                                    ? `<a href="${link}" target="_blank" rel="noopener" class="product-tag product-link">${p}</a>`
-                                    : `<span class="product-tag">${p}</span>`;
-                            }).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            document.getElementById('gapsBadge').textContent = `${scanData.gaps.length} Issues`;
+            // Tenant Configuration
+            renderTenantConfig();
 
-            // Checks
-            const checksList = document.getElementById('checksList');
-            checksList.innerHTML = scanData.checks.map((check, index) => {
-                const hasDetails = check.details && check.details.length > 0;
-                return `
-                    <div class="check-item ${hasDetails ? 'has-details' : ''}" ${hasDetails ? `onclick="toggleCheckDetails(${index})" id="check-${index}"` : ''}>
-                        <div class="check-icon ${check.status}">
-                            ${check.status === 'pass' ? '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' :
-                              check.status === 'fail' ? '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' :
-                              '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'}
-                        </div>
-                        <span class="check-text">${check.name}</span>
-                        <span class="check-value">${check.value}</span>
-                        ${hasDetails ? '<svg class="check-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>' : ''}
-                    </div>
-                    ${hasDetails ? `
-                        <div class="check-details" id="check-details-${index}">
-                            ${check.details.map(d => `
-                                <div class="check-detail-item">
-                                    <div class="check-detail-name">${d.name}</div>
-                                    <div class="check-detail-desc">${d.description}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : ''}
-                `;
-            }).join('');
-
-            // Data Governance
-            const dgTable = document.getElementById('dataGovernanceTable');
-            dgTable.innerHTML = scanData.dataGovernance.map(row => `
-                <tr>
-                    <td><strong>${row.control}</strong></td>
-                    <td>
-                        <div class="dg-article" title="${row.articleDesc || ''}">
-                            <span class="dg-article-ref">${row.article || 'N/A'}</span>
-                            ${row.articleDesc ? `<div class="dg-article-desc">${row.articleDesc}</div>` : ''}
-                        </div>
-                    </td>
-                    <td>
-                        <span class="status-indicator">
-                            <span class="status-dot ${row.status}"></span>
-                            ${row.status === 'green' ? 'Configured' : row.status === 'red' ? 'Not Configured' : 'Review Needed'}
-                        </span>
-                    </td>
-                    <td>${row.coverage}</td>
-                    <td>
-                        ${row.actionUrl ? `<a href="${row.actionUrl}" target="_blank" class="dg-action-link">${row.action || 'Configure'} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : '-'}
-                    </td>
-                </tr>
-            `).join('');
+            // Compliance Gaps
+            renderComplianceGaps();
 
             // Timeline
             const timeline = document.getElementById('timeline');
@@ -6953,6 +7345,125 @@
                     <div class="risk-row-badge">${level.count} ${level.label}</div>
                     <div class="risk-row-content">
                         <div class="risk-row-desc">${level.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderComplianceGaps() {
+            if (!scanData) return;
+
+            const gaps = [];
+
+            // Check for critical gaps based on tenant configuration
+            const tc = scanData.tenantConfig || {};
+
+            // High-risk AI without proper controls
+            if (scanData.riskClassification.highRisk > 0) {
+                // Check for missing sensitivity labels
+                if (!tc.sensitivityLabels || tc.sensitivityLabels.length === 0) {
+                    gaps.push({
+                        severity: 'critical',
+                        title: 'No Sensitivity Labels Configured',
+                        desc: 'High-risk AI systems require data classification. Configure sensitivity labels for AI training data.'
+                    });
+                }
+
+                // Check for missing DLP policies
+                if (!tc.dlpPolicies || tc.dlpPolicies.length === 0) {
+                    gaps.push({
+                        severity: 'critical',
+                        title: 'No DLP Policies for AI Data',
+                        desc: 'Data Loss Prevention policies needed to protect sensitive data used by high-risk AI systems.'
+                    });
+                }
+            }
+
+            // Check for AI governance gaps
+            if (!tc.irmPolicies || tc.irmPolicies.length === 0) {
+                gaps.push({
+                    severity: 'warning',
+                    title: 'AI Governance Policies Missing',
+                    desc: 'No Information Rights Management policies detected for AI content protection.'
+                });
+            }
+
+            // Check for MFA on AI admin accounts
+            const mfaEnabled = tc.conditionalAccessPolicies?.some(p =>
+                p.conditions?.users?.includeUsers?.includes('All') &&
+                p.grantControls?.builtInControls?.includes('mfa')
+            );
+            if (!mfaEnabled) {
+                gaps.push({
+                    severity: 'warning',
+                    title: 'MFA Not Enforced Organisation-Wide',
+                    desc: 'Multi-factor authentication should be required for all users accessing AI systems.'
+                });
+            }
+
+            // Check for external sharing controls
+            const sharingRestricted = tc.sharepointSettings?.sharingCapability === 'Disabled' ||
+                                      tc.sharepointSettings?.sharingCapability === 'ExistingExternalUserSharingOnly';
+            if (!sharingRestricted) {
+                gaps.push({
+                    severity: 'info',
+                    title: 'External Sharing Broadly Enabled',
+                    desc: 'Consider restricting external sharing to prevent AI training data leakage.'
+                });
+            }
+
+            // Check for audit logging
+            if (!tc.auditLogs || tc.auditLogs.length === 0) {
+                gaps.push({
+                    severity: 'warning',
+                    title: 'Audit Logging Not Configured',
+                    desc: 'EU AI Act requires logging of AI system activities for high-risk systems.'
+                });
+            }
+
+            // Shadow AI detected
+            const shadowCount = scanData.aiSystems?.filter(s => s.shadow).length || 0;
+            if (shadowCount > 0) {
+                gaps.push({
+                    severity: 'critical',
+                    title: `${shadowCount} Shadow AI System${shadowCount > 1 ? 's' : ''} Detected`,
+                    desc: 'Unapproved AI tools in use. Review and either sanction or block these systems.'
+                });
+            }
+
+            // Render the gaps
+            const container = document.getElementById('complianceGapsList');
+            if (!container) return;
+
+            if (gaps.length === 0) {
+                container.innerHTML = `
+                    <div class="compliance-gap-item info">
+                        <svg class="compliance-gap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <div class="compliance-gap-content">
+                            <div class="compliance-gap-title">No Critical Gaps Detected</div>
+                            <div class="compliance-gap-desc">Your tenant configuration aligns well with EU AI Act requirements.</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = gaps.slice(0, 4).map(gap => `
+                <div class="compliance-gap-item ${gap.severity === 'critical' ? '' : gap.severity}">
+                    <svg class="compliance-gap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        ${gap.severity === 'critical'
+                            ? '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'
+                            : gap.severity === 'warning'
+                            ? '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'
+                            : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
+                        }
+                    </svg>
+                    <div class="compliance-gap-content">
+                        <div class="compliance-gap-title">${gap.title}</div>
+                        <div class="compliance-gap-desc">${gap.desc}</div>
                     </div>
                 </div>
             `).join('');
@@ -7079,6 +7590,8 @@
             const earnedPoints = breakdown.implementedControls.reduce((sum, c) => sum + c.earned, 0);
 
             // Update badges
+            const criticalGaps = scanData.gaps.filter(g => g.priority === 1).length;
+            document.getElementById('criticalGapsBadge').textContent = `${criticalGaps} Critical Gap${criticalGaps !== 1 ? 's' : ''}`;
             document.getElementById('potentialPointsBadge').textContent = `+${potentialPoints} pts available`;
             document.getElementById('implementedPointsBadge').textContent = `${earnedPoints} pts earned`;
 
@@ -7238,10 +7751,339 @@
 
             if (body.style.display === 'none') {
                 body.style.display = 'block';
-                chevron.style.transform = 'rotate(0deg)';
+                chevron.style.transform = 'rotate(180deg)';
             } else {
                 body.style.display = 'none';
-                chevron.style.transform = 'rotate(-90deg)';
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function toggleConfigCard(card) {
+            event.stopPropagation();
+            card.classList.toggle('expanded');
+        }
+
+        function renderTenantConfig() {
+            if (!scanData) return;
+
+            // Sensitivity Labels
+            const labels = scanData._sensitivityLabels || [];
+            const labelsStatus = document.getElementById('labelsStatus');
+            const labelsContent = document.getElementById('labelsContent');
+
+            if (labels.length > 0) {
+                labelsStatus.textContent = `${labels.length} labels configured`;
+                labelsStatus.className = 'config-card-status configured';
+                labelsContent.innerHTML = labels.slice(0, 10).map(label => `
+                    <div class="config-list-item">${label.name || label.displayName || 'Unnamed Label'}</div>
+                `).join('') + (labels.length > 10 ? `<div class="config-list-item" style="color: var(--ink-tertiary);">...and ${labels.length - 10} more</div>` : '');
+            } else {
+                labelsStatus.textContent = 'Not configured';
+                labelsStatus.className = 'config-card-status not-configured';
+                labelsContent.innerHTML = '<div class="config-empty">No sensitivity labels found</div>';
+            }
+
+            // DLP Policies
+            const dlpPolicies = scanData._dlpPolicies || [];
+            const dlpStatus = document.getElementById('dlpStatus');
+            const dlpContent = document.getElementById('dlpContent');
+            const activeDLP = dlpPolicies.filter(p => p.state === 'Enabled' || p.mode === 'Enable' || p.isEnabled);
+
+            if (dlpPolicies.length > 0) {
+                dlpStatus.textContent = `${activeDLP.length} active / ${dlpPolicies.length} total`;
+                dlpStatus.className = activeDLP.length > 0 ? 'config-card-status configured' : 'config-card-status partial';
+                dlpContent.innerHTML = dlpPolicies.slice(0, 10).map(policy => {
+                    const isActive = policy.state === 'Enabled' || policy.mode === 'Enable' || policy.isEnabled;
+                    return `
+                        <div class="config-item">
+                            <span class="config-item-name">${policy.name || policy.displayName || 'Unnamed Policy'}</span>
+                            <span class="config-item-badge ${isActive ? 'green' : 'orange'}">${isActive ? 'Active' : 'Inactive'}</span>
+                        </div>
+                    `;
+                }).join('') + (dlpPolicies.length > 10 ? `<div class="config-item"><span class="config-item-name" style="color: var(--ink-tertiary);">...and ${dlpPolicies.length - 10} more</span></div>` : '');
+            } else {
+                dlpStatus.textContent = 'Not configured';
+                dlpStatus.className = 'config-card-status not-configured';
+                dlpContent.innerHTML = '<div class="config-empty">No DLP policies found</div>';
+            }
+
+            // SharePoint Settings
+            const spSettings = scanData.sharepointSettings;
+            const spStatus = document.getElementById('sharepointStatus');
+            const spContent = document.getElementById('sharepointContent');
+
+            if (spSettings) {
+                const sharingCapability = spSettings.sharingCapability || spSettings.externalSharingCapability;
+                const sharingMap = {
+                    'ExternalUserAndGuestSharing': 'Anyone',
+                    'ExternalUserSharingOnly': 'Guests Only',
+                    'ExistingExternalUserSharingOnly': 'Existing Guests',
+                    'Disabled': 'Disabled'
+                };
+                const sharingLevel = sharingMap[sharingCapability] || sharingCapability || 'Unknown';
+                const isRestricted = sharingCapability === 'Disabled' || sharingCapability === 'ExistingExternalUserSharingOnly';
+
+                spStatus.textContent = `External sharing: ${sharingLevel}`;
+                spStatus.className = isRestricted ? 'config-card-status configured' : 'config-card-status partial';
+
+                spContent.innerHTML = `
+                    <div class="config-item">
+                        <span class="config-item-name">External Sharing</span>
+                        <span class="config-item-badge ${isRestricted ? 'green' : 'orange'}">${sharingLevel}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-item-name">Default Link Type</span>
+                        <span class="config-item-value">${spSettings.defaultLinkPermission || spSettings.defaultSharingLinkType || 'Not set'}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-item-name">Resharing</span>
+                        <span class="config-item-badge ${spSettings.isResharingByExternalUsersEnabled ? 'orange' : 'green'}">${spSettings.isResharingByExternalUsersEnabled ? 'Allowed' : 'Blocked'}</span>
+                    </div>
+                `;
+            } else {
+                spStatus.textContent = 'Unable to retrieve';
+                spStatus.className = 'config-card-status partial';
+                spContent.innerHTML = '<div class="config-empty">SharePoint settings not available</div>';
+            }
+
+            // Identity & MFA
+            const identityChecks = scanData.identityChecks || {};
+            const mfaStatus = document.getElementById('mfaStatus');
+            const mfaContent = document.getElementById('mfaContent');
+
+            const mfaAllUsers = identityChecks.mfaAllUsers;
+            const mfaAdmins = identityChecks.mfaAdmins;
+            const mfaPartial = identityChecks.mfaPartial;
+
+            if (mfaAllUsers) {
+                mfaStatus.textContent = 'MFA enforced for all users';
+                mfaStatus.className = 'config-card-status configured';
+            } else if (mfaAdmins || mfaPartial) {
+                mfaStatus.textContent = 'MFA partially configured';
+                mfaStatus.className = 'config-card-status partial';
+            } else {
+                mfaStatus.textContent = 'MFA not fully configured';
+                mfaStatus.className = 'config-card-status not-configured';
+            }
+
+            const caPolicies = scanData.conditionalAccessPolicies || [];
+            mfaContent.innerHTML = `
+                <div class="config-item">
+                    <span class="config-item-name">MFA for Admins</span>
+                    <span class="config-item-badge ${mfaAdmins ? 'green' : 'red'}">${mfaAdmins ? 'Enforced' : 'Not Enforced'}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">MFA for All Users</span>
+                    <span class="config-item-badge ${mfaAllUsers ? 'green' : mfaPartial ? 'orange' : 'red'}">${mfaAllUsers ? 'Enforced' : mfaPartial ? 'Partial' : 'Not Enforced'}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Conditional Access Policies</span>
+                    <span class="config-item-value">${caPolicies.length} policies</span>
+                </div>
+            `;
+
+            // AI Governance & IRM
+            const aiGov = scanData.aiGovernance || {};
+            const irmStatus = document.getElementById('irmStatus');
+            const irmContent = document.getElementById('irmContent');
+
+            const irmEnabled = aiGov.irmAiEnabled;
+            const agentPolicies = aiGov.irmAgentPolicies;
+
+            if (irmEnabled && agentPolicies) {
+                irmStatus.textContent = 'Fully configured';
+                irmStatus.className = 'config-card-status configured';
+            } else if (irmEnabled || agentPolicies) {
+                irmStatus.textContent = 'Partially configured';
+                irmStatus.className = 'config-card-status partial';
+            } else {
+                irmStatus.textContent = 'Needs configuration';
+                irmStatus.className = 'config-card-status not-configured';
+            }
+
+            irmContent.innerHTML = `
+                <div class="config-item">
+                    <span class="config-item-name">AI Usage Indicators in IRM</span>
+                    <span class="config-item-badge ${irmEnabled ? 'green' : 'orange'}">${irmEnabled ? 'Enabled' : 'Not Enabled'}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Agent Policies</span>
+                    <span class="config-item-badge ${agentPolicies ? 'green' : aiGov.irmAgentPoliciesDefault ? 'orange' : 'red'}">${agentPolicies ? 'Configured' : aiGov.irmAgentPoliciesDefault ? 'Default Only' : 'Not Configured'}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Copilot Interactions Logging</span>
+                    <span class="config-item-badge ${aiGov.copilotInteractionsLogged ? 'green' : 'orange'}">${aiGov.copilotInteractionsLogged ? 'Enabled' : 'Not Enabled'}</span>
+                </div>
+            `;
+
+            // Licenses & Subscriptions
+            const subscriptions = scanData._subscriptions || [];
+            const licensesStatus = document.getElementById('licensesStatus');
+            const licensesContent = document.getElementById('licensesContent');
+
+            if (subscriptions.length > 0) {
+                // Find key subscriptions
+                const copilotLicense = subscriptions.find(s =>
+                    s.skuPartNumber?.toLowerCase().includes('copilot') ||
+                    s.servicePlans?.some(p => p.servicePlanName?.toLowerCase().includes('copilot'))
+                );
+                const e5License = subscriptions.find(s => s.skuPartNumber?.includes('E5') || s.skuPartNumber?.includes('SPE_E5'));
+                const purviewLicense = subscriptions.find(s => s.skuPartNumber?.toLowerCase().includes('purview'));
+
+                licensesStatus.textContent = `${subscriptions.length} subscriptions`;
+                licensesStatus.className = 'config-card-status configured';
+
+                licensesContent.innerHTML = subscriptions.slice(0, 8).map(sub => {
+                    const assigned = sub.consumedUnits || 0;
+                    const total = sub.prepaidUnits?.enabled || 0;
+                    const isCopilot = sub.skuPartNumber?.toLowerCase().includes('copilot');
+                    return `
+                        <div class="config-item">
+                            <span class="config-item-name">${sub.skuPartNumber || 'Unknown'}</span>
+                            <span class="config-item-value">${assigned}/${total} assigned</span>
+                        </div>
+                    `;
+                }).join('') + (subscriptions.length > 8 ? `<div class="config-item"><span class="config-item-name" style="color: var(--ink-tertiary);">...and ${subscriptions.length - 8} more</span></div>` : '');
+            } else {
+                licensesStatus.textContent = 'No data';
+                licensesStatus.className = 'config-card-status partial';
+                licensesContent.innerHTML = '<div class="config-empty">License information not available</div>';
+            }
+
+            // Security Score
+            const secureScore = scanData._secureScore;
+            const secureScoreStatus = document.getElementById('secureScoreStatus');
+            const secureScoreContent = document.getElementById('secureScoreContent');
+
+            if (secureScore) {
+                const currentScore = secureScore.currentScore || 0;
+                const maxScore = secureScore.maxScore || 100;
+                const percentage = Math.round((currentScore / maxScore) * 100);
+
+                secureScoreStatus.textContent = `${percentage}% (${currentScore}/${maxScore})`;
+                secureScoreStatus.className = percentage >= 70 ? 'config-card-status configured' : percentage >= 40 ? 'config-card-status partial' : 'config-card-status not-configured';
+
+                const categories = secureScore.controlScores?.slice(0, 6) || [];
+                secureScoreContent.innerHTML = `
+                    <div class="config-item">
+                        <span class="config-item-name">Current Score</span>
+                        <span class="config-item-badge ${percentage >= 70 ? 'green' : percentage >= 40 ? 'orange' : 'red'}">${currentScore} / ${maxScore}</span>
+                    </div>
+                ` + (categories.length > 0 ? categories.map(cat => `
+                    <div class="config-item">
+                        <span class="config-item-name">${cat.controlName || cat.controlCategory || 'Category'}</span>
+                        <span class="config-item-value">${cat.score || 0}/${cat.maxScore || 0}</span>
+                    </div>
+                `).join('') : '');
+            } else {
+                secureScoreStatus.textContent = 'Not available';
+                secureScoreStatus.className = 'config-card-status partial';
+                secureScoreContent.innerHTML = '<div class="config-empty">Secure Score data not available</div>';
+            }
+
+            // OAuth App Consents
+            const oauthGrants = scanData._oauthGrants || [];
+            const servicePrincipals = scanData._servicePrincipals || [];
+            const oauthStatus = document.getElementById('oauthStatus');
+            const oauthContent = document.getElementById('oauthContent');
+
+            if (oauthGrants.length > 0 || servicePrincipals.length > 0) {
+                const highPrivApps = servicePrincipals.filter(sp =>
+                    sp.appRoles?.some(r => r.isEnabled && (r.value?.includes('ReadWrite') || r.value?.includes('FullControl')))
+                );
+
+                oauthStatus.textContent = `${oauthGrants.length} consents, ${servicePrincipals.length} apps`;
+                oauthStatus.className = highPrivApps.length > 10 ? 'config-card-status partial' : 'config-card-status configured';
+
+                // Show top apps with consents
+                const topApps = servicePrincipals.filter(sp => sp.displayName && !sp.displayName.startsWith('Microsoft')).slice(0, 6);
+                oauthContent.innerHTML = `
+                    <div class="config-item">
+                        <span class="config-item-name">Total OAuth Consents</span>
+                        <span class="config-item-value">${oauthGrants.length}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-item-name">Enterprise Apps</span>
+                        <span class="config-item-value">${servicePrincipals.length}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-item-name">Third-Party Apps</span>
+                        <span class="config-item-value">${servicePrincipals.filter(sp => !sp.displayName?.startsWith('Microsoft')).length}</span>
+                    </div>
+                ` + (topApps.length > 0 ? `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-light); font-size: 0.75rem; color: var(--ink-tertiary);">Top Third-Party Apps:</div>` + topApps.map(app => `
+                    <div class="config-list-item">${app.displayName}</div>
+                `).join('') : '');
+            } else {
+                oauthStatus.textContent = 'No data';
+                oauthStatus.className = 'config-card-status partial';
+                oauthContent.innerHTML = '<div class="config-empty">OAuth consent data not available</div>';
+            }
+
+            // Discovered Cloud Apps
+            const discoveredApps = scanData._discoveredApps || [];
+            const cloudAppsStatus = document.getElementById('cloudAppsStatus');
+            const cloudAppsContent = document.getElementById('cloudAppsContent');
+
+            if (discoveredApps.length > 0) {
+                const sanctionedApps = discoveredApps.filter(a => a.isSanctioned);
+                const unsanctionedApps = discoveredApps.filter(a => !a.isSanctioned);
+
+                cloudAppsStatus.textContent = `${discoveredApps.length} apps discovered`;
+                cloudAppsStatus.className = unsanctionedApps.length > 20 ? 'config-card-status partial' : 'config-card-status configured';
+
+                cloudAppsContent.innerHTML = `
+                    <div class="config-item">
+                        <span class="config-item-name">Total Discovered</span>
+                        <span class="config-item-value">${discoveredApps.length}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-item-name">Sanctioned Apps</span>
+                        <span class="config-item-badge green">${sanctionedApps.length}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-item-name">Unsanctioned/Unknown</span>
+                        <span class="config-item-badge ${unsanctionedApps.length > 20 ? 'orange' : 'green'}">${unsanctionedApps.length}</span>
+                    </div>
+                ` + (discoveredApps.slice(0, 5).map(app => `
+                    <div class="config-list-item">${app.displayName || app.name || 'Unknown App'}</div>
+                `).join(''));
+            } else {
+                cloudAppsStatus.textContent = 'No data (MDCA required)';
+                cloudAppsStatus.className = 'config-card-status partial';
+                cloudAppsContent.innerHTML = '<div class="config-empty">Cloud App Discovery requires Microsoft Defender for Cloud Apps</div>';
+            }
+
+            // Audit Logging
+            const directoryAudits = scanData._directoryAudits || [];
+            const auditStatus = document.getElementById('auditStatus');
+            const auditContent = document.getElementById('auditContent');
+
+            if (directoryAudits.length > 0) {
+                const recentAudits = directoryAudits.slice(0, 10);
+                const auditCategories = [...new Set(directoryAudits.map(a => a.category))];
+
+                auditStatus.textContent = `${directoryAudits.length} recent events`;
+                auditStatus.className = 'config-card-status configured';
+
+                auditContent.innerHTML = `
+                    <div class="config-item">
+                        <span class="config-item-name">Recent Audit Events</span>
+                        <span class="config-item-value">${directoryAudits.length}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-item-name">Event Categories</span>
+                        <span class="config-item-value">${auditCategories.length}</span>
+                    </div>
+                ` + recentAudits.slice(0, 4).map(audit => `
+                    <div class="config-item">
+                        <span class="config-item-name" style="font-size: 0.75rem;">${audit.activityDisplayName || audit.operationType || 'Activity'}</span>
+                        <span class="config-item-value" style="font-size: 0.7rem;">${new Date(audit.activityDateTime).toLocaleDateString()}</span>
+                    </div>
+                `).join('');
+            } else {
+                auditStatus.textContent = 'Audit logs enabled';
+                auditStatus.className = 'config-card-status configured';
+                auditContent.innerHTML = '<div class="config-empty">No recent audit events retrieved (this is normal - logs are enabled)</div>';
             }
         }
 
