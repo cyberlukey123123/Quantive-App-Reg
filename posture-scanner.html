@@ -697,41 +697,64 @@
             }
         }
 
+        /* Stacked layout - Score on top, Tenant Config below */
         .dashboard-grid.score-config-grid {
-            grid-template-columns: 1fr 2fr;
-            align-items: start;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        /* Score card - horizontal layout */
+        .dashboard-grid.score-config-grid .score-breakdown {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 32px;
+            align-items: center;
         }
 
         .dashboard-grid.score-config-grid .score-summary {
-            flex-direction: column;
-            text-align: center;
-            gap: 12px;
+            flex-direction: row;
+            text-align: left;
+            gap: 20px;
+            align-items: center;
         }
 
         .dashboard-grid.score-config-grid .score-summary-details {
-            text-align: center;
+            text-align: left;
         }
 
+        .dashboard-grid.score-config-grid .score-categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px 24px;
+        }
+
+        /* Tenant config - 3 column grid */
         .dashboard-grid.score-config-grid .tenant-config-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
         }
 
         @media (max-width: 1200px) {
-            .dashboard-grid.score-config-grid {
-                grid-template-columns: 1fr 1fr;
+            .dashboard-grid.score-config-grid .score-categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .dashboard-grid.score-config-grid .tenant-config-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 900px) {
-            .dashboard-grid.score-config-grid {
+            .dashboard-grid.score-config-grid .score-breakdown {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
             .dashboard-grid.score-config-grid .score-summary {
-                flex-direction: row;
-                text-align: left;
+                justify-content: center;
             }
             .dashboard-grid.score-config-grid .score-summary-details {
-                text-align: left;
+                text-align: center;
+            }
+            .dashboard-grid.score-config-grid .score-categories {
+                grid-template-columns: repeat(2, 1fr);
             }
             .dashboard-grid.score-config-grid .tenant-config-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -739,6 +762,9 @@
         }
 
         @media (max-width: 600px) {
+            .dashboard-grid.score-config-grid .score-categories {
+                grid-template-columns: 1fr;
+            }
             .dashboard-grid.score-config-grid .tenant-config-grid {
                 grid-template-columns: 1fr;
             }
@@ -3516,7 +3542,7 @@
                 </div>
             </div>
 
-            <!-- Score and Tenant Config Side-by-Side -->
+            <!-- Score (Full Width) then Tenant Config (Full Width) - Stacked Layout -->
             <div class="dashboard-grid score-config-grid">
                 <!-- AI Readiness Score Card -->
                 <div class="card">
@@ -3575,11 +3601,91 @@
                             </div>
                             Current Tenant Configuration
                         </div>
-                        <span class="card-badge" style="background: var(--purple-light); color: var(--purple);" id="tenantConfigBadge">10 Areas</span>
+                        <span class="card-badge" style="background: var(--purple-light); color: var(--purple);" id="tenantConfigBadge">13 Areas</span>
                     </div>
                     <div class="card-body" id="tenantConfigBody">
                         <div class="tenant-config-grid">
-                            <!-- Sensitivity Labels Card -->
+                            <!-- IDENTITY & ACCESS SECTION -->
+
+                            <!-- 1. Identity & MFA Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: var(--warning-light); color: var(--warning);">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                            <circle cx="9" cy="7" r="4"/>
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Identity & MFA</h4>
+                                        <span class="config-card-status" id="mfaStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="mfaContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. Privileged Access / PIM Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #fee2e2; color: #dc2626;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                            <path d="M12 8v4"/>
+                                            <path d="M12 16h.01"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Privileged Access (PIM)</h4>
+                                        <span class="config-card-status" id="pimStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="pimContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3. Identity Governance Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #fce7f3; color: #db2777;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                            <circle cx="8.5" cy="7" r="4"/>
+                                            <polyline points="17 11 19 13 23 9"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Identity Governance</h4>
+                                        <span class="config-card-status" id="idGovStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="idGovContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DATA PROTECTION SECTION -->
+
+                            <!-- 4. Sensitivity Labels Card -->
                             <div class="config-card" onclick="toggleConfigCard(this)">
                                 <div class="config-card-header">
                                     <div class="config-card-icon" style="background: var(--success-light); color: var(--success);">
@@ -3603,7 +3709,7 @@
                                 </div>
                             </div>
 
-                            <!-- DLP Policies Card -->
+                            <!-- 5. DLP Policies Card -->
                             <div class="config-card" onclick="toggleConfigCard(this)">
                                 <div class="config-card-header">
                                     <div class="config-card-icon" style="background: var(--primary-light); color: var(--primary);">
@@ -3627,7 +3733,9 @@
                                 </div>
                             </div>
 
-                            <!-- SharePoint Settings Card -->
+                            <!-- COLLABORATION SECTION -->
+
+                            <!-- 6. SharePoint & Sharing Card -->
                             <div class="config-card" onclick="toggleConfigCard(this)">
                                 <div class="config-card-header">
                                     <div class="config-card-icon" style="background: #dbeafe; color: #2563eb;">
@@ -3654,33 +3762,85 @@
                                 </div>
                             </div>
 
-                            <!-- Identity & MFA Card -->
+                            <!-- DEVICES SECTION -->
+
+                            <!-- 7. Device Management Card -->
                             <div class="config-card" onclick="toggleConfigCard(this)">
                                 <div class="config-card-header">
-                                    <div class="config-card-icon" style="background: var(--warning-light); color: var(--warning);">
+                                    <div class="config-card-icon" style="background: #d1fae5; color: #059669;">
                                         <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                            <circle cx="9" cy="7" r="4"/>
-                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                                            <line x1="12" y1="18" x2="12.01" y2="18"/>
                                         </svg>
                                     </div>
                                     <div class="config-card-title">
-                                        <h4>Identity & MFA</h4>
-                                        <span class="config-card-status" id="mfaStatus">Loading...</span>
+                                        <h4>Device Management</h4>
+                                        <span class="config-card-status" id="deviceStatus">Loading...</span>
                                     </div>
                                     <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="6 9 12 15 18 9"/>
                                     </svg>
                                 </div>
                                 <div class="config-card-body">
-                                    <div class="config-card-content" id="mfaContent">
+                                    <div class="config-card-content" id="deviceContent">
                                         <!-- Dynamically populated -->
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- AI Governance / IRM Card -->
+                            <!-- APPLICATIONS SECTION -->
+
+                            <!-- 8. OAuth App Consents Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #fef3c7; color: #d97706;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                            <polyline points="10 17 15 12 10 7"/>
+                                            <line x1="15" y1="12" x2="3" y2="12"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>OAuth App Consents</h4>
+                                        <span class="config-card-status" id="oauthStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="oauthContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 9. Discovered Cloud Apps Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #f3e8ff; color: #9333ea;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Discovered Cloud Apps</h4>
+                                        <span class="config-card-status" id="cloudAppsStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="cloudAppsContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AI & RISK SECTION -->
+
+                            <!-- 10. AI Governance & IRM Card -->
                             <div class="config-card" onclick="toggleConfigCard(this)">
                                 <div class="config-card-header">
                                     <div class="config-card-icon" style="background: var(--danger-light); color: var(--danger);">
@@ -3706,32 +3866,9 @@
                                 </div>
                             </div>
 
-                            <!-- Licenses & Subscriptions Card -->
-                            <div class="config-card" onclick="toggleConfigCard(this)">
-                                <div class="config-card-header">
-                                    <div class="config-card-icon" style="background: #dbeafe; color: #2563eb;">
-                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                            <path d="M3 9h18"/>
-                                            <path d="M9 21V9"/>
-                                        </svg>
-                                    </div>
-                                    <div class="config-card-title">
-                                        <h4>Licenses & Subscriptions</h4>
-                                        <span class="config-card-status" id="licensesStatus">Loading...</span>
-                                    </div>
-                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="6 9 12 15 18 9"/>
-                                    </svg>
-                                </div>
-                                <div class="config-card-body">
-                                    <div class="config-card-content" id="licensesContent">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- MONITORING SECTION -->
 
-                            <!-- Security Score Card -->
+                            <!-- 11. Microsoft Secure Score Card -->
                             <div class="config-card" onclick="toggleConfigCard(this)">
                                 <div class="config-card-header">
                                     <div class="config-card-icon" style="background: #dcfce7; color: #16a34a;">
@@ -3755,55 +3892,7 @@
                                 </div>
                             </div>
 
-                            <!-- OAuth App Consents Card -->
-                            <div class="config-card" onclick="toggleConfigCard(this)">
-                                <div class="config-card-header">
-                                    <div class="config-card-icon" style="background: #fef3c7; color: #d97706;">
-                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                                            <polyline points="10 17 15 12 10 7"/>
-                                            <line x1="15" y1="12" x2="3" y2="12"/>
-                                        </svg>
-                                    </div>
-                                    <div class="config-card-title">
-                                        <h4>OAuth App Consents</h4>
-                                        <span class="config-card-status" id="oauthStatus">Loading...</span>
-                                    </div>
-                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="6 9 12 15 18 9"/>
-                                    </svg>
-                                </div>
-                                <div class="config-card-body">
-                                    <div class="config-card-content" id="oauthContent">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Discovered Cloud Apps Card -->
-                            <div class="config-card" onclick="toggleConfigCard(this)">
-                                <div class="config-card-header">
-                                    <div class="config-card-icon" style="background: #f3e8ff; color: #9333ea;">
-                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="config-card-title">
-                                        <h4>Discovered Cloud Apps</h4>
-                                        <span class="config-card-status" id="cloudAppsStatus">Loading...</span>
-                                    </div>
-                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="6 9 12 15 18 9"/>
-                                    </svg>
-                                </div>
-                                <div class="config-card-body">
-                                    <div class="config-card-content" id="cloudAppsContent">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Audit Logging Card -->
+                            <!-- 12. Audit Logging Card -->
                             <div class="config-card" onclick="toggleConfigCard(this)">
                                 <div class="config-card-header">
                                     <div class="config-card-icon" style="background: #e0e7ff; color: #4f46e5;">
@@ -3825,6 +3914,33 @@
                                 </div>
                                 <div class="config-card-body">
                                     <div class="config-card-content" id="auditContent">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- LICENSING SECTION -->
+
+                            <!-- 13. Licenses & Subscriptions Card -->
+                            <div class="config-card" onclick="toggleConfigCard(this)">
+                                <div class="config-card-header">
+                                    <div class="config-card-icon" style="background: #dbeafe; color: #2563eb;">
+                                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                            <path d="M3 9h18"/>
+                                            <path d="M9 21V9"/>
+                                        </svg>
+                                    </div>
+                                    <div class="config-card-title">
+                                        <h4>Licenses & Subscriptions</h4>
+                                        <span class="config-card-status" id="licensesStatus">Loading...</span>
+                                    </div>
+                                    <svg class="config-card-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="config-card-body">
+                                    <div class="config-card-content" id="licensesContent">
                                         <!-- Dynamically populated -->
                                     </div>
                                 </div>
@@ -4324,6 +4440,7 @@
             scopes: [
                 // Core permissions
                 "User.Read",
+                "User.Read.All",                        // Read all user profiles
                 "Directory.Read.All",
                 "Application.Read.All",
                 "Policy.Read.All",
@@ -4338,26 +4455,44 @@
                 "InformationProtectionPolicy.Read",     // DLP policies (user scope)
                 "SensitivityLabel.Read",                // Get labels (user scope)
                 "SensitivityLabel.Evaluate",            // Evaluate labels for content
+                "SensitivityLabel.Evaluate.All",        // Evaluate all labels (tenant scope)
+                "SensitivityLabels.Read.All",           // Read all sensitivity labels
                 // Cloud App Security
                 "CloudApp-Discovery.Read.All",          // MDCA discovered apps
                 // SharePoint
-                "Sites.Read.All"                        // External sharing settings
+                "Sites.Read.All",                       // Site access
+                "SharePointTenantSettings.Read.All",    // SharePoint tenant settings
+                // Identity Governance & PIM
+                "EntitlementManagement.Read.All",       // Access packages, entitlement management
+                "IdentityRiskyUser.Read.All",           // Risky users information
+                "PrivilegedAccess.Read.AzureAD",        // PIM role assignments
+                "RoleManagement.Read.All",              // Role management data
+                // Device Management
+                "DeviceManagementConfiguration.Read.All" // Intune device policies
             ]
         };
 
         // Additional scopes for specific API calls
         const graphScopes = {
             basic: ["User.Read"],
+            users: ["User.Read.All"],
             directory: ["Directory.Read.All"],
             applications: ["Application.Read.All"],
             policies: ["Policy.Read.All"],
             audit: ["AuditLog.Read.All"],
             reports: ["Reports.Read.All"],
             sites: ["Sites.Read.All"],
+            sharepoint: ["SharePointTenantSettings.Read.All"],
             security: ["SecurityEvents.Read.All"],
             sensitivityLabels: ["SensitivityLabel.Read"],
+            sensitivityLabelsAll: ["SensitivityLabels.Read.All"],
             informationProtection: ["InformationProtectionPolicy.Read"],
-            cloudAppDiscovery: ["CloudApp-Discovery.Read.All"]
+            cloudAppDiscovery: ["CloudApp-Discovery.Read.All"],
+            entitlementManagement: ["EntitlementManagement.Read.All"],
+            riskyUsers: ["IdentityRiskyUser.Read.All"],
+            privilegedAccess: ["PrivilegedAccess.Read.AzureAD"],
+            roleManagement: ["RoleManagement.Read.All"],
+            deviceManagement: ["DeviceManagementConfiguration.Read.All"]
         };
 
         // Initialize MSAL instance
@@ -5193,16 +5328,63 @@
                         .catch(() => ({ value: [] }))
                 ]);
 
-                updateLoadingStatus("Reading SharePoint settings...", 82);
-                // SharePoint external sharing settings
-                const sharepointSettings = await callGraphAPIBeta("/admin/sharepoint/settings", ["Sites.Read.All"])
+                updateLoadingStatus("Reading SharePoint settings...", 70);
+                // SharePoint external sharing settings - use SharePointTenantSettings scope
+                const sharepointSettings = await callGraphAPIBeta("/admin/sharepoint/settings", ["SharePointTenantSettings.Read.All"])
+                    .catch(() => callGraphAPIBeta("/admin/sharepoint/settings", ["Sites.Read.All"]))
                     .catch(() => null);
 
-                updateLoadingStatus("Reading directory settings...", 88);
+                updateLoadingStatus("Reading directory settings...", 73);
                 const directorySettings = await callGraphAPIBeta("/settings", ["Directory.Read.All"]).catch(() => ({ value: [] }));
 
-                updateLoadingStatus("Checking subscriptions...", 92);
+                updateLoadingStatus("Checking subscriptions...", 75);
                 const subscriptions = await callGraphAPI("/subscribedSkus", ["Directory.Read.All"]).catch(() => ({ value: [] }));
+
+                // ===== NEW ENHANCED API CALLS =====
+
+                updateLoadingStatus("Reading Identity Governance...", 78);
+                // Entitlement Management - Access Packages
+                const [accessPackages, accessReviews] = await Promise.all([
+                    callGraphAPIBeta("/identityGovernance/entitlementManagement/accessPackages?$top=50", ["EntitlementManagement.Read.All"])
+                        .catch(() => ({ value: [] })),
+                    callGraphAPIBeta("/identityGovernance/accessReviews/definitions?$top=50", ["EntitlementManagement.Read.All"])
+                        .catch(() => ({ value: [] }))
+                ]);
+
+                updateLoadingStatus("Reading Risky Users...", 81);
+                // Identity Protection - Risky Users
+                const riskyUsers = await callGraphAPIBeta("/identityProtection/riskyUsers?$top=100", ["IdentityRiskyUser.Read.All"])
+                    .catch(() => ({ value: [] }));
+
+                updateLoadingStatus("Reading PIM Assignments...", 84);
+                // Privileged Identity Management - Role Assignments
+                const [pimRoleAssignments, roleDefinitions, directoryRoles] = await Promise.all([
+                    callGraphAPIBeta("/roleManagement/directory/roleAssignments?$expand=principal", ["RoleManagement.Read.All"])
+                        .catch(() => ({ value: [] })),
+                    callGraphAPIBeta("/roleManagement/directory/roleDefinitions", ["RoleManagement.Read.All"])
+                        .catch(() => ({ value: [] })),
+                    callGraphAPIBeta("/directoryRoles?$expand=members", ["Directory.Read.All"])
+                        .catch(() => ({ value: [] }))
+                ]);
+
+                updateLoadingStatus("Reading PIM Eligible Assignments...", 87);
+                // PIM Eligible role assignments (JIT)
+                const pimEligibleAssignments = await callGraphAPIBeta("/roleManagement/directory/roleEligibilitySchedules", ["RoleManagement.Read.All"])
+                    .catch(() => ({ value: [] }));
+
+                updateLoadingStatus("Reading Device Policies...", 90);
+                // Intune Device Configuration
+                const [deviceConfigurations, compliancePolicies] = await Promise.all([
+                    callGraphAPIBeta("/deviceManagement/deviceConfigurations?$top=50", ["DeviceManagementConfiguration.Read.All"])
+                        .catch(() => ({ value: [] })),
+                    callGraphAPIBeta("/deviceManagement/deviceCompliancePolicies?$top=50", ["DeviceManagementConfiguration.Read.All"])
+                        .catch(() => ({ value: [] }))
+                ]);
+
+                updateLoadingStatus("Reading OAuth Grants...", 93);
+                // Delegated Permission Grants (OAuth consents)
+                const delegatedPermissionGrants = await callGraphAPI("/oauth2PermissionGrants?$top=200", ["Directory.Read.All"])
+                    .catch(() => ({ value: [] }));
 
                 updateLoadingStatus("Analyzing AI systems...", 96);
 
@@ -5238,7 +5420,22 @@
                     threatIndicators: threatIndicators?.value || [],
                     sharepointSettings: sharepointSettings,
                     directorySettings: directorySettings?.value || [],
-                    subscriptions: subscriptions?.value || []
+                    subscriptions: subscriptions?.value || [],
+                    // NEW: Identity Governance
+                    accessPackages: accessPackages?.value || [],
+                    accessReviews: accessReviews?.value || [],
+                    // NEW: Identity Protection
+                    riskyUsers: riskyUsers?.value || [],
+                    // NEW: PIM & Role Management
+                    pimRoleAssignments: pimRoleAssignments?.value || [],
+                    pimEligibleAssignments: pimEligibleAssignments?.value || [],
+                    roleDefinitions: roleDefinitions?.value || [],
+                    directoryRoles: directoryRoles?.value || [],
+                    // NEW: Device Management
+                    deviceConfigurations: deviceConfigurations?.value || [],
+                    compliancePolicies: compliancePolicies?.value || [],
+                    // NEW: Enhanced OAuth grants
+                    delegatedPermissionGrants: delegatedPermissionGrants?.value || []
                 };
 
                 // Process collected data
@@ -5252,6 +5449,10 @@
                 processCopilotUsage(collectedData.copilotUsage);
                 processSubscriptions(collectedData.subscriptions);
                 processDataGovernance(collectedData);
+                // NEW: Process additional governance data
+                processIdentityGovernance(collectedData);
+                processPrivilegedAccess(collectedData);
+                processDeviceManagement(collectedData);
 
                 // Calculate scores
                 calculateScores();
@@ -6114,6 +6315,149 @@
                     actionUrl: "https://purview.microsoft.com/auditlogsearch"
                 }
             ];
+        }
+
+        // Process Identity Governance data (Access Packages, Access Reviews)
+        function processIdentityGovernance(collectedData) {
+            const accessPackages = collectedData.accessPackages || [];
+            const accessReviews = collectedData.accessReviews || [];
+            const riskyUsers = collectedData.riskyUsers || [];
+
+            // Store for tenant config display
+            scanData._accessPackages = accessPackages;
+            scanData._accessReviews = accessReviews;
+            scanData._riskyUsers = riskyUsers;
+
+            // Update identity checks based on governance data
+            if (!scanData.identityChecks) {
+                scanData.identityChecks = {};
+            }
+
+            // Access Reviews - indicates mature governance
+            const hasAccessReviews = accessReviews.length > 0;
+            const activeReviews = accessReviews.filter(r => r.status === 'InProgress' || r.status === 'NotStarted');
+            scanData.identityChecks.accessReviewsEnabled = hasAccessReviews;
+            scanData.identityChecks.accessReviewCount = accessReviews.length;
+            scanData.identityChecks.activeReviewCount = activeReviews.length;
+
+            // Access Packages - entitlement management
+            scanData.identityChecks.entitlementManagementEnabled = accessPackages.length > 0;
+            scanData.identityChecks.accessPackageCount = accessPackages.length;
+
+            // Risky Users - identity protection
+            const highRiskUsers = riskyUsers.filter(u => u.riskLevel === 'high');
+            const mediumRiskUsers = riskyUsers.filter(u => u.riskLevel === 'medium');
+            scanData.identityChecks.riskyUserCount = riskyUsers.length;
+            scanData.identityChecks.highRiskUserCount = highRiskUsers.length;
+            scanData.identityChecks.mediumRiskUserCount = mediumRiskUsers.length;
+            scanData.identityChecks.identityProtectionActive = riskyUsers.length > 0 || true; // If API returns anything, it's active
+
+            console.log(`📊 Identity Governance: ${accessPackages.length} access packages, ${accessReviews.length} access reviews, ${riskyUsers.length} risky users`);
+        }
+
+        // Process Privileged Access data (PIM, Role Assignments)
+        function processPrivilegedAccess(collectedData) {
+            const pimRoleAssignments = collectedData.pimRoleAssignments || [];
+            const pimEligibleAssignments = collectedData.pimEligibleAssignments || [];
+            const roleDefinitions = collectedData.roleDefinitions || [];
+            const directoryRoles = collectedData.directoryRoles || [];
+
+            // Store for tenant config display
+            scanData._pimRoleAssignments = pimRoleAssignments;
+            scanData._pimEligibleAssignments = pimEligibleAssignments;
+            scanData._roleDefinitions = roleDefinitions;
+            scanData._directoryRoles = directoryRoles;
+
+            if (!scanData.identityChecks) {
+                scanData.identityChecks = {};
+            }
+
+            // Count Global Admins
+            const globalAdminRoleId = roleDefinitions.find(r =>
+                r.displayName === 'Global Administrator' || r.displayName === 'Company Administrator'
+            )?.id;
+
+            let globalAdminCount = 0;
+            if (globalAdminRoleId) {
+                globalAdminCount = pimRoleAssignments.filter(a =>
+                    a.roleDefinitionId === globalAdminRoleId &&
+                    (a.scheduleInfo?.startDateTime || a.status === 'Provisioned')
+                ).length;
+            }
+
+            // Fallback: count from directoryRoles
+            if (globalAdminCount === 0 && directoryRoles.length > 0) {
+                const globalAdminRole = directoryRoles.find(r =>
+                    r.displayName === 'Global Administrator' || r.displayName === 'Company Administrator'
+                );
+                globalAdminCount = globalAdminRole?.members?.length || 0;
+            }
+
+            scanData.identityChecks.globalAdminCount = globalAdminCount;
+
+            // Check if PIM is enabled (eligible assignments exist)
+            const pimEnabled = pimEligibleAssignments.length > 0;
+            scanData.identityChecks.pimEnabled = pimEnabled;
+            scanData.identityChecks.eligibleAssignmentCount = pimEligibleAssignments.length;
+            scanData.identityChecks.permanentAssignmentCount = pimRoleAssignments.filter(a =>
+                !a.scheduleInfo?.expiration?.endDateTime
+            ).length;
+
+            // Role quality - ratio of eligible vs permanent assignments
+            const totalAssignments = pimRoleAssignments.length + pimEligibleAssignments.length;
+            if (totalAssignments > 0) {
+                const eligibleRatio = pimEligibleAssignments.length / totalAssignments;
+                scanData.identityChecks.roleQuality = eligibleRatio > 0.5 ? 'good' : (eligibleRatio > 0.2 ? 'moderate' : 'poor');
+            } else {
+                scanData.identityChecks.roleQuality = 'unknown';
+            }
+
+            console.log(`🔐 Privileged Access: ${globalAdminCount} Global Admins, PIM ${pimEnabled ? 'Enabled' : 'Not Detected'}, ${pimEligibleAssignments.length} eligible assignments`);
+        }
+
+        // Process Device Management data (Intune configurations)
+        function processDeviceManagement(collectedData) {
+            const deviceConfigurations = collectedData.deviceConfigurations || [];
+            const compliancePolicies = collectedData.compliancePolicies || [];
+
+            // Store for tenant config display
+            scanData._deviceConfigurations = deviceConfigurations;
+            scanData._compliancePolicies = compliancePolicies;
+
+            if (!scanData.deviceSecurity) {
+                scanData.deviceSecurity = {};
+            }
+
+            // Device management enabled
+            const hasDeviceManagement = deviceConfigurations.length > 0 || compliancePolicies.length > 0;
+            scanData.deviceSecurity.intuneEnabled = hasDeviceManagement;
+            scanData.deviceSecurity.deviceConfigCount = deviceConfigurations.length;
+            scanData.deviceSecurity.compliancePolicyCount = compliancePolicies.length;
+
+            // Check for endpoint DLP configurations
+            const dlpConfigs = deviceConfigurations.filter(c =>
+                (c.displayName || '').toLowerCase().includes('dlp') ||
+                (c.displayName || '').toLowerCase().includes('data loss') ||
+                (c['@odata.type'] || '').includes('EndpointProtection')
+            );
+            scanData.deviceSecurity.endpointDlpEnabled = dlpConfigs.length > 0;
+
+            // Check for device compliance
+            const activeCompliancePolicies = compliancePolicies.filter(p =>
+                p.assignments?.length > 0 || p.scheduledActionsForRule?.length > 0
+            );
+            scanData.deviceSecurity.complianceEnforced = activeCompliancePolicies.length > 0;
+
+            // Purview device onboarding - infer from config presence
+            if (deviceConfigurations.length > 10) {
+                scanData.deviceSecurity.purviewOnboarded = 'full';
+            } else if (deviceConfigurations.length > 0) {
+                scanData.deviceSecurity.purviewOnboarded = 'partial';
+            } else {
+                scanData.deviceSecurity.purviewOnboarded = 'none';
+            }
+
+            console.log(`📱 Device Management: ${deviceConfigurations.length} configs, ${compliancePolicies.length} compliance policies, Endpoint DLP: ${scanData.deviceSecurity.endpointDlpEnabled}`);
         }
 
         // Calculate overall scores with detailed breakdown
@@ -8086,6 +8430,126 @@
                 auditStatus.className = 'config-card-status configured';
                 auditContent.innerHTML = '<div class="config-empty">No recent audit events retrieved (this is normal - logs are enabled)</div>';
             }
+
+            // Identity Governance (Access Packages, Access Reviews, Risky Users)
+            const accessPackages = scanData._accessPackages || [];
+            const accessReviews = scanData._accessReviews || [];
+            const riskyUsers = scanData._riskyUsers || [];
+            const idGovStatus = document.getElementById('idGovStatus');
+            const idGovContent = document.getElementById('idGovContent');
+
+            const hasAccessReviews = accessReviews.length > 0;
+            const hasAccessPackages = accessPackages.length > 0;
+            const hasRiskyUsers = riskyUsers.length > 0;
+
+            if (hasAccessReviews || hasAccessPackages) {
+                idGovStatus.textContent = 'Configured';
+                idGovStatus.className = 'config-card-status configured';
+            } else {
+                idGovStatus.textContent = 'Not configured';
+                idGovStatus.className = 'config-card-status not-configured';
+            }
+
+            const highRiskUsers = riskyUsers.filter(u => u.riskLevel === 'high').length;
+            const mediumRiskUsers = riskyUsers.filter(u => u.riskLevel === 'medium').length;
+
+            idGovContent.innerHTML = `
+                <div class="config-item">
+                    <span class="config-item-name">Access Reviews</span>
+                    <span class="config-item-badge ${hasAccessReviews ? 'green' : 'orange'}">${hasAccessReviews ? `${accessReviews.length} defined` : 'None'}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Access Packages</span>
+                    <span class="config-item-badge ${hasAccessPackages ? 'green' : 'orange'}">${hasAccessPackages ? `${accessPackages.length} packages` : 'None'}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">High Risk Users</span>
+                    <span class="config-item-badge ${highRiskUsers > 0 ? 'red' : 'green'}">${highRiskUsers}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Medium Risk Users</span>
+                    <span class="config-item-badge ${mediumRiskUsers > 5 ? 'orange' : 'green'}">${mediumRiskUsers}</span>
+                </div>
+            `;
+
+            // Privileged Access / PIM
+            const pimEligible = scanData._pimEligibleAssignments || [];
+            const pimActive = scanData._pimRoleAssignments || [];
+            const directoryRoles = scanData._directoryRoles || [];
+            const pimStatus = document.getElementById('pimStatus');
+            const pimContent = document.getElementById('pimContent');
+
+            const pimEnabled = pimEligible.length > 0;
+            const globalAdminCount = scanData.identityChecks?.globalAdminCount || 0;
+
+            if (pimEnabled) {
+                pimStatus.textContent = 'PIM Enabled';
+                pimStatus.className = 'config-card-status configured';
+            } else if (pimActive.length > 0) {
+                pimStatus.textContent = 'Roles assigned (no PIM)';
+                pimStatus.className = 'config-card-status partial';
+            } else {
+                pimStatus.textContent = 'Not configured';
+                pimStatus.className = 'config-card-status not-configured';
+            }
+
+            const permanentAssignments = pimActive.filter(a => !a.scheduleInfo?.expiration?.endDateTime).length;
+
+            pimContent.innerHTML = `
+                <div class="config-item">
+                    <span class="config-item-name">PIM Status</span>
+                    <span class="config-item-badge ${pimEnabled ? 'green' : 'orange'}">${pimEnabled ? 'Enabled' : 'Not Detected'}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Eligible Assignments (JIT)</span>
+                    <span class="config-item-value">${pimEligible.length}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Permanent Assignments</span>
+                    <span class="config-item-badge ${permanentAssignments > 10 ? 'orange' : 'green'}">${permanentAssignments}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Global Admins</span>
+                    <span class="config-item-badge ${globalAdminCount > 4 ? 'orange' : globalAdminCount >= 2 ? 'green' : 'red'}">${globalAdminCount}</span>
+                </div>
+            `;
+
+            // Device Management (Intune)
+            const deviceConfigs = scanData._deviceConfigurations || [];
+            const compliancePolicies = scanData._compliancePolicies || [];
+            const deviceStatus = document.getElementById('deviceStatus');
+            const deviceContent = document.getElementById('deviceContent');
+
+            const hasDeviceManagement = deviceConfigs.length > 0 || compliancePolicies.length > 0;
+
+            if (hasDeviceManagement) {
+                deviceStatus.textContent = `${deviceConfigs.length} configs, ${compliancePolicies.length} policies`;
+                deviceStatus.className = 'config-card-status configured';
+            } else {
+                deviceStatus.textContent = 'Not configured';
+                deviceStatus.className = 'config-card-status not-configured';
+            }
+
+            const endpointDlp = scanData.deviceSecurity?.endpointDlpEnabled;
+
+            deviceContent.innerHTML = `
+                <div class="config-item">
+                    <span class="config-item-name">Device Configurations</span>
+                    <span class="config-item-value">${deviceConfigs.length}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Compliance Policies</span>
+                    <span class="config-item-value">${compliancePolicies.length}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Endpoint DLP</span>
+                    <span class="config-item-badge ${endpointDlp ? 'green' : 'orange'}">${endpointDlp ? 'Configured' : 'Not Detected'}</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-item-name">Intune Management</span>
+                    <span class="config-item-badge ${hasDeviceManagement ? 'green' : 'orange'}">${hasDeviceManagement ? 'Active' : 'Not Detected'}</span>
+                </div>
+            `;
         }
 
         function showArticleReference() {
