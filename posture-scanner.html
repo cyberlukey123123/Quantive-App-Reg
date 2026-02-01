@@ -7,10 +7,10 @@
     <meta name="author" content="QuantiveCyber">
     <meta name="copyright" content="© 2026 QuantiveCyber. All Rights Reserved.">
     <title>AI Readiness Scanner | QuantiveCyber</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d9488' stroke-width='2'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <!-- MSAL.js for Microsoft Authentication -->
     <script src="https://unpkg.com/@azure/msal-browser@3.6.0/lib/msal-browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -22,20 +22,20 @@
         }
 
         :root {
-            --ink: #111827;
-            --ink-secondary: #374151;
-            --ink-tertiary: #6b7280;
-            --ink-muted: #9ca3af;
-            --bg: #f9fafb;
-            --bg-secondary: #f3f4f6;
+            --ink: #1c1917;
+            --ink-secondary: #57534e;
+            --ink-tertiary: #78716c;
+            --ink-muted: #a8a29e;
+            --bg: #f5f5f4;
+            --bg-secondary: #e7e5e4;
             --white: #ffffff;
             --surface: #ffffff;
-            --border: #e5e7eb;
-            --border-light: #f3f4f6;
+            --border: #d6d3d1;
+            --border-light: #e7e5e4;
 
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #eff6ff;
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: rgba(13, 148, 136, 0.08);
 
             --success: #059669;
             --success-light: #ecfdf5;
@@ -59,35 +59,35 @@
 
         /* Dark Mode Theme */
         [data-theme="dark"] {
-            --ink: #e0e0e0;
-            --ink-secondary: #b0b0b0;
-            --ink-tertiary: #888888;
-            --ink-muted: #666666;
-            --bg: #0a0a1a;
-            --bg-secondary: #12122a;
-            --white: #1a1a3a;
-            --surface: #1a1a3a;
-            --border: rgba(255, 255, 255, 0.1);
-            --border-light: rgba(255, 255, 255, 0.05);
+            --ink: #fafaf9;
+            --ink-secondary: #d6d3d1;
+            --ink-tertiary: #a8a29e;
+            --ink-muted: #78716c;
+            --bg: #1c1917;
+            --bg-secondary: #292524;
+            --white: #292524;
+            --surface: #292524;
+            --border: #44403c;
+            --border-light: #292524;
 
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
-            --primary-light: rgba(59, 130, 246, 0.15);
+            --primary: #14b8a6;
+            --primary-dark: #0d9488;
+            --primary-light: rgba(20, 184, 166, 0.15);
 
-            --success: #22c55e;
-            --success-light: rgba(34, 197, 94, 0.15);
-            --success-border: rgba(34, 197, 94, 0.3);
+            --success: #34d399;
+            --success-light: rgba(52, 211, 153, 0.15);
+            --success-border: rgba(52, 211, 153, 0.3);
 
-            --warning: #f59e0b;
-            --warning-light: rgba(245, 158, 11, 0.15);
-            --warning-border: rgba(245, 158, 11, 0.3);
+            --warning: #fbbf24;
+            --warning-light: rgba(251, 191, 36, 0.15);
+            --warning-border: rgba(251, 191, 36, 0.3);
 
-            --danger: #ef4444;
-            --danger-light: rgba(239, 68, 68, 0.15);
-            --danger-border: rgba(239, 68, 68, 0.3);
+            --danger: #f87171;
+            --danger-light: rgba(248, 113, 113, 0.15);
+            --danger-border: rgba(248, 113, 113, 0.3);
 
             --purple: #a78bfa;
-            --purple-light: rgba(139, 92, 246, 0.15);
+            --purple-light: rgba(167, 139, 250, 0.15);
 
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
             --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
@@ -95,7 +95,7 @@
         }
 
         [data-theme="dark"] body {
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%);
+            background: #1c1917;
         }
 
         [data-theme="dark"] .alert-banner.warning {
@@ -119,13 +119,14 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg);
             color: var(--ink);
             line-height: 1.5;
             font-size: 14px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            font-optical-sizing: auto;
         }
 
         /* Icons */
@@ -240,13 +241,16 @@
 
         .btn-primary {
             background: var(--primary);
-            color: var(--white);
+            color: #ffffff;
             border-color: var(--primary);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .btn-primary:hover {
             background: var(--primary-dark);
             border-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
         }
 
         .btn-secondary {
@@ -486,11 +490,12 @@
         }
 
         .stat-value {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 1.75rem;
-            font-weight: 700;
+            font-weight: 500;
             color: var(--ink);
             line-height: 1.2;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.02em;
         }
 
         .stat-label {
@@ -817,11 +822,12 @@
         }
 
         .score-value {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 2rem;
-            font-weight: 700;
+            font-weight: 500;
             color: var(--ink);
             line-height: 1;
-            letter-spacing: -1px;
+            letter-spacing: -0.02em;
         }
 
         .score-max {
@@ -1399,8 +1405,9 @@
 
         .score-category-value {
             width: 50px;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--ink);
             text-align: right;
         }
@@ -1412,8 +1419,9 @@
             min-width: 50px;
             padding: 2px 8px;
             border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.6875rem;
-            font-weight: 600;
+            font-weight: 500;
             text-align: center;
         }
 
@@ -1454,6 +1462,7 @@
         }
 
         .improve-score-potential {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
             color: var(--success);
             font-weight: 500;

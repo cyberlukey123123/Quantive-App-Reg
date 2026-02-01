@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Readiness Scanner | QuantiveCyber</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d9488' stroke-width='2'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
     <meta name="description" content="Assess your Microsoft 365 environment's readiness to safely deploy AI tools like Microsoft Copilot and ChatGPT Enterprise. 100-point scoring across 41 security controls aligned with Microsoft's AI Adoption Framework.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #f5f5f4;
+            --surface: #ffffff;
+            --border: #d6d3d1;
+            --text: #1c1917;
+            --text-secondary: #57534e;
+            --text-muted: #a8a29e;
+            --accent: #0d9488;
+            --accent-hover: #0f766e;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,577 +31,530 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%);
-            color: #e0e0e0;
-            min-height: 100vh;
-            line-height: 1.6;
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            font-optical-sizing: auto;
         }
 
         /* Navigation */
         nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 20px 60px;
-            background: rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            justify-content: space-between;
+            padding: 0 48px;
+            z-index: 100;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.5rem;
             font-weight: 700;
-            color: #fff;
+            font-size: 1.125rem;
+            color: var(--text);
             text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            letter-spacing: -0.02em;
         }
 
         .nav-links {
             display: flex;
-            gap: 40px;
-            align-items: center;
+            gap: 32px;
         }
 
         .nav-links a {
-            color: #a0a0a0;
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.15s;
         }
 
         .nav-links a:hover {
-            color: #fff;
+            color: var(--text);
         }
 
-        /* Hero Section */
+        /* Hero */
         .hero {
-            max-width: 1200px;
+            padding: 160px 48px 80px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 100px 60px;
-            text-align: center;
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            color: #60a5fa;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 30px;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 24px;
-            line-height: 1.2;
+            font-size: clamp(2.75rem, 6vw, 4.5rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            max-width: 720px;
+            margin-bottom: 28px;
         }
 
-        .hero h1 span {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .hero h1 em {
+            font-style: normal;
+            color: var(--accent);
         }
 
         .hero p {
-            font-size: 1.25rem;
-            color: #a0a0a0;
-            max-width: 750px;
-            margin: 0 auto 50px;
+            font-size: 1.0625rem;
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin-bottom: 48px;
+            line-height: 1.7;
         }
 
-        .cta-buttons {
+        .btn-group {
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
         }
 
         .btn {
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             gap: 10px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: #fff;
+            padding: 14px 28px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
             border: none;
         }
 
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.4);
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: var(--text);
+            padding: 14px 0;
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
+            color: var(--accent);
         }
 
-        /* Score Preview */
-        .score-preview {
+        .btn-secondary::after {
+            content: '→';
+            transition: transform 0.2s;
+        }
+
+        .btn-secondary:hover::after {
+            transform: translateX(4px);
+        }
+
+        /* Stats row */
+        .stats-row {
             display: flex;
-            justify-content: center;
             gap: 40px;
-            margin-top: 60px;
-            flex-wrap: wrap;
+            padding: 40px 0;
+            margin-top: 80px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
 
-        .score-item {
-            text-align: center;
+        .stat {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
         }
 
-        .score-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #fff;
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            color: var(--text);
         }
 
-        .score-value.green { color: #22c55e; }
-        .score-value.yellow { color: #eab308; }
-        .score-value.red { color: #ef4444; }
+        .stat-value.green {
+            color: var(--success);
+        }
 
-        .score-label {
-            font-size: 0.85rem;
-            color: #a0a0a0;
-            margin-top: 4px;
+        .stat-label {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
         }
 
         /* Features Section */
         .features {
-            max-width: 1200px;
+            padding: 120px 48px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 80px 60px;
         }
 
-        .features h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #fff;
-            margin-bottom: 20px;
+        .section-header {
+            margin-bottom: 56px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: end;
         }
 
-        .features > p {
+        .section-header.centered {
+            grid-template-columns: 1fr;
             text-align: center;
-            color: #a0a0a0;
-            max-width: 700px;
-            margin: 0 auto 60px;
+        }
+
+        .section-header.centered p {
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .section-header h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.7;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 28px;
-            transition: all 0.3s;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px 32px;
+            transition: border-color 0.2s;
             position: relative;
-            overflow: hidden;
         }
 
         .feature-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(59, 130, 246, 0.3);
-            transform: translateY(-4px);
+            border-color: var(--accent);
         }
 
         .feature-card::before {
             content: '';
             position: absolute;
-            top: 0;
+            top: 28px;
             left: 0;
-            width: 4px;
-            height: 100%;
+            width: 3px;
+            height: 24px;
+            border-radius: 0 2px 2px 0;
         }
 
         .feature-card.cat-1::before { background: #3b82f6; }
         .feature-card.cat-2::before { background: #8b5cf6; }
-        .feature-card.cat-3::before { background: #22c55e; }
+        .feature-card.cat-3::before { background: var(--success); }
         .feature-card.cat-4::before { background: #06b6d4; }
-        .feature-card.cat-5::before { background: #f59e0b; }
-        .feature-card.cat-6::before { background: #ef4444; }
+        .feature-card.cat-5::before { background: var(--warning); }
+        .feature-card.cat-6::before { background: var(--danger); }
 
         .feature-header {
             display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 14px;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 10px;
         }
 
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .feature-icon svg {
-            width: 24px;
-            height: 24px;
-            stroke: #60a5fa;
-        }
-
-        .feature-title {
-            flex: 1;
+        .feature-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
         .feature-card h3 {
-            font-size: 1.1rem;
-            color: #fff;
-            margin-bottom: 2px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 4px;
         }
 
         .feature-points {
-            font-size: 0.8rem;
-            color: #60a5fa;
-            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--accent);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .feature-card p {
-            color: #a0a0a0;
-            font-size: 0.9rem;
-            line-height: 1.5;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
         }
 
         .feature-tests {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin-top: 14px;
         }
 
         .feature-test {
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             padding: 4px 8px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 4px;
-            color: #a0a0a0;
+            background: var(--bg);
+            border-radius: 3px;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
         /* How It Works */
         .how-it-works {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 80px 60px;
+            background: #1c1917;
+            color: #fafaf9;
+            padding: 120px 48px;
         }
 
         .how-it-works-inner {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        .how-it-works h2 {
+        .how-it-works .section-header {
+            grid-template-columns: 1fr;
             text-align: center;
-            font-size: 2.5rem;
-            color: #fff;
-            margin-bottom: 20px;
+            margin-bottom: 64px;
         }
 
-        .how-it-works > .how-it-works-inner > p {
-            text-align: center;
-            color: #a0a0a0;
-            max-width: 700px;
-            margin: 0 auto 60px;
+        .how-it-works .section-header h2 {
+            color: #fafaf9;
+        }
+
+        .how-it-works .section-header p {
+            color: #a8a29e;
+            max-width: 560px;
+            margin: 0 auto;
         }
 
         .steps {
-            display: flex;
-            justify-content: space-between;
-            gap: 40px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            background: #292524;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .step {
-            flex: 1;
-            min-width: 250px;
-            text-align: center;
+            background: #1c1917;
+            padding: 36px 28px;
         }
 
         .step-number {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #fff;
-            margin: 0 auto 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.625rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 20px;
         }
 
         .step h3 {
-            font-size: 1.25rem;
-            color: #fff;
-            margin-bottom: 12px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
         }
 
         .step p {
-            color: #a0a0a0;
-            font-size: 0.95rem;
+            font-size: 0.8125rem;
+            color: #a8a29e;
+            line-height: 1.7;
         }
 
         /* Risk Levels */
         .risk-levels {
-            max-width: 1200px;
+            padding: 120px 48px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 80px 60px;
-        }
-
-        .risk-levels h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #fff;
-            margin-bottom: 20px;
-        }
-
-        .risk-levels > p {
-            text-align: center;
-            color: #a0a0a0;
-            max-width: 700px;
-            margin: 0 auto 60px;
         }
 
         .risk-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 16px;
+            margin-top: 56px;
         }
 
         .risk-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
             padding: 32px;
-            text-align: center;
-            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
 
-        .risk-card.critical {
-            border-color: rgba(239, 68, 68, 0.4);
-            background: rgba(239, 68, 68, 0.1);
+        .risk-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
         }
 
-        .risk-card.elevated {
-            border-color: rgba(245, 158, 11, 0.4);
-            background: rgba(245, 158, 11, 0.1);
-        }
-
-        .risk-card.managed {
-            border-color: rgba(34, 197, 94, 0.4);
-            background: rgba(34, 197, 94, 0.1);
-        }
+        .risk-card.critical::before { background: var(--danger); }
+        .risk-card.elevated::before { background: var(--warning); }
+        .risk-card.managed::before { background: var(--success); }
 
         .risk-score {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 2rem;
-            font-weight: 800;
+            font-weight: 500;
+            letter-spacing: -0.02em;
             margin-bottom: 8px;
         }
 
-        .risk-card.critical .risk-score { color: #ef4444; }
-        .risk-card.elevated .risk-score { color: #f59e0b; }
-        .risk-card.managed .risk-score { color: #22c55e; }
+        .risk-card.critical .risk-score { color: var(--danger); }
+        .risk-card.elevated .risk-score { color: var(--warning); }
+        .risk-card.managed .risk-score { color: var(--success); }
 
         .risk-card h3 {
-            font-size: 1.25rem;
-            color: #fff;
-            margin-bottom: 12px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
         }
 
-        .risk-card p {
-            color: #a0a0a0;
-            font-size: 0.9rem;
-            margin-bottom: 16px;
+        .risk-card > p {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
         }
 
         .risk-status {
             display: flex;
             flex-direction: column;
             gap: 8px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
         }
 
         .status-item {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
-            padding: 8px 12px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 6px;
+            font-size: 0.75rem;
         }
 
         .status-item span:first-child {
-            color: #a0a0a0;
+            color: var(--text-muted);
         }
 
         .status-item span:last-child {
             font-weight: 600;
         }
 
-        .risk-card.critical .status-item span:last-child { color: #ef4444; }
-        .risk-card.elevated .status-item span:last-child { color: #f59e0b; }
-        .risk-card.managed .status-item span:last-child { color: #22c55e; }
+        .risk-card.critical .status-item span:last-child { color: var(--danger); }
+        .risk-card.elevated .status-item span:last-child { color: var(--warning); }
+        .risk-card.managed .status-item span:last-child { color: var(--success); }
 
-        /* Microsoft Framework Section */
-        .ms-framework {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 80px 60px;
+        /* Framework Section */
+        .framework {
+            background: #1c1917;
+            color: #fafaf9;
+            padding: 120px 48px;
         }
 
-        .ms-framework-inner {
-            max-width: 1200px;
+        .framework-inner {
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        .ms-framework-badge {
-            display: inline-block;
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            color: #60a5fa;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 20px;
+        .framework .section-header {
+            grid-template-columns: 1fr;
             text-align: center;
-            display: block;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 64px;
         }
 
-        .ms-framework h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #fff;
-            margin-bottom: 20px;
+        .framework .section-header h2 {
+            color: #fafaf9;
+            max-width: 600px;
+            margin: 0 auto 16px;
         }
 
-        .framework-pillars {
+        .framework .section-header p {
+            color: #a8a29e;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .pillars {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-bottom: 40px;
+            gap: 2px;
+            background: #292524;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 48px;
         }
 
-        .framework-pillar {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 32px 24px;
-            text-align: center;
-            transition: transform 0.2s, border-color 0.2s;
+        .pillar {
+            background: #1c1917;
+            padding: 36px 32px;
         }
 
-        .framework-pillar:hover {
-            transform: translateY(-4px);
-            border-color: rgba(59, 130, 246, 0.4);
+        .pillar-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.625rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 24px;
         }
 
-        .pillar-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-
-        .pillar-icon svg {
-            width: 32px;
-            height: 32px;
-        }
-
-        .pillar-icon.govern {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2));
-        }
-
-        .pillar-icon.govern svg {
-            stroke: #a78bfa;
-        }
-
-        .pillar-icon.secure {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2));
-        }
-
-        .pillar-icon.secure svg {
-            stroke: #4ade80;
-        }
-
-        .pillar-icon.manage {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
-        }
-
-        .pillar-icon.manage svg {
-            stroke: #60a5fa;
-        }
-
-        .framework-pillar h3 {
-            font-size: 1.25rem;
-            color: #fff;
+        .pillar h3 {
+            font-size: 1.375rem;
+            font-weight: 600;
             margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
 
-        .framework-pillar p {
-            font-size: 0.9rem;
-            color: #a0a0a0;
-            line-height: 1.6;
-            margin-bottom: 20px;
+        .pillar p {
+            font-size: 0.875rem;
+            color: #a8a29e;
+            line-height: 1.7;
         }
 
-        .pillar-checks {
+        .pillar-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
+            gap: 6px;
+            margin-top: 24px;
         }
 
-        .pillar-checks span {
-            background: rgba(255, 255, 255, 0.1);
-            color: #d1d5db;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.75rem;
+        .pillar-tags span {
+            font-size: 0.6875rem;
+            color: #d6d3d1;
+            background: #292524;
+            padding: 5px 10px;
+            border-radius: 3px;
             font-weight: 500;
         }
 
@@ -596,138 +566,114 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #60a5fa;
+            color: var(--accent);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             font-weight: 500;
-            transition: color 0.2s;
         }
 
         .framework-link a:hover {
-            color: #93c5fd;
+            text-decoration: underline;
         }
 
-        @media (max-width: 968px) {
-            .framework-pillars {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .ms-framework {
-                padding: 60px 24px;
-            }
-
-            .ms-framework h2 {
-                font-size: 2rem;
-            }
-        }
-
-        /* EU AI Act Info */
+        /* EU AI Act */
         .eu-ai-act {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 80px 60px;
-        }
-
-        .eu-ai-act-inner {
-            max-width: 1200px;
+            padding: 120px 48px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        .eu-ai-act h2 {
+        .eu-ai-act .section-header {
+            grid-template-columns: 1fr;
             text-align: center;
-            font-size: 2rem;
-            color: #fff;
-            margin-bottom: 20px;
-        }
-
-        .eu-ai-act > .eu-ai-act-inner > p {
-            text-align: center;
-            color: #a0a0a0;
-            max-width: 700px;
-            margin: 0 auto 40px;
-        }
-
-        .eu-badge {
-            display: inline-block;
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            color: #a78bfa;
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-bottom: 16px;
         }
 
         .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 48px;
         }
 
-        .category-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 20px;
-            border-left: 4px solid;
+        .eu-category {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
         }
 
-        .category-card.prohibited { border-left-color: #ef4444; }
-        .category-card.high-risk { border-left-color: #f97316; }
-        .category-card.limited { border-left-color: #eab308; }
-        .category-card.minimal { border-left-color: #22c55e; }
+        .eu-category::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+        }
 
-        .category-card h3 {
-            font-size: 1rem;
-            color: #fff;
+        .eu-category.prohibited::before { background: #1c1917; }
+        .eu-category.high::before { background: var(--danger); }
+        .eu-category.limited::before { background: var(--warning); }
+        .eu-category.minimal::before { background: var(--success); }
+
+        .eu-category h4 {
+            font-size: 0.9375rem;
+            font-weight: 600;
             margin-bottom: 8px;
         }
 
-        .category-card p {
-            color: #a0a0a0;
-            font-size: 0.85rem;
+        .eu-category p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.5;
         }
 
         /* CTA Section */
         .cta-section {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-            border-top: 1px solid rgba(59, 130, 246, 0.3);
-            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
-            padding: 80px 60px;
             text-align: center;
+            padding: 100px 48px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
         }
 
         .cta-section h2 {
-            font-size: 2.5rem;
-            color: #fff;
-            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
         }
 
         .cta-section p {
-            color: #a0a0a0;
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-size: 1rem;
         }
 
         /* Footer */
         footer {
-            padding: 40px 60px;
-            text-align: center;
-            color: #666;
-            font-size: 0.9rem;
+            padding: 32px 48px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        footer span {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
         }
 
         footer a {
-            color: #60a5fa;
+            color: var(--text-muted);
             text-decoration: none;
+            font-size: 0.8125rem;
         }
 
         footer a:hover {
-            text-decoration: underline;
+            color: var(--accent);
         }
 
         /* Mobile Menu */
@@ -746,23 +692,11 @@
 
         .mobile-menu-btn span {
             display: block;
-            width: 24px;
+            width: 20px;
             height: 2px;
-            background: #fff;
+            background: var(--text);
             border-radius: 2px;
             transition: all 0.3s;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
         }
 
         .mobile-nav {
@@ -771,11 +705,11 @@
             top: 100%;
             left: 0;
             right: 0;
-            background: rgba(10, 10, 26, 0.98);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px 24px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         .mobile-nav.active {
@@ -783,97 +717,84 @@
         }
 
         .mobile-nav a {
-            color: #a0a0a0;
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 1rem;
+            font-size: 0.9375rem;
             padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: color 0.3s;
+            border-bottom: 1px solid var(--border);
         }
 
         .mobile-nav a:last-child {
             border-bottom: none;
         }
 
-        .mobile-nav a:hover {
-            color: #fff;
-        }
-
         /* Responsive */
-        @media (max-width: 968px) {
-            .risk-grid {
+        @media (max-width: 1024px) {
+            .section-header {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .features-grid, .pillars, .steps, .risk-grid {
+                grid-template-columns: 1fr;
+            }
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
             nav {
-                padding: 20px 24px;
-                position: relative;
+                padding: 0 24px;
             }
-
             .nav-links {
                 display: none;
             }
-
             .mobile-menu-btn {
                 display: flex;
             }
-
+            .hero, .features, .risk-levels, .eu-ai-act {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .how-it-works, .framework {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .cta-section, footer {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
             .hero {
-                padding: 60px 24px;
+                padding-top: 120px;
             }
-
             .hero h1 {
-                font-size: 2.25rem;
+                font-size: 2.5rem;
             }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .features,
-            .risk-levels,
-            .how-it-works,
-            .eu-ai-act {
-                padding: 60px 24px;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cta-section {
-                padding: 60px 24px;
-            }
-
-            .steps {
-                flex-direction: column;
-            }
-
-            .score-preview {
+            .stats-row {
+                flex-wrap: wrap;
                 gap: 24px;
             }
-
+            .stat {
+                flex-direction: column;
+                gap: 2px;
+            }
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
             footer {
-                padding: 40px 24px;
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
     <nav>
-        <a href="https://quantivecyber.com" class="logo">
-            <div class="logo-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-            </div>
-            QuantiveCyber
-        </a>
+        <a href="https://quantivecyber.com" class="logo">QuantiveCyber</a>
         <div class="nav-links">
-            <a href="posture-scanner.html">AI Readiness Scanner</a>
-            <a href="https://quantivecyber.com">About Us</a>
+            <a href="posture-scanner.html">Scanner</a>
+            <a href="https://quantivecyber.com">About</a>
             <a href="https://quantivecyber.com/contact">Contact</a>
         </div>
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -882,67 +803,54 @@
             <span></span>
         </button>
         <div class="mobile-nav">
-            <a href="posture-scanner.html">AI Readiness Scanner</a>
-            <a href="https://quantivecyber.com">About Us</a>
+            <a href="posture-scanner.html">Scanner</a>
+            <a href="https://quantivecyber.com">About</a>
             <a href="https://quantivecyber.com/contact">Contact</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="badge">100-Point AI Readiness Assessment</div>
-        <h1>Is Your Organisation <span>Ready for AI?</span></h1>
-        <p>Automatically assess your Microsoft 365 security posture before deploying AI tools like Microsoft Copilot, ChatGPT Enterprise, or custom AI agents. Our scanner evaluates 41 controls across 6 categories aligned with Microsoft's AI Adoption Framework.</p>
-        <div class="cta-buttons">
-            <a href="posture-scanner.html" class="btn btn-primary">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 6v6l4 2"/>
-                </svg>
-                Start Free Scan
-            </a>
-            <a href="posture-scanner.html?demo=true" class="btn btn-secondary">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="5 3 19 12 5 21 5 3"/>
-                </svg>
-                View Demo
-            </a>
+        <h1>Know if you're <em>ready for AI</em> before you deploy</h1>
+        <p>We scan 41 security controls across your Microsoft 365 tenant and give you a single score. Find out if you're ready for Copilot, ChatGPT Enterprise, or custom AI agents.</p>
+        <div class="btn-group">
+            <a href="posture-scanner.html" class="btn btn-primary">Run Free Assessment</a>
+            <a href="posture-scanner.html?demo=true" class="btn btn-secondary">View demo</a>
         </div>
-        <div class="score-preview">
-            <div class="score-item">
-                <div class="score-value">41</div>
-                <div class="score-label">Security Tests</div>
+
+        <div class="stats-row">
+            <div class="stat">
+                <span class="stat-value">41</span>
+                <span class="stat-label">controls checked</span>
             </div>
-            <div class="score-item">
-                <div class="score-value">6</div>
-                <div class="score-label">Categories</div>
+            <div class="stat">
+                <span class="stat-value">6</span>
+                <span class="stat-label">categories</span>
             </div>
-            <div class="score-item">
-                <div class="score-value">100</div>
-                <div class="score-label">Point Score</div>
+            <div class="stat">
+                <span class="stat-value">100</span>
+                <span class="stat-label">point score</span>
             </div>
-            <div class="score-item">
-                <div class="score-value green">71+</div>
-                <div class="score-label">AI Ready</div>
+            <div class="stat">
+                <span class="stat-value green">71+</span>
+                <span class="stat-label">AI ready</span>
             </div>
         </div>
     </section>
 
     <section class="features">
-        <h2>What We Assess</h2>
-        <p>Our scanner evaluates your Microsoft 365 environment across 6 critical categories that determine AI readiness. Each category contains specific tests weighted by importance.</p>
+        <div class="section-header">
+            <h2>Six categories that determine your readiness</h2>
+            <p>Each category is weighted by its impact on AI security. Your final score is a sum of all 100 points across these areas.</p>
+        </div>
+
         <div class="features-grid">
             <div class="feature-card cat-1">
                 <div class="feature-header">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/>
-                            <path d="m21 21-4.35-4.35"/>
-                        </svg>
-                    </div>
-                    <div class="feature-title">
+                    <div>
+                        <div class="feature-number">01</div>
                         <h3>Data Visibility & Discovery</h3>
-                        <div class="feature-points">10 points | 5 tests</div>
                     </div>
+                    <span class="feature-points">10 pts</span>
                 </div>
                 <p>Can you see where your sensitive data is? We check data mapping, classification coverage, audit logging, and shadow IT discovery.</p>
                 <div class="feature-tests">
@@ -952,18 +860,14 @@
                     <span class="feature-test">Shadow AI</span>
                 </div>
             </div>
+
             <div class="feature-card cat-2">
                 <div class="feature-header">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
-                    </div>
-                    <div class="feature-title">
+                    <div>
+                        <div class="feature-number">02</div>
                         <h3>Identity & Access Governance</h3>
-                        <div class="feature-points">20 points | 9 tests</div>
                     </div>
+                    <span class="feature-points">20 pts</span>
                 </div>
                 <p>Who can access what? We evaluate MFA coverage, Conditional Access policies, PIM, access reviews, and admin account security.</p>
                 <div class="feature-tests">
@@ -971,21 +875,16 @@
                     <span class="feature-test">Conditional Access</span>
                     <span class="feature-test">PIM</span>
                     <span class="feature-test">Access Reviews</span>
-                    <span class="feature-test">Admin Count</span>
                 </div>
             </div>
+
             <div class="feature-card cat-3">
                 <div class="feature-header">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            <path d="M9 12l2 2 4-4"/>
-                        </svg>
-                    </div>
-                    <div class="feature-title">
+                    <div>
+                        <div class="feature-number">03</div>
                         <h3>Data Classification & Protection</h3>
-                        <div class="feature-points">15 points | 6 tests</div>
                     </div>
+                    <span class="feature-points">15 pts</span>
                 </div>
                 <p>Is your data labelled and protected? We check sensitivity labels, DLP policies, auto-labeling accuracy, and user adoption.</p>
                 <div class="feature-tests">
@@ -995,19 +894,14 @@
                     <span class="feature-test">DLP</span>
                 </div>
             </div>
+
             <div class="feature-card cat-4">
                 <div class="feature-header">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                            <line x1="8" y1="21" x2="16" y2="21"/>
-                            <line x1="12" y1="17" x2="12" y2="21"/>
-                        </svg>
-                    </div>
-                    <div class="feature-title">
+                    <div>
+                        <div class="feature-number">04</div>
                         <h3>Device & Endpoint Security</h3>
-                        <div class="feature-points">5 points | 2 tests</div>
                     </div>
+                    <span class="feature-points">5 pts</span>
                 </div>
                 <p>Are devices secure? We check Purview device onboarding and endpoint DLP policies for USB, print, and browser controls.</p>
                 <div class="feature-tests">
@@ -1015,53 +909,36 @@
                     <span class="feature-test">Endpoint DLP</span>
                 </div>
             </div>
+
             <div class="feature-card cat-5">
                 <div class="feature-header">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                        </svg>
-                    </div>
-                    <div class="feature-title">
+                    <div>
+                        <div class="feature-number">05</div>
                         <h3>Collaboration Security</h3>
-                        <div class="feature-points">11 points | 5 tests</div>
                     </div>
+                    <span class="feature-points">11 pts</span>
                 </div>
                 <p>Is sharing controlled? We assess external sharing policies, guest access, container labels, and oversharing detection.</p>
                 <div class="feature-tests">
                     <span class="feature-test">External Sharing</span>
                     <span class="feature-test">Guest Access</span>
                     <span class="feature-test">Oversharing</span>
-                    <span class="feature-test">Link Defaults</span>
                 </div>
             </div>
+
             <div class="feature-card cat-6">
                 <div class="feature-header">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
-                            <rect x="9" y="9" width="6" height="6"/>
-                            <line x1="9" y1="1" x2="9" y2="4"/>
-                            <line x1="15" y1="1" x2="15" y2="4"/>
-                            <line x1="9" y1="20" x2="9" y2="23"/>
-                            <line x1="15" y1="20" x2="15" y2="23"/>
-                        </svg>
-                    </div>
-                    <div class="feature-title">
+                    <div>
+                        <div class="feature-number">06</div>
                         <h3>AI & Agent Governance</h3>
-                        <div class="feature-points">39 points | 14 tests</div>
                     </div>
+                    <span class="feature-points">39 pts</span>
                 </div>
                 <p>Are you AI-ready? The differentiator. We check Copilot config, DSPM for AI, restricted search, agent controls, and adaptive protection.</p>
                 <div class="feature-tests">
-                    <span class="feature-test">AI Discovery</span>
                     <span class="feature-test">Copilot Config</span>
                     <span class="feature-test">DSPM</span>
                     <span class="feature-test">Agent Controls</span>
-                    <span class="feature-test">Oversharing Audit</span>
                 </div>
             </div>
         </div>
@@ -1069,36 +946,42 @@
 
     <section class="how-it-works">
         <div class="how-it-works-inner">
-            <h2>How It Works</h2>
-            <p style="text-align: center; color: #a0a0a0; max-width: 700px; margin: 0 auto 60px;">Connect your Microsoft 365 tenant and get your AI Readiness score in minutes. Read-only access means zero risk to your environment.</p>
+            <div class="section-header">
+                <h2>How it works</h2>
+                <p>Connect your Microsoft 365 tenant and get your AI Readiness score in minutes. Read-only access means zero risk to your environment.</p>
+            </div>
+
             <div class="steps">
                 <div class="step">
-                    <div class="step-number">1</div>
+                    <div class="step-number">Step 01</div>
                     <h3>Connect Securely</h3>
                     <p>Authenticate with your Microsoft 365 account. We request read-only permissions to scan your security configurations.</p>
                 </div>
                 <div class="step">
-                    <div class="step-number">2</div>
+                    <div class="step-number">Step 02</div>
                     <h3>Automated Analysis</h3>
                     <p>Our scanner evaluates 41 security controls across Entra ID, Purview, Defender, SharePoint, and Copilot settings.</p>
                 </div>
                 <div class="step">
-                    <div class="step-number">3</div>
+                    <div class="step-number">Step 03</div>
                     <h3>Get Your Score</h3>
                     <p>Receive your 100-point AI Readiness score with category breakdowns showing exactly where you stand.</p>
                 </div>
                 <div class="step">
-                    <div class="step-number">4</div>
+                    <div class="step-number">Step 04</div>
                     <h3>Improve & Deploy</h3>
-                    <p>Follow prioritised recommendations with direct links to Microsoft admin portals to close gaps and deploy AI safely.</p>
+                    <p>Follow prioritised recommendations with direct links to Microsoft admin portals to close gaps.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="risk-levels">
-        <h2>Understanding Your Score</h2>
-        <p>Your AI Readiness score determines whether it's safe to deploy Microsoft Copilot and AI agents in your environment.</p>
+        <div class="section-header centered">
+            <h2>Understanding your score</h2>
+            <p>Your AI Readiness score determines whether it's safe to deploy Microsoft Copilot and AI agents in your environment.</p>
+        </div>
+
         <div class="risk-grid">
             <div class="risk-card critical">
                 <div class="risk-score">0-35</div>
@@ -1119,6 +1002,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="risk-card elevated">
                 <div class="risk-score">36-70</div>
                 <h3>Elevated Risk</h3>
@@ -1138,6 +1022,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="risk-card managed">
                 <div class="risk-score">71-100</div>
                 <h3>Managed Risk</h3>
@@ -1160,132 +1045,100 @@
         </div>
     </section>
 
-    <section class="ms-framework">
-        <div class="ms-framework-inner">
-            <div class="ms-framework-badge">Aligned with Microsoft</div>
-            <h2>Built on Microsoft's AI Adoption Framework</h2>
-            <p style="text-align: center; color: #a0a0a0; max-width: 700px; margin: 0 auto 50px;">Our scanner is aligned with Microsoft's Cloud Adoption Framework for AI, ensuring your organisation follows best practices for secure AI deployment across Copilot, ChatGPT Enterprise, and other AI tools.</p>
+    <section class="framework">
+        <div class="framework-inner">
+            <div class="section-header">
+                <h2>Built on Microsoft's AI Adoption Framework</h2>
+                <p>Our methodology follows Microsoft's Cloud Adoption Framework for AI, ensuring best practices for secure AI deployment.</p>
+            </div>
 
-            <div class="framework-pillars">
-                <div class="framework-pillar">
-                    <div class="pillar-icon govern">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                            <polyline points="10 9 9 9 8 9"/>
-                        </svg>
-                    </div>
+            <div class="pillars">
+                <div class="pillar">
+                    <div class="pillar-number">Pillar 01</div>
                     <h3>Govern</h3>
-                    <p>Assess AI risks, document policies, and ensure regulatory compliance. Our scanner checks your AI governance policies, acceptable use frameworks, and audit configurations.</p>
-                    <div class="pillar-checks">
+                    <p>Establish policies, assess risks, and ensure compliance with regulations like the EU AI Act.</p>
+                    <div class="pillar-tags">
                         <span>AI Usage Policy</span>
                         <span>Audit Logging</span>
-                        <span>Content Filtering</span>
+                        <span>Compliance</span>
                     </div>
                 </div>
-                <div class="framework-pillar">
-                    <div class="pillar-icon secure">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                    </div>
+                <div class="pillar">
+                    <div class="pillar-number">Pillar 02</div>
                     <h3>Secure</h3>
-                    <p>Protect your data before Copilot can access it. We assess identity controls, data classification, DLP policies, and sharing restrictions to prevent data exposure.</p>
-                    <div class="pillar-checks">
+                    <p>Protect your data with identity controls, classification, DLP, and access restrictions.</p>
+                    <div class="pillar-tags">
                         <span>Data Protection</span>
-                        <span>Identity & Access</span>
-                        <span>Sharing Controls</span>
+                        <span>Identity</span>
+                        <span>DLP</span>
                     </div>
                 </div>
-                <div class="framework-pillar">
-                    <div class="pillar-icon manage">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="3" y1="9" x2="21" y2="9"/>
-                            <line x1="9" y1="21" x2="9" y2="9"/>
-                        </svg>
-                    </div>
+                <div class="pillar">
+                    <div class="pillar-number">Pillar 03</div>
                     <h3>Manage</h3>
-                    <p>Monitor and maintain AI deployments over time. We check Copilot configurations, agent controls, DSPM for AI, and adaptive protection settings.</p>
-                    <div class="pillar-checks">
+                    <p>Monitor AI deployments, configure agent controls, and maintain security posture.</p>
+                    <div class="pillar-tags">
                         <span>Copilot Config</span>
-                        <span>Agent Controls</span>
-                        <span>DSPM for AI</span>
+                        <span>Agents</span>
+                        <span>DSPM</span>
                     </div>
                 </div>
             </div>
 
             <div class="framework-link">
                 <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/ai/" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                        <polyline points="15 3 21 3 21 9"/>
-                        <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
-                    Learn more about Microsoft's AI Adoption Framework
+                    Learn more about Microsoft's AI Adoption Framework →
                 </a>
             </div>
         </div>
     </section>
 
     <section class="eu-ai-act">
-        <div class="eu-ai-act-inner">
-            <div style="text-align: center;">
-                <span class="eu-badge">Informational</span>
-            </div>
+        <div class="section-header">
             <h2>EU AI Act Risk Classification</h2>
-            <p style="text-align: center; color: #a0a0a0; max-width: 700px; margin: 0 auto 40px;">Our scanner also identifies discovered AI systems and classifies them according to EU AI Act risk categories. This helps you understand regulatory obligations alongside your technical readiness.</p>
-            <div class="category-grid">
-                <div class="category-card prohibited">
-                    <h3>Prohibited AI</h3>
-                    <p>Banned AI systems including social scoring and real-time biometric identification. Must be removed immediately.</p>
-                </div>
-                <div class="category-card high-risk">
-                    <h3>High-Risk AI</h3>
-                    <p>HR/recruitment AI, credit scoring. Requires conformity assessment, human oversight, and documentation.</p>
-                </div>
-                <div class="category-card limited">
-                    <h3>Limited Risk AI</h3>
-                    <p>Chatbots, AI assistants like Copilot. Must disclose AI use to users with transparency notices.</p>
-                </div>
-                <div class="category-card minimal">
-                    <h3>Minimal Risk AI</h3>
-                    <p>Spam filters, productivity AI. No mandatory requirements - voluntary best practices apply.</p>
-                </div>
+            <p>Our scanner identifies AI systems and classifies them according to EU AI Act risk categories, helping you understand regulatory obligations.</p>
+        </div>
+
+        <div class="category-grid">
+            <div class="eu-category prohibited">
+                <h4>Prohibited</h4>
+                <p>Unacceptable risk AI that is banned under the regulation</p>
+            </div>
+            <div class="eu-category high">
+                <h4>High Risk</h4>
+                <p>Requires conformity assessment and human oversight</p>
+            </div>
+            <div class="eu-category limited">
+                <h4>Limited Risk</h4>
+                <p>Transparency obligations apply to these systems</p>
+            </div>
+            <div class="eu-category minimal">
+                <h4>Minimal Risk</h4>
+                <p>No specific requirements beyond voluntary codes</p>
             </div>
         </div>
     </section>
 
     <section class="cta-section">
-        <h2>Ready to Check Your AI Readiness?</h2>
-        <p>Get instant visibility into your Microsoft 365 security posture and understand if you're ready for Copilot and AI agents.</p>
-        <div class="cta-buttons">
-            <a href="posture-scanner.html" class="btn btn-primary">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-                Start Your Free Scan
-            </a>
-            <a href="https://quantivecyber.com/contact" class="btn btn-secondary">Book a Consultation</a>
-        </div>
+        <h2>Ready to find out your score?</h2>
+        <p>Connect your Microsoft 365 tenant. Takes less than 2 minutes.</p>
+        <a href="posture-scanner.html" class="btn btn-primary">Run Free Assessment</a>
     </section>
 
     <footer>
-        <p>&copy; 2026 QuantiveCyber. All rights reserved. | <a href="https://quantivecyber.com">quantivecyber.com</a></p>
+        <span>&copy; 2025 QuantiveCyber</span>
+        <a href="https://quantivecyber.com">quantivecyber.com</a>
     </footer>
 
     <script>
         function toggleMobileMenu() {
-            const btn = document.querySelector('.mobile-menu-btn');
             const nav = document.querySelector('.mobile-nav');
-            btn.classList.toggle('active');
+            const btn = document.querySelector('.mobile-menu-btn');
             nav.classList.toggle('active');
+            btn.classList.toggle('active');
         }
 
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', (e) => {
             const nav = document.querySelector('.mobile-nav');
             const btn = document.querySelector('.mobile-menu-btn');
             if (nav.classList.contains('active') && !nav.contains(e.target) && !btn.contains(e.target)) {

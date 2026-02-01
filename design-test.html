@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Readiness Scanner | Design Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f5f4;
+            --surface: #ffffff;
+            --border: #d6d3d1;
+            --text: #1c1917;
+            --text-secondary: #57534e;
+            --text-muted: #a8a29e;
+            --accent: #0d9488;
+            --accent-hover: #0f766e;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            font-optical-sizing: auto;
+        }
+
+        /* Navigation - Minimal */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        /* Hero - Asymmetric, more character */
+        .hero {
+            padding: 180px 48px 80px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.75rem, 6vw, 4.5rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            max-width: 720px;
+            margin-bottom: 28px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.0625rem;
+            color: var(--text-secondary);
+            max-width: 480px;
+            margin-bottom: 48px;
+            line-height: 1.7;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 14px 0;
+        }
+
+        .btn-secondary:hover {
+            color: var(--accent);
+        }
+
+        .btn-secondary::after {
+            content: '→';
+            transition: transform 0.2s;
+        }
+
+        .btn-secondary:hover::after {
+            transform: translateX(4px);
+        }
+
+        /* Stats row - horizontal ticker style */
+        .stats-row {
+            display: flex;
+            gap: 40px;
+            padding: 40px 0;
+            margin-top: 80px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+
+        .stat-label {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 120px 48px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 56px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: end;
+        }
+
+        .section-header h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .category-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .category-card:hover {
+            border-color: var(--accent);
+        }
+
+        .category-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .category-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+        }
+
+        .category-card p {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .category-points {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--accent);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Framework Section */
+        .framework {
+            background: #1c1917;
+            color: #fafaf9;
+            padding: 120px 48px;
+        }
+
+        .framework-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .framework .section-header {
+            grid-template-columns: 1fr;
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .framework .section-header h2 {
+            color: #fafaf9;
+            max-width: 600px;
+            margin: 0 auto 16px;
+        }
+
+        .framework .section-header p {
+            color: #a8a29e;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: #292524;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .pillar {
+            background: #1c1917;
+            padding: 36px 32px;
+        }
+
+        .pillar-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.625rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .pillar h3 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .pillar p {
+            font-size: 0.875rem;
+            color: #a8a29e;
+            line-height: 1.7;
+        }
+
+        .pillar-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 28px;
+        }
+
+        .pillar-tags span {
+            font-size: 0.6875rem;
+            color: #d6d3d1;
+            background: #292524;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        /* Score Preview */
+        .score-preview {
+            padding: 120px 48px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .score-preview .section-header {
+            grid-template-columns: 1fr;
+            margin-bottom: 48px;
+        }
+
+        .score-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .score-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .score-card-title {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .score-card-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--warning);
+            background: #fef3c7;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .score-card-body {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 0;
+        }
+
+        .score-main {
+            padding: 40px 32px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-big {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 4rem;
+            font-weight: 500;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .score-label {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .score-categories {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .score-category {
+            display: grid;
+            grid-template-columns: 130px 1fr 48px;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .score-category-name {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .score-bar {
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .score-bar-fill.good { background: var(--success); }
+        .score-bar-fill.warning { background: var(--warning); }
+        .score-bar-fill.danger { background: var(--danger); }
+
+        .score-category-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: right;
+            color: var(--text);
+        }
+
+        /* CTA Section */
+        .cta {
+            text-align: center;
+            padding: 100px 48px;
+            background: var(--bg);
+        }
+
+        .cta h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .cta p {
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            font-size: 0.9375rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 32px 48px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        footer span {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8125rem;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .section-header {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .category-grid, .pillars {
+                grid-template-columns: 1fr;
+            }
+            .score-card-body {
+                grid-template-columns: 1fr;
+            }
+            .score-main {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 32px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            nav, .hero, .categories, .framework, .score-preview, .cta, footer {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .hero {
+                padding-top: 140px;
+            }
+            .stats-row {
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+            .stat {
+                flex-direction: column;
+                gap: 2px;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" class="logo">QuantiveCyber</a>
+        <div class="nav-links">
+            <a href="#">Scanner</a>
+            <a href="#">Pricing</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Know if you're <em>ready for AI</em> before you deploy</h1>
+        <p>We scan 41 security controls across your Microsoft 365 tenant and give you a single score. Find out if you're ready for Copilot, ChatGPT Enterprise, or custom AI agents.</p>
+        <div class="btn-group">
+            <a href="posture-scanner.html" class="btn btn-primary">Run Free Assessment</a>
+            <a href="#preview" class="btn btn-secondary">See example output</a>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat">
+                <span class="stat-value">41</span>
+                <span class="stat-label">controls checked</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">6</span>
+                <span class="stat-label">categories</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">71+</span>
+                <span class="stat-label">AI ready threshold</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">&lt;2m</span>
+                <span class="stat-label">scan time</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="categories">
+        <div class="section-header">
+            <h2>Six categories that determine your readiness</h2>
+            <p>Each category is weighted by its impact on AI security. Your final score is a sum of all 100 points across these areas.</p>
+        </div>
+
+        <div class="category-grid">
+            <div class="category-card">
+                <div>
+                    <div class="category-number">01</div>
+                    <h3>Data Visibility</h3>
+                    <p>Know what data exists before AI can see it</p>
+                </div>
+                <span class="category-points">10 pts</span>
+            </div>
+            <div class="category-card">
+                <div>
+                    <div class="category-number">02</div>
+                    <h3>Identity & Access</h3>
+                    <p>MFA, Conditional Access, PIM controls</p>
+                </div>
+                <span class="category-points">20 pts</span>
+            </div>
+            <div class="category-card">
+                <div>
+                    <div class="category-number">03</div>
+                    <h3>Data Classification</h3>
+                    <p>Labels, encryption, auto-classification</p>
+                </div>
+                <span class="category-points">15 pts</span>
+            </div>
+            <div class="category-card">
+                <div>
+                    <div class="category-number">04</div>
+                    <h3>Device Security</h3>
+                    <p>Endpoint DLP and compliance policies</p>
+                </div>
+                <span class="category-points">5 pts</span>
+            </div>
+            <div class="category-card">
+                <div>
+                    <div class="category-number">05</div>
+                    <h3>Collaboration</h3>
+                    <p>SharePoint, external sharing, guest access</p>
+                </div>
+                <span class="category-points">11 pts</span>
+            </div>
+            <div class="category-card">
+                <div>
+                    <div class="category-number">06</div>
+                    <h3>AI Governance</h3>
+                    <p>Copilot config, agents, DSPM for AI</p>
+                </div>
+                <span class="category-points">39 pts</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="framework">
+        <div class="framework-inner">
+            <div class="section-header">
+                <h2>Built on Microsoft's AI Adoption Framework</h2>
+                <p>Our methodology follows Microsoft's Cloud Adoption Framework for AI.</p>
+            </div>
+
+            <div class="pillars">
+                <div class="pillar">
+                    <div class="pillar-number">Pillar 01</div>
+                    <h3>Govern</h3>
+                    <p>Establish policies, assess risks, and ensure compliance with regulations like the EU AI Act.</p>
+                    <div class="pillar-tags">
+                        <span>AI Usage Policy</span>
+                        <span>Audit Logging</span>
+                        <span>Compliance</span>
+                    </div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-number">Pillar 02</div>
+                    <h3>Secure</h3>
+                    <p>Protect your data with identity controls, classification, DLP, and access restrictions.</p>
+                    <div class="pillar-tags">
+                        <span>Data Protection</span>
+                        <span>Identity</span>
+                        <span>DLP</span>
+                    </div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-number">Pillar 03</div>
+                    <h3>Manage</h3>
+                    <p>Monitor AI deployments, configure agent controls, and maintain security posture.</p>
+                    <div class="pillar-tags">
+                        <span>Copilot Config</span>
+                        <span>Agents</span>
+                        <span>DSPM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="score-preview" id="preview">
+        <div class="section-header">
+            <h2>What you'll get</h2>
+            <p>A breakdown of your security posture across all 6 categories, with a clear score out of 100.</p>
+        </div>
+
+        <div class="score-card">
+            <div class="score-card-header">
+                <span class="score-card-title">Contoso Ltd — AI Readiness Report</span>
+                <span class="score-card-badge">Needs Improvement</span>
+            </div>
+            <div class="score-card-body">
+                <div class="score-main">
+                    <div class="score-big">58</div>
+                    <div class="score-label">out of 100</div>
+                </div>
+
+                <div class="score-categories">
+                    <div class="score-category">
+                        <span class="score-category-name">Data Visibility</span>
+                        <div class="score-bar">
+                            <div class="score-bar-fill good" style="width: 80%;"></div>
+                        </div>
+                        <span class="score-category-value">8/10</span>
+                    </div>
+                    <div class="score-category">
+                        <span class="score-category-name">Identity & Access</span>
+                        <div class="score-bar">
+                            <div class="score-bar-fill warning" style="width: 65%;"></div>
+                        </div>
+                        <span class="score-category-value">13/20</span>
+                    </div>
+                    <div class="score-category">
+                        <span class="score-category-name">Classification</span>
+                        <div class="score-bar">
+                            <div class="score-bar-fill warning" style="width: 60%;"></div>
+                        </div>
+                        <span class="score-category-value">9/15</span>
+                    </div>
+                    <div class="score-category">
+                        <span class="score-category-name">Device Security</span>
+                        <div class="score-bar">
+                            <div class="score-bar-fill warning" style="width: 60%;"></div>
+                        </div>
+                        <span class="score-category-value">3/5</span>
+                    </div>
+                    <div class="score-category">
+                        <span class="score-category-name">Collaboration</span>
+                        <div class="score-bar">
+                            <div class="score-bar-fill warning" style="width: 64%;"></div>
+                        </div>
+                        <span class="score-category-value">7/11</span>
+                    </div>
+                    <div class="score-category">
+                        <span class="score-category-name">AI Governance</span>
+                        <div class="score-bar">
+                            <div class="score-bar-fill danger" style="width: 46%;"></div>
+                        </div>
+                        <span class="score-category-value">18/39</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Ready to find out your score?</h2>
+        <p>Connect your Microsoft 365 tenant. Takes less than 2 minutes.</p>
+        <a href="posture-scanner.html" class="btn btn-primary">Run Free Assessment</a>
+    </section>
+
+    <footer>
+        <span>&copy; 2025 QuantiveCyber</span>
+        <a href="https://quantivecyber.com">quantivecyber.com</a>
+    </footer>
+</body>
+</html>
