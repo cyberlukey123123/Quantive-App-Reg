@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="author" content="QuantiveCyber">
     <meta name="copyright" content="© 2026 QuantiveCyber. All Rights Reserved.">
-    <title>Copilot Readiness Scanner | QuantiveCyber</title>
+    <title>AI Readiness Scanner | QuantiveCyber</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1346,7 +1346,7 @@
         .score-categories {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .score-category {
@@ -1365,16 +1365,36 @@
 
         .score-category-bar {
             flex: 1;
-            height: 8px;
-            background: var(--border-light);
-            border-radius: 4px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 5px;
             overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .score-category-fill {
             height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
+            border-radius: 5px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* RAG Progress Bar Colors with gradients */
+        .score-category-fill.rag-green {
+            background: linear-gradient(90deg, #10b981, #34d399);
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        }
+
+        .score-category-fill.rag-amber {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+        }
+
+        .score-category-fill.rag-red {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
         }
 
         .score-category-value {
@@ -1383,6 +1403,36 @@
             font-weight: 600;
             color: var(--ink);
             text-align: right;
+        }
+
+        .score-category-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .score-category-badge.rag-green {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .score-category-badge.rag-amber {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .score-category-badge.rag-red {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         /* Improve Score Section */
@@ -3321,8 +3371,8 @@
             <div class="connect-logo">
                 <img src="logo.png" alt="QuantiveCyber" style="height: 48px;" onerror="this.parentElement.innerHTML='<div class=\'connect-logo-text\'>QuantiveCyber</div><div class=\'connect-logo-sub\'>Security you can measure</div>'">
             </div>
-            <h1 class="connect-title">Copilot Readiness Scanner</h1>
-            <p class="connect-description">Connect your Microsoft 365 tenant to assess your organisation's readiness to securely adopt AI tools like Microsoft Copilot and AI agents. We scan your environment for security controls, data governance, and AI configurations.</p>
+            <h1 class="connect-title">AI Readiness Scanner</h1>
+            <p class="connect-description">Connect your Microsoft 365 tenant to assess your organisation's readiness to securely adopt AI tools like Microsoft Copilot, ChatGPT Enterprise, and AI agents. We scan your environment for security controls, data governance, and AI configurations.</p>
 
             <button class="btn btn-primary connect-btn" onclick="startScan()">
                 <svg class="icon" viewBox="0 0 23 23" fill="currentColor">
@@ -3407,7 +3457,7 @@
                 <div class="header-left">
                     <img src="logo.png" alt="QuantiveCyber" class="logo" onerror="this.outerHTML='<span class=\'logo-placeholder\'>QuantiveCyber</span>'">
                     <div class="header-divider"></div>
-                    <span class="header-title">Copilot Readiness Scanner</span>
+                    <span class="header-title">AI Readiness Scanner</span>
                 </div>
                 <div class="header-right">
                     <div class="tenant-info">
@@ -3473,7 +3523,7 @@
                 </div>
                 <div class="alert-content">
                     <div class="alert-title">Action Required</div>
-                    <div class="alert-text">Address security gaps below to improve your Copilot readiness.</div>
+                    <div class="alert-text">Address security gaps below to improve your AI readiness.</div>
                 </div>
                 <button class="btn btn-secondary" id="alertBannerBtn" onclick="scrollToGaps()">View Gaps</button>
             </div>
@@ -3538,10 +3588,10 @@
                     </div>
                     <div class="stat-content">
                         <div class="stat-value" id="statPointsToReady">+71</div>
-                        <div class="stat-label">Points to Copilot Ready</div>
+                        <div class="stat-label">Points to AI Ready</div>
                     </div>
                     <div class="stat-card-popup" id="popupPointsToReady">
-                        <div class="stat-popup-title">Copilot Ready Threshold</div>
+                        <div class="stat-popup-title">AI Ready Threshold</div>
                         <div id="popupPointsToReadyContent"></div>
                     </div>
                 </div>
@@ -3549,7 +3599,7 @@
 
             <!-- Score (Full Width) then Tenant Config (Full Width) - Stacked Layout -->
             <div class="dashboard-grid score-config-grid">
-                <!-- Copilot Readiness Score Card -->
+                <!-- AI Readiness Score Card -->
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
@@ -3560,7 +3610,7 @@
                                     <line x1="6" y1="20" x2="6" y2="14"/>
                                 </svg>
                             </div>
-                            Copilot Readiness Score
+                            AI Readiness Score
                         </div>
                         <span class="card-badge" style="background: var(--bg); color: var(--ink-secondary);" id="scorePointsBadge">0 / 100 pts</span>
                     </div>
@@ -4205,7 +4255,7 @@
             <!-- CTA -->
             <div class="card cta-card" style="margin-top: 20px;">
                 <h3>Need Help Achieving Compliance?</h3>
-                <p>This automated scan provides an indication of your Copilot readiness. Our full 100-Point AI Readiness Assessment includes expert analysis, detailed remediation plans, and hands-on implementation support.</p>
+                <p>This automated scan provides an indication of your AI readiness. Our full 100-Point AI Readiness Assessment includes expert analysis, detailed remediation plans, and hands-on implementation support.</p>
                 <button class="btn btn-primary" onclick="openContactModal()">Book Expert Assessment</button>
                 <div class="connect-features" style="margin-top: 20px;">
                     <div class="connect-feature">
@@ -5077,6 +5127,98 @@
                     action: "View Audit Logs",
                     actionUrl: "https://purview.microsoft.com/auditlogsearch"
                 }
+            ],
+            // Tenant Configuration Demo Data - Realistic examples of what IT admins would see
+            _sensitivityLabels: [
+                { displayName: "Highly Confidential", description: "For sensitive business data requiring encryption", priority: 0 },
+                { displayName: "Confidential - Internal", description: "Internal business data - do not share externally", priority: 1 },
+                { displayName: "General", description: "Standard business content", priority: 2 },
+                { displayName: "Public", description: "Approved for public sharing", priority: 3 }
+            ],
+            _dlpPolicies: [
+                { name: "Block External PII Sharing", state: "Enabled", mode: "Enable", isEnabled: true },
+                { name: "Financial Data Protection", state: "Enabled", mode: "Enable", isEnabled: true },
+                { name: "Credit Card Number Detection", state: "Enabled", mode: "Enable", isEnabled: true },
+                { name: "UK National Insurance Numbers", state: "Enabled", mode: "Enable", isEnabled: true },
+                { name: "GDPR Personal Data", state: "Disabled", mode: "TestWithNotifications", isEnabled: false },
+                { name: "Healthcare (HIPAA) Controls", state: "Disabled", mode: "TestWithNotifications", isEnabled: false }
+            ],
+            sharepointSettings: {
+                sharingCapability: "ExternalUserSharingOnly",
+                externalSharingCapability: "ExternalUserSharingOnly",
+                defaultLinkPermission: "View",
+                defaultSharingLinkType: "Internal",
+                isResharingByExternalUsersEnabled: false
+            },
+            conditionalAccessPolicies: [
+                { displayName: "Require MFA for All Users", state: "enabled" },
+                { displayName: "Block Legacy Authentication", state: "enabled" },
+                { displayName: "Require Compliant Device for M365", state: "enabled" },
+                { displayName: "Require MFA for Administrators", state: "enabled" },
+                { displayName: "Block Sign-ins from High-Risk Locations", state: "enabledForReportingButNotEnforced" }
+            ],
+            _subscriptions: [
+                { skuPartNumber: "SPE_E5", consumedUnits: 245, prepaidUnits: { enabled: 300 } },
+                { skuPartNumber: "Microsoft_Copilot_M365", consumedUnits: 45, prepaidUnits: { enabled: 50 } },
+                { skuPartNumber: "ENTERPRISEPREMIUM", consumedUnits: 180, prepaidUnits: { enabled: 200 } },
+                { skuPartNumber: "EMSPREMIUM", consumedUnits: 245, prepaidUnits: { enabled: 300 } },
+                { skuPartNumber: "POWER_BI_PRO", consumedUnits: 35, prepaidUnits: { enabled: 50 } },
+                { skuPartNumber: "PROJECTPROFESSIONAL", consumedUnits: 12, prepaidUnits: { enabled: 20 } },
+                { skuPartNumber: "VISIOCLIENT", consumedUnits: 8, prepaidUnits: { enabled: 15 } }
+            ],
+            _secureScore: {
+                currentScore: 58,
+                maxScore: 100,
+                controlScores: [
+                    { controlName: "Enable MFA for admins", score: 10, maxScore: 10 },
+                    { controlName: "Block legacy authentication", score: 8, maxScore: 8 },
+                    { controlName: "Enable Conditional Access", score: 6, maxScore: 10 },
+                    { controlName: "Turn on audit data recording", score: 5, maxScore: 5 },
+                    { controlName: "Enable DLP policies", score: 4, maxScore: 6 },
+                    { controlName: "Set password expiration policy", score: 3, maxScore: 5 }
+                ]
+            },
+            _oauthGrants: [
+                { clientId: "app-1", consentType: "AllPrincipals", scope: "User.Read Mail.Read" },
+                { clientId: "app-2", consentType: "AllPrincipals", scope: "User.Read Files.Read" },
+                { clientId: "app-3", consentType: "Principal", scope: "User.Read" },
+                { clientId: "app-4", consentType: "AllPrincipals", scope: "User.Read Calendars.Read" },
+                { clientId: "app-5", consentType: "AllPrincipals", scope: "User.Read Sites.Read.All" }
+            ],
+            _servicePrincipals: [
+                { displayName: "Salesforce", appRoles: [{ isEnabled: true, value: "User.Read" }] },
+                { displayName: "Zoom", appRoles: [{ isEnabled: true, value: "User.Read" }] },
+                { displayName: "DocuSign", appRoles: [{ isEnabled: true, value: "User.ReadWrite" }] },
+                { displayName: "Slack", appRoles: [{ isEnabled: true, value: "User.Read" }] },
+                { displayName: "ServiceNow", appRoles: [{ isEnabled: true, value: "User.Read" }] },
+                { displayName: "Workday", appRoles: [{ isEnabled: true, value: "User.Read" }] },
+                { displayName: "Adobe Creative Cloud", appRoles: [{ isEnabled: true, value: "User.Read" }] },
+                { displayName: "Atlassian (Jira/Confluence)", appRoles: [{ isEnabled: true, value: "User.Read" }] },
+                { displayName: "Microsoft Power BI", appRoles: [] },
+                { displayName: "Microsoft Teams", appRoles: [] },
+                { displayName: "Microsoft Graph Explorer", appRoles: [] }
+            ],
+            _discoveredApps: [
+                { displayName: "Microsoft 365", isSanctioned: true },
+                { displayName: "Salesforce", isSanctioned: true },
+                { displayName: "Google Workspace", isSanctioned: true },
+                { displayName: "Slack", isSanctioned: true },
+                { displayName: "Zoom", isSanctioned: true },
+                { displayName: "Dropbox", isSanctioned: false },
+                { displayName: "ChatGPT", isSanctioned: false },
+                { displayName: "WeTransfer", isSanctioned: false },
+                { displayName: "Grammarly", isSanctioned: false },
+                { displayName: "Notion", isSanctioned: false },
+                { displayName: "Canva", isSanctioned: false }
+            ],
+            _directoryAudits: [
+                { category: "UserManagement", activityDisplayName: "Add user", activityDateTime: new Date().toISOString() },
+                { category: "GroupManagement", activityDisplayName: "Add member to group", activityDateTime: new Date().toISOString() },
+                { category: "ApplicationManagement", activityDisplayName: "Consent to application", activityDateTime: new Date().toISOString() },
+                { category: "Policy", activityDisplayName: "Update conditional access policy", activityDateTime: new Date().toISOString() },
+                { category: "RoleManagement", activityDisplayName: "Add member to role", activityDateTime: new Date().toISOString() },
+                { category: "UserManagement", activityDisplayName: "Update user", activityDateTime: new Date().toISOString() },
+                { category: "ApplicationManagement", activityDisplayName: "Update application", activityDateTime: new Date().toISOString() }
             ],
             timeline: [
                 { date: "February 2025", title: "Prohibited AI Practices", desc: "Ban on unacceptable-risk AI", status: "passed" },
@@ -7605,7 +7747,7 @@
                     ? licenseGapControls.map(c => `<div class="stat-popup-item"><span class="dot license"></span>${c.name} <span style="color: var(--purple); font-size: 0.7rem; margin-left: auto;">${c.licenseRequired}</span></div>`).join('')
                     : '<div class="stat-popup-empty">No license gaps detected</div>';
 
-                // Populate popup content - Points to Copilot Ready
+                // Populate popup content - Points to AI Ready
                 document.getElementById('popupPointsToReadyContent').innerHTML = pointsToReady === 0
                     ? `<div class="stat-popup-item"><span class="dot pass"></span>Score: ${earned}/100 - AI Ready!</div>
                        <div class="stat-popup-item"><span class="dot pass"></span>Safe to deploy Copilot</div>
@@ -7619,17 +7761,31 @@
             // Risk Classification - Dynamic rendering with system names
             renderRiskClassification();
 
-            // Categories - New progress bar style
+            // Categories - RAG progress bar style
             const categoryList = document.getElementById('categoryList');
-            categoryList.innerHTML = scanData.categories.map(cat => `
-                <div class="score-category">
-                    <span class="score-category-name">${cat.name}</span>
-                    <div class="score-category-bar">
-                        <div class="score-category-fill" style="width: ${cat.score}%; background: ${cat.color};"></div>
+            categoryList.innerHTML = scanData.categories.map(cat => {
+                // Determine RAG status based on score percentage
+                const percentage = cat.score;
+                let ragClass = 'rag-red';
+                let ragLabel = 'At Risk';
+                if (percentage >= 70) {
+                    ragClass = 'rag-green';
+                    ragLabel = 'Good';
+                } else if (percentage >= 50) {
+                    ragClass = 'rag-amber';
+                    ragLabel = 'Needs Work';
+                }
+
+                return `
+                    <div class="score-category">
+                        <span class="score-category-name">${cat.name}</span>
+                        <div class="score-category-bar">
+                            <div class="score-category-fill ${ragClass}" style="width: ${percentage}%;"></div>
+                        </div>
+                        <span class="score-category-badge ${ragClass}">${cat.earned || Math.round(percentage * (cat.max || 20) / 100)}/${cat.max || 20}</span>
                     </div>
-                    <span class="score-category-value">${cat.earned || Math.round(cat.score * (cat.max || 20) / 100)}/${cat.max || 20}</span>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             // Render Score Controls (Improve Your Score + Implemented)
             renderScoreControls();
@@ -8808,8 +8964,8 @@
                     <div style="border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 24px;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div>
-                                <h1 style="margin: 0 0 4px 0; font-size: 24px; color: #2563eb;">Copilot Readiness Report</h1>
-                                <div style="color: #6b7280; font-size: 13px;">Generated by QuantiveCyber Copilot Readiness Scanner</div>
+                                <h1 style="margin: 0 0 4px 0; font-size: 24px; color: #2563eb;">AI Readiness Report</h1>
+                                <div style="color: #6b7280; font-size: 13px;">Generated by QuantiveCyber AI Readiness Scanner</div>
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-weight: 600; color: #111827;">${scanData.tenant.name}</div>
