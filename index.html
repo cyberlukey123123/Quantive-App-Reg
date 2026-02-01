@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Readiness Scanner | QuantiveCyber</title>
+    <title>Copilot Readiness Scanner | QuantiveCyber</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
-    <meta name="description" content="Assess your Microsoft 365 environment's readiness to safely deploy Microsoft Copilot and AI agents. 100-point scoring across 41 security controls with actionable recommendations.">
+    <meta name="description" content="Assess your Microsoft 365 environment's readiness to safely deploy Microsoft Copilot. 100-point scoring across 41 security controls aligned with Microsoft's AI Adoption Framework.">
     <style>
         * {
             margin: 0;
@@ -462,6 +462,167 @@
         .risk-card.elevated .status-item span:last-child { color: #f59e0b; }
         .risk-card.managed .status-item span:last-child { color: #22c55e; }
 
+        /* Microsoft Framework Section */
+        .ms-framework {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 80px 60px;
+        }
+
+        .ms-framework-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .ms-framework-badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #60a5fa;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: block;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .ms-framework h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .framework-pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .framework-pillar {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .framework-pillar:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .pillar-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .pillar-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .pillar-icon.govern {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2));
+        }
+
+        .pillar-icon.govern svg {
+            stroke: #a78bfa;
+        }
+
+        .pillar-icon.secure {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2));
+        }
+
+        .pillar-icon.secure svg {
+            stroke: #4ade80;
+        }
+
+        .pillar-icon.manage {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
+        }
+
+        .pillar-icon.manage svg {
+            stroke: #60a5fa;
+        }
+
+        .framework-pillar h3 {
+            font-size: 1.25rem;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .framework-pillar p {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .pillar-checks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .pillar-checks span {
+            background: rgba(255, 255, 255, 0.1);
+            color: #d1d5db;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .framework-link {
+            text-align: center;
+        }
+
+        .framework-link a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .framework-link a:hover {
+            color: #93c5fd;
+        }
+
+        @media (max-width: 968px) {
+            .framework-pillars {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ms-framework {
+                padding: 60px 24px;
+            }
+
+            .ms-framework h2 {
+                font-size: 2rem;
+            }
+        }
+
         /* EU AI Act Info */
         .eu-ai-act {
             background: rgba(0, 0, 0, 0.3);
@@ -721,16 +882,16 @@
             <span></span>
         </button>
         <div class="mobile-nav">
-            <a href="posture-scanner.html">AI Readiness Scanner</a>
+            <a href="posture-scanner.html">Copilot Readiness Scanner</a>
             <a href="https://quantivecyber.com">About Us</a>
             <a href="https://quantivecyber.com/contact">Contact</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="badge">100-Point AI Readiness Assessment</div>
-        <h1>Is Your Organisation <span>Ready for AI?</span></h1>
-        <p>Automatically assess your Microsoft 365 security posture to safely deploy Microsoft Copilot and AI agents. Our scanner evaluates 41 controls across 6 categories to give you a clear AI readiness score.</p>
+        <div class="badge">100-Point Copilot Readiness Assessment</div>
+        <h1>Is Your Organisation <span>Ready for Copilot?</span></h1>
+        <p>Automatically assess your Microsoft 365 security posture before deploying Microsoft Copilot. Our scanner evaluates 41 controls across 6 categories aligned with Microsoft's AI Adoption Framework to identify gaps and show you exactly what to fix.</p>
         <div class="cta-buttons">
             <a href="posture-scanner.html" class="btn btn-primary">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -759,12 +920,16 @@
                 <div class="score-value">100</div>
                 <div class="score-label">Point Score</div>
             </div>
+            <div class="score-item">
+                <div class="score-value green">71+</div>
+                <div class="score-label">Copilot Ready</div>
+            </div>
         </div>
     </section>
 
     <section class="features">
         <h2>What We Assess</h2>
-        <p>Our scanner evaluates your Microsoft 365 environment across 6 critical categories that determine AI readiness. Each category contains specific tests weighted by importance.</p>
+        <p>Our scanner evaluates your Microsoft 365 environment across 6 critical categories that determine Copilot readiness. Each category contains specific tests weighted by importance.</p>
         <div class="features-grid">
             <div class="feature-card cat-1">
                 <div class="feature-header">
@@ -991,6 +1156,76 @@
                         <span>5-10%</span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ms-framework">
+        <div class="ms-framework-inner">
+            <div class="ms-framework-badge">Aligned with Microsoft</div>
+            <h2>Built on Microsoft's AI Adoption Framework</h2>
+            <p style="text-align: center; color: #a0a0a0; max-width: 700px; margin: 0 auto 50px;">Our scanner is aligned with Microsoft's Cloud Adoption Framework for AI, ensuring your organisation follows best practices for secure Copilot deployment.</p>
+
+            <div class="framework-pillars">
+                <div class="framework-pillar">
+                    <div class="pillar-icon govern">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </div>
+                    <h3>Govern</h3>
+                    <p>Assess AI risks, document policies, and ensure regulatory compliance. Our scanner checks your AI governance policies, acceptable use frameworks, and audit configurations.</p>
+                    <div class="pillar-checks">
+                        <span>AI Usage Policy</span>
+                        <span>Audit Logging</span>
+                        <span>Content Filtering</span>
+                    </div>
+                </div>
+                <div class="framework-pillar">
+                    <div class="pillar-icon secure">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h3>Secure</h3>
+                    <p>Protect your data before Copilot can access it. We assess identity controls, data classification, DLP policies, and sharing restrictions to prevent data exposure.</p>
+                    <div class="pillar-checks">
+                        <span>Data Protection</span>
+                        <span>Identity & Access</span>
+                        <span>Sharing Controls</span>
+                    </div>
+                </div>
+                <div class="framework-pillar">
+                    <div class="pillar-icon manage">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="3" y1="9" x2="21" y2="9"/>
+                            <line x1="9" y1="21" x2="9" y2="9"/>
+                        </svg>
+                    </div>
+                    <h3>Manage</h3>
+                    <p>Monitor and maintain AI deployments over time. We check Copilot configurations, agent controls, DSPM for AI, and adaptive protection settings.</p>
+                    <div class="pillar-checks">
+                        <span>Copilot Config</span>
+                        <span>Agent Controls</span>
+                        <span>DSPM for AI</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="framework-link">
+                <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/ai/" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    Learn more about Microsoft's AI Adoption Framework
+                </a>
             </div>
         </div>
     </section>

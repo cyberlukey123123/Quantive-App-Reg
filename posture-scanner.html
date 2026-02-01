@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="author" content="QuantiveCyber">
     <meta name="copyright" content="© 2026 QuantiveCyber. All Rights Reserved.">
-    <title>AI Readiness Scanner | QuantiveCyber</title>
+    <title>Copilot Readiness Scanner | QuantiveCyber</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -138,6 +138,11 @@
         .icon-sm {
             width: 16px;
             height: 16px;
+        }
+
+        .icon-xs {
+            width: 14px;
+            height: 14px;
         }
 
         .icon-lg {
@@ -3316,7 +3321,7 @@
             <div class="connect-logo">
                 <img src="logo.png" alt="QuantiveCyber" style="height: 48px;" onerror="this.parentElement.innerHTML='<div class=\'connect-logo-text\'>QuantiveCyber</div><div class=\'connect-logo-sub\'>Security you can measure</div>'">
             </div>
-            <h1 class="connect-title">AI Readiness Scanner</h1>
+            <h1 class="connect-title">Copilot Readiness Scanner</h1>
             <p class="connect-description">Connect your Microsoft 365 tenant to assess your organisation's readiness to securely adopt AI tools like Microsoft Copilot and AI agents. We scan your environment for security controls, data governance, and AI configurations.</p>
 
             <button class="btn btn-primary connect-btn" onclick="startScan()">
@@ -3402,7 +3407,7 @@
                 <div class="header-left">
                     <img src="logo.png" alt="QuantiveCyber" class="logo" onerror="this.outerHTML='<span class=\'logo-placeholder\'>QuantiveCyber</span>'">
                     <div class="header-divider"></div>
-                    <span class="header-title">AI Readiness Scanner</span>
+                    <span class="header-title">Copilot Readiness Scanner</span>
                 </div>
                 <div class="header-right">
                     <div class="tenant-info">
@@ -3468,7 +3473,7 @@
                 </div>
                 <div class="alert-content">
                     <div class="alert-title">Action Required</div>
-                    <div class="alert-text">Address security gaps below to improve your AI readiness posture.</div>
+                    <div class="alert-text">Address security gaps below to improve your Copilot readiness.</div>
                 </div>
                 <button class="btn btn-secondary" id="alertBannerBtn" onclick="scrollToGaps()">View Gaps</button>
             </div>
@@ -3501,10 +3506,10 @@
                     </div>
                     <div class="stat-content">
                         <div class="stat-value" id="statCriticalGaps">0</div>
-                        <div class="stat-label">Critical Gaps</div>
+                        <div class="stat-label">Copilot Risks</div>
                     </div>
                     <div class="stat-card-popup" id="popupCriticalGaps">
-                        <div class="stat-popup-title">High-Impact Missing Controls (3+ pts)</div>
+                        <div class="stat-popup-title">High-Impact Security Gaps</div>
                         <div id="popupCriticalGapsContent"></div>
                     </div>
                 </div>
@@ -3533,10 +3538,10 @@
                     </div>
                     <div class="stat-content">
                         <div class="stat-value" id="statPointsToReady">+71</div>
-                        <div class="stat-label">Points to AI Ready</div>
+                        <div class="stat-label">Points to Copilot Ready</div>
                     </div>
                     <div class="stat-card-popup" id="popupPointsToReady">
-                        <div class="stat-popup-title">AI Readiness Threshold</div>
+                        <div class="stat-popup-title">Copilot Ready Threshold</div>
                         <div id="popupPointsToReadyContent"></div>
                     </div>
                 </div>
@@ -3544,7 +3549,7 @@
 
             <!-- Score (Full Width) then Tenant Config (Full Width) - Stacked Layout -->
             <div class="dashboard-grid score-config-grid">
-                <!-- AI Readiness Score Card -->
+                <!-- Copilot Readiness Score Card -->
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
@@ -3555,7 +3560,7 @@
                                     <line x1="6" y1="20" x2="6" y2="14"/>
                                 </svg>
                             </div>
-                            AI Readiness Score
+                            Copilot Readiness Score
                         </div>
                         <span class="card-badge" style="background: var(--bg); color: var(--ink-secondary);" id="scorePointsBadge">0 / 100 pts</span>
                     </div>
@@ -4200,7 +4205,7 @@
             <!-- CTA -->
             <div class="card cta-card" style="margin-top: 20px;">
                 <h3>Need Help Achieving Compliance?</h3>
-                <p>This automated scan provides an indication of your AI readiness posture. Our full 100-Point AI Readiness Assessment includes expert analysis, detailed remediation plans, and hands-on implementation support.</p>
+                <p>This automated scan provides an indication of your Copilot readiness. Our full 100-Point AI Readiness Assessment includes expert analysis, detailed remediation plans, and hands-on implementation support.</p>
                 <button class="btn btn-primary" onclick="openContactModal()">Book Expert Assessment</button>
                 <div class="connect-features" style="margin-top: 20px;">
                     <div class="connect-feature">
@@ -7600,7 +7605,7 @@
                     ? licenseGapControls.map(c => `<div class="stat-popup-item"><span class="dot license"></span>${c.name} <span style="color: var(--purple); font-size: 0.7rem; margin-left: auto;">${c.licenseRequired}</span></div>`).join('')
                     : '<div class="stat-popup-empty">No license gaps detected</div>';
 
-                // Populate popup content - Points to AI Ready
+                // Populate popup content - Points to Copilot Ready
                 document.getElementById('popupPointsToReadyContent').innerHTML = pointsToReady === 0
                     ? `<div class="stat-popup-item"><span class="dot pass"></span>Score: ${earned}/100 - AI Ready!</div>
                        <div class="stat-popup-item"><span class="dot pass"></span>Safe to deploy Copilot</div>
@@ -8803,8 +8808,8 @@
                     <div style="border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 24px;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div>
-                                <h1 style="margin: 0 0 4px 0; font-size: 24px; color: #2563eb;">AI Readiness Report</h1>
-                                <div style="color: #6b7280; font-size: 13px;">Generated by QuantiveCyber AI Readiness Scanner</div>
+                                <h1 style="margin: 0 0 4px 0; font-size: 24px; color: #2563eb;">Copilot Readiness Report</h1>
+                                <div style="color: #6b7280; font-size: 13px;">Generated by QuantiveCyber Copilot Readiness Scanner</div>
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-weight: 600; color: #111827;">${scanData.tenant.name}</div>
