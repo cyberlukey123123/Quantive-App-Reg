@@ -1443,6 +1443,144 @@
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
+        /* Score Card - New Design */
+        .score-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .score-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .score-card-title {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .score-card-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .score-card-badge.status-good {
+            color: var(--success);
+            background: var(--success-light);
+        }
+
+        .score-card-badge.status-warning {
+            color: var(--warning);
+            background: #fef3c7;
+        }
+
+        .score-card-badge.status-danger {
+            color: var(--danger);
+            background: var(--danger-light);
+        }
+
+        .score-card-body {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 0;
+        }
+
+        .score-main {
+            padding: 36px 28px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface);
+        }
+
+        .score-big {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3.5rem;
+            font-weight: 500;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 6px;
+            color: var(--ink);
+        }
+
+        .score-label {
+            font-size: 0.8125rem;
+            color: var(--ink-tertiary);
+        }
+
+        .score-card .score-categories {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: var(--surface);
+        }
+
+        .score-card .score-category {
+            display: grid;
+            grid-template-columns: 120px 1fr 48px;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .score-card .score-category-name {
+            font-size: 0.8125rem;
+            color: var(--ink-secondary);
+            width: auto;
+        }
+
+        .score-bar {
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-bar-fill.rag-green { background: var(--success); }
+        .score-bar-fill.rag-amber { background: var(--warning); }
+        .score-bar-fill.rag-red { background: var(--danger); }
+
+        .score-card .score-category-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: right;
+            color: var(--ink);
+        }
+
+        @media (max-width: 700px) {
+            .score-card-body {
+                grid-template-columns: 1fr;
+            }
+            .score-main {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 28px;
+            }
+            .score-card .score-category {
+                grid-template-columns: 100px 1fr 42px;
+                gap: 12px;
+            }
+        }
+
         /* Improve Score Section */
         .improve-score-section {
             margin-top: 8px;
@@ -3609,48 +3747,17 @@
             <!-- Score (Full Width) then Tenant Config (Full Width) - Stacked Layout -->
             <div class="dashboard-grid score-config-grid">
                 <!-- AI Readiness Score Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="card-title-icon" style="background: var(--primary-light); color: var(--primary);">
-                                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="18" y1="20" x2="18" y2="10"/>
-                                    <line x1="12" y1="20" x2="12" y2="4"/>
-                                    <line x1="6" y1="20" x2="6" y2="14"/>
-                                </svg>
-                            </div>
-                            AI Readiness Score
-                        </div>
-                        <span class="card-badge" style="background: var(--bg); color: var(--ink-secondary);" id="scorePointsBadge">0 / 100 pts</span>
+                <div class="score-card">
+                    <div class="score-card-header">
+                        <span class="score-card-title" id="scoreCardTitle">AI Readiness Report</span>
+                        <span class="score-card-badge status-warning" id="scoreCardBadge">Needs Improvement</span>
                     </div>
-                    <div class="card-body">
-                        <div class="score-breakdown">
-                            <!-- Score Summary -->
-                            <div class="score-summary">
-                                <div class="score-ring" id="scoreRing">
-                                    <svg width="100" height="100" viewBox="0 0 100 100">
-                                        <circle class="score-ring-bg" cx="50" cy="50" r="42" stroke-width="8"/>
-                                        <circle class="score-ring-progress" cx="50" cy="50" r="42" stroke-width="8"
-                                            stroke="var(--warning)"
-                                            stroke-dasharray="263.89"
-                                            stroke-dashoffset="110.84"
-                                            id="scoreProgress"/>
-                                    </svg>
-                                    <div class="score-ring-text">
-                                        <div class="score-value" id="overallScore" style="font-size: 1.5rem;">58</div>
-                                        <div class="score-max" style="font-size: 0.625rem;">/ 100</div>
-                                    </div>
-                                </div>
-                                <div class="score-summary-details">
-                                    <div class="score-summary-points" id="scorePointsText">Earning 58 of 100 possible points</div>
-                                    <div class="score-summary-status" id="scoreStatus" style="color: var(--warning);">Partially Ready</div>
-                                    <div class="score-summary-desc" id="scoreDescription">Basic controls in place but gaps remain. Copilot deployment possible with restrictions.</div>
-                                </div>
-                            </div>
-
-                            <!-- Category Progress Bars -->
-                            <div class="score-categories" id="categoryList"></div>
+                    <div class="score-card-body">
+                        <div class="score-main">
+                            <div class="score-big" id="overallScore" style="color: var(--warning);">58</div>
+                            <div class="score-label">out of 100</div>
                         </div>
+                        <div class="score-categories" id="categoryList"></div>
                     </div>
                 </div>
 
@@ -7688,23 +7795,38 @@
             document.getElementById('tenantName').textContent = tenantDisplay;
             document.getElementById('scanTime').textContent = `Last scan: ${scanData.tenant.scanTime}`;
 
-            // Score - Updated for new layout
+            // Score - Updated for new card layout
             const score = scanData.score.overall;
-            const circumference = 2 * Math.PI * 42; // Updated radius for smaller ring
-            const offset = circumference - (score / 100) * circumference;
+            const scoreEl = document.getElementById('overallScore');
+            scoreEl.textContent = score;
 
-            document.getElementById('overallScore').textContent = score;
-            document.getElementById('scoreStatus').textContent = scanData.score.status;
-            document.getElementById('scoreStatus').style.color = scanData.score.statusColor;
-            document.getElementById('scoreDescription').textContent = scanData.score.description;
-            document.getElementById('scoreProgress').setAttribute('stroke-dashoffset', offset);
-            document.getElementById('scoreProgress').setAttribute('stroke', scanData.score.statusColor);
+            // Color the score number based on risk level
+            if (score >= 71) {
+                scoreEl.style.color = 'var(--success)';
+            } else if (score >= 40) {
+                scoreEl.style.color = 'var(--warning)';
+            } else {
+                scoreEl.style.color = 'var(--danger)';
+            }
+
+            // Update score card title with tenant name
+            document.getElementById('scoreCardTitle').textContent = `${tenantDisplay} — AI Readiness Report`;
+
+            // Update score card badge based on score
+            const badgeEl = document.getElementById('scoreCardBadge');
+            badgeEl.textContent = scanData.score.status;
+            badgeEl.className = 'score-card-badge';
+            if (score >= 71) {
+                badgeEl.classList.add('status-good');
+            } else if (score >= 40) {
+                badgeEl.classList.add('status-warning');
+            } else {
+                badgeEl.classList.add('status-danger');
+            }
 
             // Score points breakdown
             const earned = scanData.score.earned || score;
             const possible = scanData.score.possible || 100;
-            document.getElementById('scorePointsBadge').textContent = `${earned} / ${possible} pts`;
-            document.getElementById('scorePointsText').textContent = `Earning ${earned} of ${possible} possible points`;
 
             // Stats - Calculate new KPIs from scoreBreakdown
             const breakdown = scanData.scoreBreakdown;
@@ -7788,10 +7910,10 @@
                 return `
                     <div class="score-category">
                         <span class="score-category-name">${cat.name}</span>
-                        <div class="score-category-bar">
-                            <div class="score-category-fill ${ragClass}" style="width: ${percentage}%;"></div>
+                        <div class="score-bar">
+                            <div class="score-bar-fill ${ragClass}" style="width: ${percentage}%;"></div>
                         </div>
-                        <span class="score-category-badge ${ragClass}">${cat.earned || Math.round(percentage * (cat.max || 20) / 100)}/${cat.max || 20}</span>
+                        <span class="score-category-value">${cat.earned || Math.round(percentage * (cat.max || 20) / 100)}/${cat.max || 20}</span>
                     </div>
                 `;
             }).join('');
